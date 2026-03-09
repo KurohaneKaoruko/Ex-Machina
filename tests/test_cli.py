@@ -24,6 +24,9 @@ class CliTests(unittest.TestCase):
             settings_bundle = json.loads((output / "openclaw.settings.json").read_text(encoding="utf-8"))
             self.assertEqual(settings_bundle["mode"], "lite")
             self.assertIn("settings_patch", settings_bundle)
+            self.assertIn("dialogue_contracts", settings_bundle)
+            self.assertEqual(settings_bundle["dialogue_contracts"]["exmachina-main"]["role_name"], "主控体")
+            self.assertTrue(settings_bundle["dialogue_contracts"]["exmachina-main"]["sample_utterances"])
             self.assertTrue((output / "install" / "SETTINGS.md").exists())
 
     def test_build_command_exports_lite_pack_by_default(self) -> None:
@@ -60,6 +63,8 @@ class CliTests(unittest.TestCase):
             )
             task_board = json.loads((output / "openclaw-pack" / "runtime" / "task-board.json").read_text(encoding="utf-8"))
             child_doc = next((output / "openclaw-pack" / "subagents").glob("*.md")).read_text(encoding="utf-8")
+            bootstrap_doc = (output / "openclaw-pack" / "BOOTSTRAP.md").read_text(encoding="utf-8")
+            prompt_doc = (output / "openclaw-pack" / "examples" / "openclaw-prompt.md").read_text(encoding="utf-8")
 
             self.assertEqual(mission["mode"], "lite")
             self.assertEqual(manifest["mode"], "lite")
@@ -82,7 +87,12 @@ class CliTests(unittest.TestCase):
             self.assertFalse((output / "openclaw-pack" / "install" / "compat" / "workspaces").exists())
             self.assertFalse((output / "openclaw-pack" / "install" / "compat" / "openclaw.agents.plan.json").exists())
             self.assertIn("## 工作流", child_doc)
+            self.assertIn("## 对话口吻", child_doc)
             self.assertIn("## 输出契约", child_doc)
+            self.assertIn("## 对话口吻契约", bootstrap_doc)
+            self.assertIn("分层口吻", prompt_doc)
+            self.assertIn("优先词汇", bootstrap_doc)
+            self.assertIn("已接收", prompt_doc)
 
     def test_build_command_exports_full_pack_when_requested(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -115,6 +125,9 @@ class CliTests(unittest.TestCase):
                 (output / "openclaw-pack" / "install" / "compat" / "openclaw.agents.plan.json").read_text(encoding="utf-8")
             )
             topology = json.loads((output / "openclaw-pack" / "runtime" / "topology.json").read_text(encoding="utf-8"))
+            workspace_bootstrap = (
+                output / "openclaw-pack" / "install" / "compat" / "workspaces" / "exmachina-main" / "BOOTSTRAP.md"
+            ).read_text(encoding="utf-8")
 
             self.assertEqual(manifest["mode"], "full")
             self.assertTrue(manifest["compatibility"]["requires_multi_agent_binding"])
@@ -125,6 +138,8 @@ class CliTests(unittest.TestCase):
             self.assertEqual(manifest["openclaw_compat_bundle"]["install_plan"], "install/compat/openclaw.agents.plan.json")
             self.assertTrue((output / "openclaw-pack" / "install" / "compat" / "workspaces" / "exmachina-main").exists())
             self.assertFalse((output / "openclaw-pack" / "install" / "workspaces").exists())
+            self.assertIn("## 对话口吻契约", workspace_bootstrap)
+            self.assertIn("优先词汇", workspace_bootstrap)
 
 
 if __name__ == "__main__":

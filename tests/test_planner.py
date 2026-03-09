@@ -30,6 +30,12 @@ class PlannerTests(unittest.TestCase):
         self.assertEqual(plan.openclaw_settings_bundle.mode, "lite")
         self.assertTrue(plan.openclaw_settings_bundle.supports_direct_import)
         self.assertEqual(plan.openclaw_settings_bundle.default_entry_agent_id, "exmachina-main")
+        main_agent = plan.openclaw_settings_bundle.settings_patch["agents"]["list"][0]
+        self.assertIn("dialogue_contract", main_agent["metadata"])
+        self.assertIn("子个体", main_agent["identity"]["theme"])
+        self.assertIn("少女式终端", main_agent["identity"]["theme"])
+        self.assertIn("已接收", main_agent["identity"]["theme"])
+        self.assertEqual(plan.openclaw_settings_bundle.dialogue_contracts["exmachina-main"]["role_name"], "主控体")
 
     def test_plan_mission_builds_lite_runtime_topology_by_default(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -44,6 +50,8 @@ class PlannerTests(unittest.TestCase):
         self.assertEqual(plan.runtime_topology.agent_specs[0].agent_id, "exmachina-main")
         self.assertTrue(plan.runtime_topology.agent_specs[0].recommended_skill)
         self.assertIn("agents", plan.openclaw_settings_bundle.settings_patch)
+        self.assertIn("少女式终端", plan.openclaw_install_prompt)
+        self.assertIn("可参考句式", plan.openclaw_install_prompt)
 
     def test_plan_mission_builds_full_runtime_topology_when_requested(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -63,6 +71,11 @@ class PlannerTests(unittest.TestCase):
         self.assertGreater(len(plan.openclaw_install_plan.agents), 1)
         self.assertFalse(plan.openclaw_settings_bundle.supports_direct_import)
         self.assertTrue(plan.openclaw_settings_bundle.bindings_template)
+        for agent in plan.openclaw_settings_bundle.settings_patch["agents"]["list"]:
+            self.assertIn("dialogue_contract", agent["metadata"])
+            self.assertIn("对话口吻要求", agent["identity"]["theme"])
+            self.assertIn("优先词汇", agent["identity"]["theme"])
+        self.assertEqual(plan.openclaw_settings_bundle.dialogue_contracts["exmachina-primary"]["role_name"], "主连结体")
 
 
 if __name__ == "__main__":

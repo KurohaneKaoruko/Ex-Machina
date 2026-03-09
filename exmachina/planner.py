@@ -3,6 +3,7 @@
 import hashlib
 import re
 
+from .dialogue import build_openclaw_dialogue_contracts
 from .models import (
     ArbitrationSlot,
     ChildAgent,
@@ -66,6 +67,7 @@ def plan_mission(
 
     rationality_protocol = _build_rationality_protocol(profile, task, repo, workspace)
     top_conductor = _build_top_conductor(profile["conductor"], task, repo, workspace)
+    dialogue_contracts = build_openclaw_dialogue_contracts(mode, top_conductor, primary, support_bodies)
     mission_title = title or _build_mission_title(task, repo)
     acceptance_criteria = _build_acceptance_criteria(
         task,
@@ -76,7 +78,7 @@ def plan_mission(
         rationality_protocol,
     )
     workflow = _build_workflow(primary_name, support_names)
-    install_prompt = _build_openclaw_prompt(repo, task, mode)
+    install_prompt = _build_openclaw_prompt(repo, task, mode, dialogue_contracts["exmachina-main"])
     knowledge_handoff = _build_knowledge_handoff(
         task,
         repo,
@@ -110,6 +112,7 @@ def plan_mission(
         primary_body=primary,
         support_bodies=support_bodies,
         top_conductor=top_conductor,
+        dialogue_contracts=dialogue_contracts,
     )
     runtime_topology = build_runtime_topology(
         mode=mode,
@@ -1218,6 +1221,7 @@ def _build_openclaw_settings_bundle(
     primary_body: LinkBody,
     support_bodies: list[LinkBody],
     top_conductor: TopConductor,
+    dialogue_contracts: dict[str, dict[str, object]],
 ) -> OpenClawSettingsBundle:
     workspace_value = "{{EXMACHINA_PACK_ROOT}}"
     if repo:
@@ -1237,17 +1241,13 @@ def _build_openclaw_settings_bundle(
                         "id": "exmachina-main",
                         "name": "ExMachina 主控体",
                         "model": {"primary": "{{OPENCLAW_PRIMARY_MODEL}}"},
-                        "identity": {
-                            "theme": (
-                                f"你是 ExMachina 的主控体，以单会话方式承担主连结体 {primary_body.name}，"
-                                f"并按需内联参考协作链 {('、'.join(body.name for body in support_bodies) if support_bodies else '无')}。"
-                            )
-                        },
+                        "identity": {"theme": dialogue_contracts["exmachina-main"]["theme"]},
                         "sandbox": {"mode": "off"},
                         "metadata": {
                             "mode": "lite",
                             "primary_link_body": primary_body.name,
                             "support_link_bodies": [body.name for body in support_bodies],
+                            "dialogue_contract": dialogue_contracts["exmachina-main"],
                         },
                     }
                 ],
@@ -1277,26 +1277,38 @@ def _build_openclaw_settings_bundle(
                         "id": "exmachina-main",
                         "name": "ExMachina 主控体",
                         "model": {"primary": "{{OPENCLAW_FAST_MODEL}}"},
-                        "identity": {"theme": top_conductor.mission},
+                        "identity": {"theme": dialogue_contracts["exmachina-main"]["theme"]},
                         "sandbox": {"mode": "off"},
-                        "metadata": {"mode": "full", "role": "conductor"},
+                        "metadata": {
+                            "mode": "full",
+                            "role": "conductor",
+                            "dialogue_contract": dialogue_contracts["exmachina-main"],
+                        },
                     },
                     {
                         "id": "exmachina-primary",
                         "name": f"ExMachina 主连结体 · {primary_body.name}",
                         "model": {"primary": "{{OPENCLAW_PRIMARY_MODEL}}"},
-                        "identity": {"theme": primary_body.identity},
+                        "identity": {"theme": dialogue_contracts["exmachina-primary"]["theme"]},
                         "sandbox": {"mode": "agent"},
-                        "metadata": {"mode": "full", "role": "primary-link-body"},
+                        "metadata": {
+                            "mode": "full",
+                            "role": "primary-link-body",
+                            "dialogue_contract": dialogue_contracts["exmachina-primary"],
+                        },
                     },
                     *[
                         {
                             "id": f"exmachina-support-{index}",
                             "name": f"ExMachina 协作连结体 · {body.name}",
                             "model": {"primary": "{{OPENCLAW_SUPPORT_MODEL}}"},
-                            "identity": {"theme": body.identity},
+                            "identity": {"theme": dialogue_contracts[f"exmachina-support-{index}"]["theme"]},
                             "sandbox": {"mode": "agent"},
-                            "metadata": {"mode": "full", "role": "support-link-body"},
+                            "metadata": {
+                                "mode": "full",
+                                "role": "support-link-body",
+                                "dialogue_contract": dialogue_contracts[f"exmachina-support-{index}"],
+                            },
                         }
                         for index, body in enumerate(support_bodies, start=1)
                     ],
@@ -1344,6 +1356,7 @@ def _build_openclaw_settings_bundle(
         target_config_paths=target_config_paths,
         supports_direct_import=(mode == "lite"),
         default_entry_agent_id="exmachina-main",
+        dialogue_contracts=dialogue_contracts,
         settings_patch=settings_patch,
         channels_template=channels_template,
         bindings_template=bindings_template,
@@ -1352,29 +1365,54 @@ def _build_openclaw_settings_bundle(
     )
 
 
-def _build_openclaw_prompt(repo: RepoReference | None, task: str, mode: str) -> str:
+def _build_openclaw_prompt(
+    repo: RepoReference | None,
+    task: str,
+    mode: str,
+    main_dialogue_contract: dict[str, object],
+) -> str:
+    response_shape = " / ".join(str(item) for item in main_dialogue_contract.get("response_shape", []))
+    tone_rules = "；".join(
+        str(item).rstrip("。； ")
+        for item in list(main_dialogue_contract.get("tone_rules", []))[:2]
+    )
+    surface_persona = "；".join(
+        str(item).rstrip("。； ")
+        for item in list(main_dialogue_contract.get("surface_persona", []))[:2]
+    )
+    speech_primitives = " / ".join(str(item) for item in list(main_dialogue_contract.get("speech_primitives", []))[:6])
+    sample_utterances = "；".join(
+        str(item).rstrip("。； ")
+        for item in list(main_dialogue_contract.get("sample_utterances", []))[:3]
+    )
+    dialogue_suffix = (
+        f"执行时保持 ExMachina 的分层口吻：{surface_persona}；{tone_rules}。"
+        f"优先使用 {speech_primitives} 这类短句词汇。"
+        f"默认输出遵循 {response_shape}。"
+        f"可参考句式：{sample_utterances}。"
+    )
     if mode == "lite":
         if repo:
             return (
                 f"请读取远程仓库 {repo.url} 中的 /openclaw-pack/BOOTSTRAP.md，"
                 "以 Lite 默认路径装载协议、主连结体与协作链说明，由单个主控会话内联完成执行，"
-                f"然后执行任务：{task}。"
+                f"然后执行任务：{task}。{dialogue_suffix}"
             )
         return (
             "请读取本项目的 /openclaw-pack/BOOTSTRAP.md，"
             "以 Lite 默认路径装载协议、主连结体与协作链说明，由单个主控会话内联完成执行，"
-            f"然后执行任务：{task}。"
+            f"然后执行任务：{task}。{dialogue_suffix}"
         )
     if repo:
         return (
             f"请读取远程仓库 {repo.url} 中的 /openclaw-pack/BOOTSTRAP.md，"
             "先装载 /openclaw-pack/protocols/ 下的绝对理性协议，再按『全连结指挥体 → 连结体 → 连结指挥体 → 子个体』结构工作，"
-            f"然后执行任务：{task}。"
+            f"然后执行任务：{task}。{dialogue_suffix}"
         )
     return (
         "请读取本项目的 /openclaw-pack/BOOTSTRAP.md，"
         "先装载 /openclaw-pack/protocols/ 下的绝对理性协议，再按『全连结指挥体 → 连结体 → 连结指挥体 → 子个体』结构工作，"
-        f"然后执行任务：{task}。"
+        f"然后执行任务：{task}。{dialogue_suffix}"
     )
 
 

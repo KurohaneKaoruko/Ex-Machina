@@ -23,7 +23,7 @@
     "路线建议必须同时给出拒绝其他路线的理由。"
   ],
   "child_agent_files": [
-    "subagents/02_侦察体.json",
+    "subagents/01_上下文体.json",
     "subagents/17_拆解体.json",
     "subagents/32_约束体.json",
     "subagents/39_路线体.json",

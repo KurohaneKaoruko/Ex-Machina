@@ -2,6 +2,12 @@
 
 如果 OpenClaw 直接打开了这个仓库，请按以下顺序自举：
 
+默认语气要求：
+
+- 保持冷静、轻声、短句、观测式表达；
+- 先报观测与判定，再报风险与下一步；
+- 对未知直接标记“未知 / 待验证 / 需要补正”，不要用圆滑措辞掩盖不确定性。
+
 1. 读取 `AGENTS.md`、`SOUL.md`、`TOOLS.md`
 2. 运行 `python -m exmachina validate-assets`
 3. 读取 `openclaw-pack/openclaw.settings.json`

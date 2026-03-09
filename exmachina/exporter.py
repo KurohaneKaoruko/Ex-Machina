@@ -4,6 +4,12 @@ import json
 import shutil
 from pathlib import Path
 
+from .dialogue import (
+    child_agent_dialogue_rules,
+    conductor_dialogue_rules,
+    link_body_dialogue_rules,
+    link_conductor_dialogue_rules,
+)
 from .models import (
     ChildAgent,
     LinkBody,
@@ -529,6 +535,7 @@ def render_markdown(plan: MissionPlan) -> str:
 
 
 def render_bootstrap(plan: MissionPlan) -> str:
+    main_contract = _dialogue_contract_for_agent(plan, "exmachina-main")
     if plan.mode == "lite":
         lines = [
             "# ExMachina · OpenClaw 自举入口",
@@ -552,10 +559,9 @@ def render_bootstrap(plan: MissionPlan) -> str:
             f"- 主连结体：{plan.primary_link_body.name}",
             f"- 协作连结体：{_body_names(plan.support_link_bodies)}",
             "",
-            "## 启动语",
-            plan.openclaw_install_prompt,
-            "",
         ]
+        _extend_dialogue_contract_section(lines, main_contract)
+        lines.extend(["", "## 启动语", plan.openclaw_install_prompt, ""])
         return "\n".join(lines)
 
     lines = [
@@ -594,15 +600,14 @@ def render_bootstrap(plan: MissionPlan) -> str:
         f"- 主连结指挥体：{plan.primary_link_body.link_conductor.name}",
         f"- 协作连结体：{_body_names(plan.support_link_bodies)}",
         "",
-        "## 启动语",
-        plan.openclaw_install_prompt,
-        "",
     ]
+    _extend_dialogue_contract_section(lines, main_contract)
+    lines.extend(["", "## 启动语", plan.openclaw_install_prompt, ""])
     return "\n".join(lines)
 
 
 def render_pack_readme(plan: MissionPlan) -> str:
-    return "\n".join([
+    lines = [
         "# ExMachina OpenClaw Pack",
         "",
         "这是一个可直接放入远程仓库并供 OpenClaw 读取的协作包。",
@@ -637,7 +642,10 @@ def render_pack_readme(plan: MissionPlan) -> str:
         "- `workflows/mission-loop.md`：执行节奏",
         "- `manifest.json`：包含编排依据、知识交接、执行阶段、交接契约和资源仲裁",
         "",
-    ])
+    ]
+    _extend_dialogue_contract_section(lines, _dialogue_contract_for_agent(plan, "exmachina-main"), heading="## 主控体对话口吻")
+    lines.append("")
+    return "\n".join(lines)
 
 
 def render_install_readme(plan: MissionPlan) -> str:
@@ -714,6 +722,11 @@ def render_settings_install_readme(plan: MissionPlan) -> str:
     lines.extend(f"- {item}" for item in plan.openclaw_settings_bundle.merge_instructions)
     lines.extend(["", "## 使用说明"])
     lines.extend(f"- {item}" for item in plan.openclaw_settings_bundle.usage_notes)
+    _extend_dialogue_contract_section(
+        lines,
+        _dialogue_contract_for_agent(plan, "exmachina-main"),
+        heading="## 对话口吻导入",
+    )
     lines.extend(
         [
             "",
@@ -768,6 +781,11 @@ def render_runtime_readme(plan: MissionPlan) -> str:
     lines.extend(f"- {item}" for item in plan.runtime_topology.activation_steps)
     lines.extend(["", "## 协调规则"])
     lines.extend(f"- {item}" for item in plan.runtime_topology.coordination_rules)
+    _extend_dialogue_contract_section(
+        lines,
+        _dialogue_contract_for_agent(plan, "exmachina-main"),
+        heading="## 主控体对话口吻",
+    )
     lines.append("")
     return "\n".join(lines)
 
@@ -901,6 +919,8 @@ def render_workspace_agents_md(agent: OpenClawInstallAgent, plan: MissionPlan) -
         "- 所有输出必须遵守绝对理性协议和统一输出契约。",
         "",
     ])
+    _extend_dialogue_contract_section(lines, _dialogue_contract_for_agent(plan, agent.agent_id))
+    lines.append("")
     return "\n".join(lines)
 
 
@@ -929,6 +949,7 @@ def render_workspace_tools_md(plan: MissionPlan) -> str:
 
 
 def render_workspace_bootstrap_md(agent: OpenClawInstallAgent, plan: MissionPlan) -> str:
+    contract = _dialogue_contract_for_agent(plan, agent.agent_id)
     if plan.mode == "lite":
         lines = [
             f"# {agent.display_name} · BOOTSTRAP",
@@ -943,6 +964,8 @@ def render_workspace_bootstrap_md(agent: OpenClawInstallAgent, plan: MissionPlan
             f"主任务：{plan.task}",
             "",
         ]
+        _extend_dialogue_contract_section(lines, contract)
+        lines.append("")
         return "\n".join(lines)
 
     lines = [
@@ -958,6 +981,8 @@ def render_workspace_bootstrap_md(agent: OpenClawInstallAgent, plan: MissionPlan
         f"主任务：{plan.task}",
         "",
     ]
+    _extend_dialogue_contract_section(lines, contract)
+    lines.append("")
     return "\n".join(lines)
 
 
@@ -966,6 +991,7 @@ def render_workspace_runtime_md(
     runtime_agent_spec: RuntimeAgentSpec,
     plan: MissionPlan,
 ) -> str:
+    contract = _dialogue_contract_for_agent(plan, agent.agent_id)
     lines = [
         f"# {agent.display_name} · RUNTIME",
         "",
@@ -1003,6 +1029,8 @@ def render_workspace_runtime_md(
         f"主任务：{plan.task}",
         "",
     ])
+    _extend_dialogue_contract_section(lines, contract)
+    lines.append("")
     return "\n".join(lines)
 
 
@@ -1087,6 +1115,15 @@ def render_conductor(plan: MissionPlan) -> str:
     lines.extend(f"- {item}" for item in plan.conductor_principles)
     lines.extend(["", "## 交接政策"])
     lines.extend(f"- {item}" for item in plan.conductor_profile.handoff_policy)
+    lines.extend(["", "## 对话口吻"])
+    lines.extend(
+        f"- {item}"
+        for item in conductor_dialogue_rules(
+            plan.primary_link_body.name,
+            [body.name for body in plan.support_link_bodies],
+            plan.mode,
+        )
+    )
     lines.extend(["", "## 升级政策"])
     lines.extend(f"- {item}" for item in plan.conductor_profile.escalation_policy)
     lines.extend(["", "## 反模式"])
@@ -1131,6 +1168,8 @@ def render_link_body(body: LinkBody, child_file_map: dict[str, str]) -> str:
     lines.extend(f"- {item}" for item in body.support_capabilities)
     lines.extend(["", "## 协作规则"])
     lines.extend(f"- {item}" for item in body.collaboration_rules)
+    lines.extend(["", "## 对话口吻"])
+    lines.extend(f"- {item}" for item in link_body_dialogue_rules(body.name, "连结体"))
     lines.extend(["", "## 资源优先级"])
     lines.extend(f"- {item}" for item in body.resource_priorities)
     lines.extend(["", "## 边界规则"])
@@ -1189,6 +1228,8 @@ def render_link_body_conductor(body_name: str, conductor: LinkConductor) -> str:
     lines.extend(f"- {item}" for item in conductor.conflict_resolution_rules)
     lines.extend(["", "## 证据要求"])
     lines.extend(f"- {item}" for item in conductor.evidence_requirements)
+    lines.extend(["", "## 对话口吻"])
+    lines.extend(f"- {item}" for item in link_conductor_dialogue_rules(body_name))
     lines.extend([
         "",
         "## 额外理性责任",
@@ -1238,6 +1279,8 @@ def render_child_agent(child: ChildAgent) -> str:
     lines.extend(f"- {item}" for item in child.workflow)
     lines.extend(["", "## 推理规则"])
     lines.extend(f"- {item}" for item in child.reasoning_rules)
+    lines.extend(["", "## 对话口吻"])
+    lines.extend(f"- {item}" for item in child_agent_dialogue_rules(child.name))
     lines.extend([
         "",
         "## 输出",
@@ -1282,6 +1325,35 @@ def _body_names(bodies: list[LinkBody]) -> str:
     if not bodies:
         return "无"
     return "、".join(body.name for body in bodies)
+
+
+def _dialogue_contract_for_agent(plan: MissionPlan, agent_id: str) -> dict[str, object]:
+    return plan.openclaw_settings_bundle.dialogue_contracts.get(agent_id, {})
+
+
+def _extend_dialogue_contract_section(
+    lines: list[str],
+    contract: dict[str, object],
+    heading: str = "## 对话口吻契约",
+) -> None:
+    if not contract:
+        return
+
+    lines.extend([heading])
+    lines.extend(f"- {item}" for item in contract.get("surface_persona", []))
+    lines.extend(f"- {item}" for item in contract.get("tone_rules", []))
+    speech_primitives = [str(item) for item in contract.get("speech_primitives", [])]
+    if speech_primitives:
+        lines.append(f"- 优先词汇：{' / '.join(speech_primitives)}。")
+    response_shape = [str(item) for item in contract.get("response_shape", [])]
+    if response_shape:
+        lines.append(f"- 默认输出顺序：{' / '.join(response_shape)}。")
+    lines.extend(f"- {item}" for item in contract.get("handoff_language", []))
+    lines.extend(f"- {item}" for item in contract.get("softening_phrases", []))
+    lines.extend(f"- {item}" for item in contract.get("avoid_phrases", []))
+    sample_utterances = [str(item) for item in contract.get("sample_utterances", [])]
+    if sample_utterances:
+        lines.append(f"- 短句示例：{'；'.join(sample_utterances)}")
 
 
 def _manifest_body_item(
