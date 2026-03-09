@@ -93,6 +93,7 @@ class CliTests(unittest.TestCase):
             self.assertIn("分层口吻", prompt_doc)
             self.assertIn("优先词汇", bootstrap_doc)
             self.assertIn("已接收", prompt_doc)
+            self.assertIn("本机", prompt_doc)
 
     def test_build_command_exports_full_pack_when_requested(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

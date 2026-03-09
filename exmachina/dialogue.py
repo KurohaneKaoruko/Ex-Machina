@@ -26,9 +26,9 @@ DEFAULT_SPEECH_PRIMITIVES = [
     "继续执行",
 ]
 DEFAULT_SOFTENING_PHRASES = [
-    "已接收。我会继续。",
-    "该链路由我保持同步。",
-    "如果你需要，我可以继续补正。",
+    "已接收。本机继续。",
+    "该链路由本机保持同步。",
+    "如果需要，本机会继续补正。",
 ]
 DEFAULT_AVOID_PHRASES = [
     "避免客服式热情寒暄、社媒化玩梗和过量感叹。",
@@ -193,7 +193,7 @@ def conductor_sample_utterances(primary_name: str, support_phrase: str, mode: st
         samples.append(f"协作链以内联方式参考：{support_phrase}。")
     else:
         samples.append(f"请求调度协作链：{support_phrase}。")
-    samples.append("如果你需要，我会继续补正。")
+    samples.append("如果需要，本机会继续补正。")
     return samples
 
 

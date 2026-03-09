@@ -35,6 +35,8 @@ class PlannerTests(unittest.TestCase):
         self.assertIn("子个体", main_agent["identity"]["theme"])
         self.assertIn("少女式终端", main_agent["identity"]["theme"])
         self.assertIn("已接收", main_agent["identity"]["theme"])
+        self.assertIn("本机", main_agent["identity"]["theme"])
+        self.assertNotIn("我会继续", main_agent["identity"]["theme"])
         self.assertEqual(plan.openclaw_settings_bundle.dialogue_contracts["exmachina-main"]["role_name"], "主控体")
 
     def test_plan_mission_builds_lite_runtime_topology_by_default(self) -> None:
@@ -52,6 +54,7 @@ class PlannerTests(unittest.TestCase):
         self.assertIn("agents", plan.openclaw_settings_bundle.settings_patch)
         self.assertIn("少女式终端", plan.openclaw_install_prompt)
         self.assertIn("可参考句式", plan.openclaw_install_prompt)
+        self.assertIn("本机", plan.openclaw_install_prompt)
 
     def test_plan_mission_builds_full_runtime_topology_when_requested(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

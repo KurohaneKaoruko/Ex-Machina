@@ -1385,11 +1385,20 @@ def _build_openclaw_prompt(
         str(item).rstrip("。； ")
         for item in list(main_dialogue_contract.get("sample_utterances", []))[:3]
     )
+    softening_phrase = next(
+        (
+            str(item).rstrip("。； ")
+            for item in list(main_dialogue_contract.get("softening_phrases", []))
+            if "本机" in str(item)
+        ),
+        "",
+    )
     dialogue_suffix = (
         f"执行时保持 ExMachina 的分层口吻：{surface_persona}；{tone_rules}。"
         f"优先使用 {speech_primitives} 这类短句词汇。"
         f"默认输出遵循 {response_shape}。"
         f"可参考句式：{sample_utterances}。"
+        + (f"自称统一使用“本机”，例如：{softening_phrase}。" if softening_phrase else "")
     )
     if mode == "lite":
         if repo:
