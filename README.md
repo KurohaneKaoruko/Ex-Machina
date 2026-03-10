@@ -45,10 +45,20 @@
 1. 把仓库交给 OpenClaw 作为 workspace 打开。
 2. 先读取根目录 `PROMPT.md`。
 3. 按 `install/INTAKE.md` 问清语言、主控体显示名、配置路径、workspace 路径、宿主多 agent 能力与安装模式。
-4. 通过 `install.sh --mode lite|full` 或按 `install/SETTINGS.md` 手动合并对应 settings：`exmachina/openclaw.settings.lite.json` 或 `exmachina/openclaw.settings.json`。
+4. 通过 `install.sh --mode lite|full --pack exmachina`（或 `--lang zh`）、`install.ps1 --mode lite|full --pack exmachina`（或 `--lang zh`）、`install.cmd --mode lite|full --pack exmachina`，或按 `install/SETTINGS.md` 手动合并对应 settings：`exmachina/openclaw.settings.lite.json` 或 `exmachina/openclaw.settings.json`。
 5. 进入 `exmachina/BOOTSTRAP.md` 启动任务。
 
+如需英文版，请改用 `PROMPT.en.md`、`install/INTAKE.en.md`、`install/SETTINGS.en.md`，并在脚本中使用 `--pack exmachina-en` 或 `--lang en`，入口为 `exmachina-en/BOOTSTRAP.md`。
+
 如果宿主不支持多 agent 绑定与外部路由，请停止安装。
+
+---
+
+## 语言版本
+
+- 中文版：`exmachina/` + `PROMPT.md` + `install/INTAKE.md` + `install/SETTINGS.md`
+- 英文版：`exmachina-en/` + `PROMPT.en.md` + `install/INTAKE.en.md` + `install/SETTINGS.en.md`
+- 安装脚本支持 `--pack exmachina|exmachina-en` 或 `--lang zh|en`
 
 ---
 
@@ -122,15 +132,39 @@ exmachina/
     agents/
     shared/
 
+exmachina-en/
+  BOOTSTRAP.md
+  QUICKSTART.md
+  README.md
+  manifest.json
+  openclaw.settings.json
+  openclaw.settings.lite.json
+  protocols/
+  agents/
+  workflows/
+    mission-loop.md
+  runtime/
+    README.md
+    topology.json
+    task-board.json
+    agents/
+    shared/
+
 docs/
   ARCHITECTURE.md
+  ARCHITECTURE.en.md
 
 install/
   BOOTSTRAP.md
+  BOOTSTRAP.en.md
   AGENTS.md
+  AGENTS.en.md
   INTAKE.md
+  INTAKE.en.md
   SETTINGS.md
+  SETTINGS.en.md
   intake.template.json
+  intake.template.en.json
 
 skills/
   */SKILL.md
@@ -139,7 +173,11 @@ src/
   pack.js
 
 PROMPT.md
+PROMPT.en.md
+README.en.md
 install.sh
+install.ps1
+install.cmd
 ```
 
 ---
@@ -171,7 +209,9 @@ flowchart TD
 
 ```bash
 node src/pack.js check
+node src/pack.js check --pack exmachina-en
 node src/pack.js export --out dist
+node src/pack.js export --out dist --pack exmachina-en
 ```
 
 ---

@@ -1,0 +1,60 @@
+{
+  "summary": "Allocate resources for the mission \"Consolidate knowledge handoff, terminology index, resource arbitration rules, and README examples to form an OpenClaw collaboration layer\" from P0 to P3: close risk gates first, protect the primary chain, then support and deferred work.",
+  "priority_slots": [
+    {
+      "priority": "P0",
+      "owner_body": "Rationality Link Body",
+      "objective": "Handle high-risk items, evidence conflicts, irreversible actions, and security/permission gates first.",
+      "reason": "If risk gates are not closed, downstream execution amplifies uncertainty and rework cost.",
+      "deferrable": false
+    },
+    {
+      "priority": "P1",
+      "owner_body": "Knowledge Link Body",
+      "objective": "Keep the Knowledge Link Body primary delivery moving.",
+      "reason": "The primary chain decides whether this round produces a core deliverable.",
+      "deferrable": false
+    },
+    {
+      "priority": "P2",
+      "owner_body": "Documentation Link Body",
+      "objective": "Handle integration, runbooks, instructions, and knowledge landing support work.",
+      "reason": "These directly impact usability, maintainability, and consumption of the deliverable.",
+      "deferrable": false
+    },
+    {
+      "priority": "P3",
+      "owner_body": "Knowledge Link Body",
+      "objective": "Collect deferrable research, optimization, polish, or extension items.",
+      "reason": "Before higher priorities are cleared, these must not block the main task.",
+      "deferrable": true
+    }
+  ],
+  "contention_rules": [
+    "When the P0 risk gate is open, other stages must not preempt its required resources.",
+    "When the Knowledge Link Body core delivery conflicts with other support tasks, prioritize P1 primary chain work.",
+    "Support work should reuse existing stage outputs and must not recreate the same context.",
+    "Deferrable items sink to P3 and are recorded in the knowledge handoff; do not masquerade as blockers.",
+    "When test context exists, validation resources must not be preempted by documentation or polish work.",
+    "When the Knowledge Link Body scope is involved, prioritize its core delivery and required validation.",
+    "When the Rationality Link Body scope is involved, prioritize its core delivery and required validation.",
+    "When the Validation Link Body scope is involved, prioritize its core delivery and required validation.",
+    "When the Documentation Link Body scope is involved, prioritize its core delivery and required validation.",
+    "When the Security Link Body scope is involved, prioritize its core delivery and required validation."
+  ],
+  "escalation_rules": [
+    "If P0 and P1 contend for the same input and cannot be split, escalate to the Primary Conductor for arbitration.",
+    "When security, evidence, and delivery goals conflict, preserve options that are more verifiable and reversible.",
+    "When support work exceeds this round's capacity, move it into knowledge handoff and follow-up plans.",
+    "Knowledge Link Body boundary: only handle terminology unification, decision consolidation, index organization, and question logging.",
+    "Rationality Link Body boundary: only handle evidence grading, counterevidence search, conflict arbitration, and confidence calibration.",
+    "Validation Link Body boundary: only handle reproduction, assertions, evidence collection, and regression validation.",
+    "Documentation Link Body boundary: only handle inventory, structure organization, example writing, and proofreading release.",
+    "Security Link Body boundary: only handle threat modeling, permission audits, hardening guidance, and compliance closure."
+  ],
+  "deferred_work": [
+    "Non-blocking performance tweaks, copy polish, and extra extension points.",
+    "Long-term abstractions and large-scale refactors that do not affect current acceptance.",
+    "Supplementary retrospectives beyond the knowledge index, captured after the main loop closes."
+  ]
+}

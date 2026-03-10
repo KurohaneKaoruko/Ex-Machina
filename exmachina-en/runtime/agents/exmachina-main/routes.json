@@ -1,0 +1,14 @@
+{
+  "agent_id": "exmachina-main",
+  "routes": [
+    "route-dispatch",
+    "route-status",
+    "route-stage-01",
+    "route-stage-02",
+    "route-stage-03",
+    "route-stage-04",
+    "route-validation",
+    "route-docs",
+    "route-security"
+  ]
+}

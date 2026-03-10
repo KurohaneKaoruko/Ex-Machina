@@ -14,6 +14,8 @@
 
 - `PROMPT.md`
 - `install.sh`
+- `install.ps1`
+- `install.cmd`
 - `install/INTAKE.md`
 - `exmachina/openclaw.settings.lite.json`
 - `exmachina/openclaw.settings.json`
@@ -26,5 +28,7 @@
 5. 读取 `install/SETTINGS.md`
 6. 确认宿主已开启多 agent 绑定与外部路由
 7. 完成后回到 `exmachina/BOOTSTRAP.md`，按所选模式执行任务
+
+如需英文版，请改用 `PROMPT.en.md`、`install/INTAKE.en.md`、`install/SETTINGS.en.md`，并在脚本中使用 `--pack exmachina-en` 或 `--lang en`，入口为 `exmachina-en/BOOTSTRAP.md`。
 
 如果当前环境不支持多 agent 绑定与路由，请停止安装并提示用户更换宿主环境。

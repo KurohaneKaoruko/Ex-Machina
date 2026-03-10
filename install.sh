@@ -4,11 +4,24 @@ set -e
 ROOT_DIR=$(cd "$(dirname "$0")" && pwd)
 MODE="full"
 TARGET_PATH=""
+PACK_DIR="exmachina"
+LANG=""
+LANG_SUFFIX=""
+PACK_OVERRIDE=""
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --mode)
       MODE="$2"
+      shift 2
+      ;;
+    --pack)
+      PACK_DIR="$2"
+      PACK_OVERRIDE="1"
+      shift 2
+      ;;
+    --lang)
+      LANG="$2"
       shift 2
       ;;
     lite|full)
@@ -22,16 +35,43 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
+if [ -n "$LANG" ]; then
+  case "$LANG" in
+    en|en-US|en_US)
+      LANG_SUFFIX=".en"
+      ;;
+    *)
+      LANG_SUFFIX=""
+      ;;
+  esac
+fi
+
+if [ -n "$LANG" ] && [ -z "$PACK_OVERRIDE" ]; then
+  case "$LANG" in
+    en|en-US|en_US)
+      PACK_DIR="exmachina-en"
+      ;;
+  esac
+fi
+
+if [ -z "$LANG_SUFFIX" ]; then
+  case "$PACK_DIR" in
+    *-en)
+      LANG_SUFFIX=".en"
+      ;;
+  esac
+fi
+
 case "$MODE" in
   lite)
-    SETTINGS_FILE="$ROOT_DIR/exmachina/openclaw.settings.lite.json"
+    SETTINGS_FILE="$ROOT_DIR/$PACK_DIR/openclaw.settings.lite.json"
     ;;
   full)
-    SETTINGS_FILE="$ROOT_DIR/exmachina/openclaw.settings.json"
+    SETTINGS_FILE="$ROOT_DIR/$PACK_DIR/openclaw.settings.json"
     ;;
   *)
     echo "Unknown mode: $MODE"
-    echo "Usage: ./install.sh [--mode lite|full] <target-config-path>"
+    echo "Usage: ./install.sh [--mode lite|full] [--pack exmachina|exmachina-en] [--lang zh|en] <target-config-path>"
     exit 1
     ;;
 esac
@@ -41,16 +81,19 @@ if [ ! -f "$SETTINGS_FILE" ]; then
   exit 1
 fi
 
+INTAKE_FILE="$ROOT_DIR/install/INTAKE${LANG_SUFFIX}.md"
+BOOTSTRAP_FILE="$ROOT_DIR/$PACK_DIR/BOOTSTRAP.md"
+
 echo "ExMachina Prompt-First Install"
-echo "1) Read: $ROOT_DIR/install/INTAKE.md"
+echo "1) Read: $INTAKE_FILE"
 echo "2) Select mode: $MODE"
-echo "3) Import: $SETTINGS_FILE (merge only ExMachina agent entries)"
-echo "4) Follow: $ROOT_DIR/exmachina/BOOTSTRAP.md"
+echo "3) Import: $SETTINGS_FILE (merge ExMachina agent entries; set exmachina-main as default)"
+echo "4) Follow: $BOOTSTRAP_FILE"
 
 echo ""
 if [ -z "$TARGET_PATH" ]; then
   echo "Tip: You can copy the settings template into your OpenClaw config path."
-  echo "Usage: ./install.sh [--mode lite|full] <target-config-path>"
+  echo "Usage: ./install.sh [--mode lite|full] [--pack exmachina|exmachina-en] [--lang zh|en] <target-config-path>"
   exit 0
 fi
 

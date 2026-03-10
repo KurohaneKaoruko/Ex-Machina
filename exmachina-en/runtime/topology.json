@@ -1,0 +1,466 @@
+{
+  "mode": "full",
+  "supported_modes": [
+    "lite",
+    "full"
+  ],
+  "mode_notes": {
+    "lite": "Do not create subagent agents in OpenClaw; subagent responsibilities are executed inline by the link body.",
+    "full": "Create all subagent agents in OpenClaw; runtime topology remains link-body level."
+  },
+  "controller_agent_id": "exmachina-main",
+  "coordination_mode": "multi-agent-routing",
+  "requires_external_routing": true,
+  "shared_artifacts": [
+    {
+      "name": "mission-context",
+      "path": "runtime/shared/mission-context.json",
+      "description": "Global mission context and primary/support chain summary.",
+      "consumers": [
+        "exmachina-main",
+        "exmachina-primary",
+        "exmachina-support-1",
+        "exmachina-support-2",
+        "exmachina-support-3",
+        "exmachina-support-4"
+      ]
+    },
+    {
+      "name": "task-board",
+      "path": "runtime/task-board.json",
+      "description": "Multi-agent task board and stage allocation.",
+      "consumers": [
+        "exmachina-main",
+        "exmachina-primary",
+        "exmachina-support-1",
+        "exmachina-support-2",
+        "exmachina-support-3",
+        "exmachina-support-4"
+      ]
+    },
+    {
+      "name": "knowledge-handoff",
+      "path": "runtime/shared/knowledge-handoff.json",
+      "description": "Knowledge handoff and maintenance inputs.",
+      "consumers": [
+        "exmachina-main",
+        "exmachina-primary"
+      ]
+    },
+    {
+      "name": "resource-arbitration",
+      "path": "runtime/shared/resource-arbitration.json",
+      "description": "Resource arbitration and escalation rules.",
+      "consumers": [
+        "exmachina-main",
+        "exmachina-primary",
+        "exmachina-support-1",
+        "exmachina-support-2",
+        "exmachina-support-3",
+        "exmachina-support-4"
+      ]
+    }
+  ],
+  "agent_specs": [
+    {
+      "agent_id": "exmachina-main",
+      "display_name": "ExMachina Controller",
+      "runtime_role": "controller",
+      "source": "Primary Conductor",
+      "workspace_dir": "{{EXMACHINA_PACK_ROOT}}",
+      "responsibilities": [
+        "Dispatch stage tasks to the primary and support link bodies.",
+        "Aggregate multi-agent outputs into the final structured delivery.",
+        "Resolve cross-agent conflicts and handle risk escalation."
+      ],
+      "handoff_targets": [
+        "exmachina-primary",
+        "exmachina-support-1",
+        "exmachina-support-2",
+        "exmachina-support-3",
+        "exmachina-support-4"
+      ],
+      "inbox_path": "runtime/agents/exmachina-main/inbox",
+      "outbox_path": "runtime/agents/exmachina-main/outbox",
+      "status_path": "runtime/agents/exmachina-main/status.json",
+      "assignments": [
+        "assignment-controller"
+      ]
+    },
+    {
+      "agent_id": "exmachina-primary",
+      "display_name": "ExMachina Primary Link Body · Knowledge Link Body",
+      "runtime_role": "primary-link-body",
+      "source": "Knowledge Link Body",
+      "workspace_dir": "{{EXMACHINA_PACK_ROOT}}",
+      "responsibilities": [
+        "Own primary delivery for stages 1, 2, and 4.",
+        "Incorporate support link body outputs into primary conclusions."
+      ],
+      "handoff_targets": [
+        "exmachina-main"
+      ],
+      "inbox_path": "runtime/agents/exmachina-primary/inbox",
+      "outbox_path": "runtime/agents/exmachina-primary/outbox",
+      "status_path": "runtime/agents/exmachina-primary/status.json",
+      "assignments": [
+        "assignment-stage-01",
+        "assignment-stage-02",
+        "assignment-stage-04"
+      ]
+    },
+    {
+      "agent_id": "exmachina-support-1",
+      "display_name": "ExMachina Support Link Body · Rationality Link Body",
+      "runtime_role": "support-link-body",
+      "source": "Rationality Link Body",
+      "workspace_dir": "{{EXMACHINA_PACK_ROOT}}",
+      "responsibilities": [
+        "Handle stage 3 evidence grading, counterevidence search, conflict arbitration, and confidence calibration."
+      ],
+      "handoff_targets": [
+        "exmachina-main",
+        "exmachina-primary"
+      ],
+      "inbox_path": "runtime/agents/exmachina-support-1/inbox",
+      "outbox_path": "runtime/agents/exmachina-support-1/outbox",
+      "status_path": "runtime/agents/exmachina-support-1/status.json",
+      "assignments": [
+        "assignment-stage-03"
+      ]
+    },
+    {
+      "agent_id": "exmachina-support-2",
+      "display_name": "ExMachina Support Link Body · Validation Link Body",
+      "runtime_role": "support-link-body",
+      "source": "Validation Link Body",
+      "workspace_dir": "{{EXMACHINA_PACK_ROOT}}",
+      "responsibilities": [
+        "Handle reproduction, assertions, evidence archiving, and regression validation."
+      ],
+      "handoff_targets": [
+        "exmachina-main",
+        "exmachina-primary"
+      ],
+      "inbox_path": "runtime/agents/exmachina-support-2/inbox",
+      "outbox_path": "runtime/agents/exmachina-support-2/outbox",
+      "status_path": "runtime/agents/exmachina-support-2/status.json",
+      "assignments": [
+        "assignment-support-validation"
+      ]
+    },
+    {
+      "agent_id": "exmachina-support-3",
+      "display_name": "ExMachina Support Link Body · Documentation Link Body",
+      "runtime_role": "support-link-body",
+      "source": "Documentation Link Body",
+      "workspace_dir": "{{EXMACHINA_PACK_ROOT}}",
+      "responsibilities": [
+        "Handle inventory, structure organization, example writing, and proofreading release."
+      ],
+      "handoff_targets": [
+        "exmachina-main",
+        "exmachina-primary"
+      ],
+      "inbox_path": "runtime/agents/exmachina-support-3/inbox",
+      "outbox_path": "runtime/agents/exmachina-support-3/outbox",
+      "status_path": "runtime/agents/exmachina-support-3/status.json",
+      "assignments": [
+        "assignment-support-docs"
+      ]
+    },
+    {
+      "agent_id": "exmachina-support-4",
+      "display_name": "ExMachina Support Link Body · Security Link Body",
+      "runtime_role": "support-link-body",
+      "source": "Security Link Body",
+      "workspace_dir": "{{EXMACHINA_PACK_ROOT}}",
+      "responsibilities": [
+        "Handle threat modeling, permission audits, hardening guidance, and compliance closure."
+      ],
+      "handoff_targets": [
+        "exmachina-main",
+        "exmachina-primary"
+      ],
+      "inbox_path": "runtime/agents/exmachina-support-4/inbox",
+      "outbox_path": "runtime/agents/exmachina-support-4/outbox",
+      "status_path": "runtime/agents/exmachina-support-4/status.json",
+      "assignments": [
+        "assignment-support-security"
+      ]
+    }
+  ],
+  "assignments": [
+    {
+      "assignment_id": "assignment-controller",
+      "stage_name": "Global Coordination",
+      "agent_id": "exmachina-main",
+      "source_body": "Primary Conductor",
+      "role": "controller",
+      "goal": "Coordinate the primary chain, support chain, and final consolidation to keep multi-agent delivery mergeable.",
+      "deliverables": [
+        "Task boundary and acceptance criteria",
+        "Multi-agent task board",
+        "Final structured delivery"
+      ],
+      "exit_checks": [
+        "Primary and support chain responsibilities are aligned.",
+        "Final conclusions, risks, and next steps are unified."
+      ],
+      "depends_on": [],
+      "handoff_routes": [
+        "route-dispatch",
+        "route-status"
+      ]
+    },
+    {
+      "assignment_id": "assignment-stage-01",
+      "stage_name": "Stage 1 · Task Clarification",
+      "agent_id": "exmachina-primary",
+      "source_body": "Knowledge Link Body",
+      "role": "owner",
+      "goal": "Provide fill-in inputs for terminology alignment, decision consolidation, index organization, and question logging.",
+      "deliverables": [
+        "Terminology alignment and index skeleton",
+        "Risk and boundary reminders"
+      ],
+      "exit_checks": [
+        "Fill-in inputs delivered to the controller."
+      ],
+      "depends_on": [],
+      "handoff_routes": [
+        "route-stage-01"
+      ]
+    },
+    {
+      "assignment_id": "assignment-stage-02",
+      "stage_name": "Stage 2 · Primary Delivery",
+      "agent_id": "exmachina-primary",
+      "source_body": "Knowledge Link Body",
+      "role": "owner",
+      "goal": "Produce the main deliverable and integrate support-chain inputs.",
+      "deliverables": [
+        "Primary delivery summary",
+        "Risks and dependencies"
+      ],
+      "exit_checks": [
+        "Primary delivery is traceable.",
+        "Support link bodies have received required fill-in inputs."
+      ],
+      "depends_on": [
+        "Stage 1 · Task Clarification"
+      ],
+      "handoff_routes": [
+        "route-stage-02",
+        "route-dispatch"
+      ]
+    },
+    {
+      "assignment_id": "assignment-stage-03",
+      "stage_name": "Stage 3 · Cross-Validation",
+      "agent_id": "exmachina-support-1",
+      "source_body": "Rationality Link Body",
+      "role": "owner",
+      "goal": "Complete evidence grading, counterevidence search, conflict arbitration, and confidence calibration.",
+      "deliverables": [
+        "Evidence grading matrix",
+        "Counterevidence and conflict arbitration report",
+        "Confidence calibration conclusion"
+      ],
+      "exit_checks": [
+        "Rationality Link Body delivery is structured and complete."
+      ],
+      "depends_on": [
+        "Stage 2 · Primary Delivery"
+      ],
+      "handoff_routes": [
+        "route-stage-03"
+      ]
+    },
+    {
+      "assignment_id": "assignment-stage-04",
+      "stage_name": "Stage 4 · Integration Handoff",
+      "agent_id": "exmachina-primary",
+      "source_body": "Knowledge Link Body",
+      "role": "owner",
+      "goal": "Consolidate terminology, decisions, index, and open questions.",
+      "deliverables": [
+        "Terminology and concept index",
+        "Key decisions and rejection rationale",
+        "Open questions and maintenance list"
+      ],
+      "exit_checks": [
+        "Knowledge Link Body delivery is directly consumable downstream."
+      ],
+      "depends_on": [
+        "Stage 3 · Cross-Validation"
+      ],
+      "handoff_routes": [
+        "route-stage-04"
+      ]
+    },
+    {
+      "assignment_id": "assignment-support-validation",
+      "stage_name": "Support Fill-in · Validation Link Body",
+      "agent_id": "exmachina-support-2",
+      "source_body": "Validation Link Body",
+      "role": "support",
+      "goal": "Fill in validation, regression, and evidence archiving.",
+      "deliverables": [
+        "Validation matrix",
+        "Regression results",
+        "Issue evidence list"
+      ],
+      "exit_checks": [
+        "Validation deliverables returned to the controller and primary link body."
+      ],
+      "depends_on": [
+        "Stage 2 · Primary Delivery"
+      ],
+      "handoff_routes": [
+        "route-validation"
+      ]
+    },
+    {
+      "assignment_id": "assignment-support-docs",
+      "stage_name": "Support Fill-in · Documentation Link Body",
+      "agent_id": "exmachina-support-3",
+      "source_body": "Documentation Link Body",
+      "role": "support",
+      "goal": "Fill in documentation structure, example writing, and proofreading release.",
+      "deliverables": [
+        "Documentation information architecture",
+        "Instructions and example draft",
+        "Update list"
+      ],
+      "exit_checks": [
+        "Documentation deliverables returned to the controller and primary link body."
+      ],
+      "depends_on": [
+        "Stage 2 · Primary Delivery"
+      ],
+      "handoff_routes": [
+        "route-docs"
+      ]
+    },
+    {
+      "assignment_id": "assignment-support-security",
+      "stage_name": "Support Fill-in · Security Link Body",
+      "agent_id": "exmachina-support-4",
+      "source_body": "Security Link Body",
+      "role": "support",
+      "goal": "Fill in threat modeling, permission audits, and hardening guidance.",
+      "deliverables": [
+        "Threat surface and risk list",
+        "Permission or sensitive information audit conclusions",
+        "Hardening and compliance recommendations"
+      ],
+      "exit_checks": [
+        "Security deliverables returned to the controller and primary link body."
+      ],
+      "depends_on": [
+        "Stage 2 · Primary Delivery"
+      ],
+      "handoff_routes": [
+        "route-security"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "route-dispatch",
+      "from": "exmachina-main",
+      "to": [
+        "exmachina-primary",
+        "exmachina-support-1",
+        "exmachina-support-2",
+        "exmachina-support-3",
+        "exmachina-support-4"
+      ],
+      "purpose": "Controller dispatches stage tasks and fill-in requests."
+    },
+    {
+      "route_id": "route-status",
+      "from": "exmachina-main",
+      "to": [
+        "exmachina-primary",
+        "exmachina-support-1",
+        "exmachina-support-2",
+        "exmachina-support-3",
+        "exmachina-support-4"
+      ],
+      "purpose": "Status return and delivery sync."
+    },
+    {
+      "route_id": "route-stage-01",
+      "from": "exmachina-primary",
+      "to": [
+        "exmachina-main"
+      ],
+      "purpose": "Stage 1 delivery return flow."
+    },
+    {
+      "route_id": "route-stage-02",
+      "from": "exmachina-primary",
+      "to": [
+        "exmachina-main"
+      ],
+      "purpose": "Stage 2 delivery return flow."
+    },
+    {
+      "route_id": "route-stage-03",
+      "from": "exmachina-support-1",
+      "to": [
+        "exmachina-main",
+        "exmachina-primary"
+      ],
+      "purpose": "Stage 3 cross-validation return flow."
+    },
+    {
+      "route_id": "route-stage-04",
+      "from": "exmachina-primary",
+      "to": [
+        "exmachina-main"
+      ],
+      "purpose": "Stage 4 integration handoff return flow."
+    },
+    {
+      "route_id": "route-validation",
+      "from": "exmachina-support-2",
+      "to": [
+        "exmachina-main",
+        "exmachina-primary"
+      ],
+      "purpose": "Validation Link Body delivery return flow."
+    },
+    {
+      "route_id": "route-docs",
+      "from": "exmachina-support-3",
+      "to": [
+        "exmachina-main",
+        "exmachina-primary"
+      ],
+      "purpose": "Documentation Link Body delivery return flow."
+    },
+    {
+      "route_id": "route-security",
+      "from": "exmachina-support-4",
+      "to": [
+        "exmachina-main",
+        "exmachina-primary"
+      ],
+      "purpose": "Security Link Body delivery return flow."
+    }
+  ],
+  "coordination_rules": [
+    "Multi-agent binding and external routing must be enabled.",
+    "All support link body outputs must flow back to the controller and the primary link body.",
+    "Multi-agent reporting must use the [xx-body]:xxx format."
+  ],
+  "activation_steps": [
+    "The controller reads runtime/shared/mission-context.json, runtime/task-board.json, and runtime/topology.json.",
+    "The controller dispatches Stage 1 and Stage 2 tasks to the primary link body.",
+    "After Stage 2, dispatch cross-validation and support fill-in tasks.",
+    "The controller aggregates Stage 3 and support outputs to drive Stage 4 integration handoff."
+  ]
+}

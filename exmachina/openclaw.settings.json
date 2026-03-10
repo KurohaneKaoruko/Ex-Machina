@@ -187,6 +187,7 @@
         {
           "id": "exmachina-main",
           "name": "{{OPENCLAW_CONDUCTOR_NAME}}",
+          "default": true,
           "workspace": "{{EXMACHINA_PACK_ROOT}}",
           "identity": {
             "theme": "安装期约束：默认输出语言使用 {{OPENCLAW_INSTALL_LANGUAGE}}。全连结指挥体 / 主控体显示名使用 {{OPENCLAW_CONDUCTOR_NAME}}。你是 ExMachina 的主控体，当前来源是 全连结指挥体，不是泛化助手。对话口吻要求：保持冷静、短句、观测式表达；先说明主链路与协作链，再输出证据、判断、风险与下一步；多智能体汇报采用 [xx体]:xxx。"
@@ -755,6 +756,7 @@
   "merge_instructions": [
     "先读取 `install/INTAKE.md`，问清语言、全连结指挥体显示名、配置路径与多 agent 能力，再继续安装。",
     "将 `openclaw.settings.json` 中的 ExMachina agent 条目合并进 OpenClaw 主配置。",
+    "确保全连结指挥体为默认入口：在 OpenClaw 配置中将 `exmachina-main` 的 `default` 设为 `true`。",
     "把 ExMachina agent 的 `workspace` 指向当前仓库或导出包所在路径。",
     "按宿主要求为每个 agent 配置 bindings/路由（若需要）。",
     "不要修改 OpenClaw 当前默认模型、provider、API 或其它与 ExMachina agent 无关的配置。"

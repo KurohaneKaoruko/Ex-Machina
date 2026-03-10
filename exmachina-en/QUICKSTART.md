@@ -1,0 +1,22 @@
+# QUICKSTART
+
+Current mode: lite / full (default full)
+
+## Shortest Path
+1. Confirm all questions in `install/INTAKE.en.md` (language, conductor display name, config path, workspace path, host multi-agent capability, install mode).
+2. Merge settings by mode: `lite` uses `openclaw.settings.lite.json`; `full` uses `openclaw.settings.json`.
+3. Configure multi-agent bindings/routes (channels, bindings, accounts, etc. required by the host).
+4. Let `exmachina-main` read `runtime/` and dispatch other agents by the task board.
+
+## Key Files
+- `openclaw.settings.lite.json`: lite-mode settings template (no subagent agents in OpenClaw; subagent responsibilities are executed inline).
+- `openclaw.settings.json`: full-mode settings template (creates all subagent agents in OpenClaw).
+- `install/INTAKE.en.md`: install intake.
+- `runtime/topology.json`: multi-agent topology and routing summary.
+- `runtime/task-board.json`: phased task board.
+- `runtime/agents/`: per-agent spec, queue, and status.
+- `BOOTSTRAP.md`: install and execution entry.
+
+## Runtime Constraints
+- Multi-agent reporting must use the `[xx-body]:xxx` format.
+- If the host does not support multi-agent, do not import this pack.

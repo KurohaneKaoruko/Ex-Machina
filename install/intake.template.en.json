@@ -1,0 +1,9 @@
+{
+  "install_language": "en-US",
+  "conductor_name": "ExMachina Controller",
+  "target_config_path": "~/.openclaw/openclaw.json",
+  "workspace_root": "{{EXMACHINA_PACK_ROOT}}",
+  "host_supports_multi_agent": true,
+  "install_mode": "full",
+  "extra_config_notes": ""
+}

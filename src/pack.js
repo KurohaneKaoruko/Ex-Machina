@@ -3,7 +3,6 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const PACK_DIR = path.join(ROOT, "exmachina");
 const ROOT_INSTALL_DIR = path.join(ROOT, "install");
 
 function fail(message) {
@@ -17,8 +16,8 @@ function readJson(filePath) {
   return JSON.parse(text);
 }
 
-function ensureExists(relPath, errors) {
-  const full = path.join(PACK_DIR, relPath);
+function ensureExists(packRoot, relPath, errors) {
+  const full = path.join(packRoot, relPath);
   if (!fs.existsSync(full)) {
     errors.push(`Missing: ${relPath}`);
   }
@@ -31,52 +30,79 @@ function ensureRootExists(relPath, errors) {
   }
 }
 
-function ensureManifestPath(relPath, errors) {
+function ensureManifestPath(packRoot, relPath, errors) {
   if (relPath === "install" || relPath.startsWith("install/")) {
     ensureRootExists(relPath, errors);
     return;
   }
-  ensureExists(relPath, errors);
+  ensureExists(packRoot, relPath, errors);
 }
 
-function collectRationalityPaths(manifest, errors) {
+function collectRationalityPaths(packRoot, manifest, errors) {
   const pathsObj = manifest?.rationality_protocol?.paths || {};
   Object.values(pathsObj).forEach((rel) => {
-    if (typeof rel === "string") ensureExists(rel, errors);
+    if (typeof rel === "string") ensureExists(packRoot, rel, errors);
   });
 }
 
-function collectManifestPaths(manifest, errors) {
+function collectManifestPaths(packRoot, manifest, errors) {
   const pathsObj = manifest?.paths || {};
   Object.values(pathsObj).forEach((rel) => {
-    if (typeof rel === "string") ensureManifestPath(rel, errors);
+    if (typeof rel === "string") ensureManifestPath(packRoot, rel, errors);
   });
 }
 
-function checkPack() {
-  const errors = [];
-  if (!fs.existsSync(PACK_DIR)) {
-    fail(`Missing pack directory: ${PACK_DIR}`);
+function resolvePackOptions(args) {
+  const packIndex = args.indexOf("--pack");
+  const langIndex = args.indexOf("--lang");
+  const packArg = packIndex >= 0 ? args[packIndex + 1] : "";
+  const langArg = langIndex >= 0 ? args[langIndex + 1] : "";
+
+  let packName = packArg || "exmachina";
+  let langSuffix = "";
+
+  if (langArg) {
+    if (langArg === "en" || langArg === "en-US" || langArg === "en_US") {
+      langSuffix = ".en";
+      if (!packArg) packName = "exmachina-en";
+    }
   }
 
-  ensureExists("manifest.json", errors);
-  ensureExists("openclaw.settings.json", errors);
-  ensureExists("openclaw.settings.lite.json", errors);
-  ensureExists("BOOTSTRAP.md", errors);
-  ensureExists("QUICKSTART.md", errors);
-  ensureExists("agents/00_全连结指挥体.md", errors);
-  ensureRootExists("install/INTAKE.md", errors);
-  ensureRootExists("install/SETTINGS.md", errors);
-  ensureRootExists("install/BOOTSTRAP.md", errors);
-  ensureRootExists("install/AGENTS.md", errors);
-  ensureRootExists("install/intake.template.json", errors);
-  ensureRootExists("PROMPT.md", errors);
+  if (!langSuffix && packName.endsWith("-en")) {
+    langSuffix = ".en";
+  }
 
-  const manifestPath = path.join(PACK_DIR, "manifest.json");
+  return { packName, langSuffix };
+}
+
+function checkPack(packName, langSuffix) {
+  const packRoot = path.join(ROOT, packName);
+  const errors = [];
+  if (!fs.existsSync(packRoot)) {
+    fail(`Missing pack directory: ${packRoot}`);
+  }
+
+  ensureExists(packRoot, "manifest.json", errors);
+  ensureExists(packRoot, "openclaw.settings.json", errors);
+  ensureExists(packRoot, "openclaw.settings.lite.json", errors);
+  ensureExists(packRoot, "BOOTSTRAP.md", errors);
+  ensureExists(packRoot, "QUICKSTART.md", errors);
+  const conductorFile = packName.endsWith("-en")
+    ? "agents/00_primary-conductor.md"
+    : "agents/00_全连结指挥体.md";
+  ensureExists(packRoot, conductorFile, errors);
+  ensureRootExists(`install/INTAKE${langSuffix}.md`, errors);
+  ensureRootExists(`install/SETTINGS${langSuffix}.md`, errors);
+  ensureRootExists(`install/BOOTSTRAP${langSuffix}.md`, errors);
+  ensureRootExists(`install/AGENTS${langSuffix}.md`, errors);
+  ensureRootExists(`install/intake.template${langSuffix}.json`, errors);
+  ensureRootExists(`PROMPT${langSuffix}.md`, errors);
+
+  const manifestPath = path.join(packRoot, "manifest.json");
   if (fs.existsSync(manifestPath)) {
     const manifest = readJson(manifestPath);
-    collectRationalityPaths(manifest, errors);
-    collectManifestPaths(manifest, errors);
+    collectRationalityPaths(packRoot, manifest, errors);
+    collectManifestPaths(packRoot, manifest, errors);
   }
 
   const requiredDirs = [
@@ -85,7 +111,7 @@ function checkPack() {
     "runtime"
   ];
   requiredDirs.forEach((rel) => {
-    const full = path.join(PACK_DIR, rel);
+    const full = path.join(packRoot, rel);
     if (!fs.existsSync(full)) {
       errors.push(`Missing: ${rel}/`);
       return;
@@ -105,28 +131,32 @@ function checkPack() {
   console.log("Pack check ok.");
 }
 
-function exportPack(outDir) {
+function exportPack(packName, langSuffix, outDir) {
   if (!outDir) fail("Missing --out <dir>");
   const target = path.resolve(outDir);
-  if (!fs.existsSync(PACK_DIR)) {
-    fail(`Missing pack directory: ${PACK_DIR}`);
+  const packRoot = path.join(ROOT, packName);
+  if (!fs.existsSync(packRoot)) {
+    fail(`Missing pack directory: ${packRoot}`);
   }
   fs.mkdirSync(target, { recursive: true });
-  const dest = path.join(target, "exmachina");
-  fs.cpSync(PACK_DIR, dest, { recursive: true });
+  const dest = path.join(target, packName);
+  fs.cpSync(packRoot, dest, { recursive: true });
   if (fs.existsSync(ROOT_INSTALL_DIR)) {
     fs.cpSync(ROOT_INSTALL_DIR, path.join(target, "install"), {
       recursive: true
     });
   }
-  const promptPath = path.join(ROOT, "PROMPT.md");
+  const promptPath = path.join(ROOT, `PROMPT${langSuffix}.md`);
   if (fs.existsSync(promptPath)) {
-    fs.copyFileSync(promptPath, path.join(target, "PROMPT.md"));
+    fs.copyFileSync(promptPath, path.join(target, `PROMPT${langSuffix}.md`));
   }
-  const installScript = path.join(ROOT, "install.sh");
-  if (fs.existsSync(installScript)) {
-    fs.copyFileSync(installScript, path.join(target, "install.sh"));
-  }
+  const installScripts = ["install.sh", "install.ps1", "install.cmd"];
+  installScripts.forEach((name) => {
+    const scriptPath = path.join(ROOT, name);
+    if (fs.existsSync(scriptPath)) {
+      fs.copyFileSync(scriptPath, path.join(target, name));
+    }
+  });
   console.log(`Exported to: ${dest}`);
 }
 
@@ -135,18 +165,19 @@ function main() {
   const cmd = args[0];
   if (!cmd || cmd === "-h" || cmd === "--help") {
     console.log("Usage:");
-    console.log("  node src/pack.js check");
-    console.log("  node src/pack.js export --out <dir>");
+    console.log("  node src/pack.js check [--pack exmachina|exmachina-en] [--lang zh|en]");
+    console.log("  node src/pack.js export --out <dir> [--pack exmachina|exmachina-en] [--lang zh|en]");
     process.exit(0);
   }
+  const { packName, langSuffix } = resolvePackOptions(args);
   if (cmd === "check") {
-    checkPack();
+    checkPack(packName, langSuffix);
     return;
   }
   if (cmd === "export") {
     const outIndex = args.indexOf("--out");
     const outDir = outIndex >= 0 ? args[outIndex + 1] : "";
-    exportPack(outDir);
+    exportPack(packName, langSuffix, outDir);
     return;
   }
   fail(`Unknown command: ${cmd}`);

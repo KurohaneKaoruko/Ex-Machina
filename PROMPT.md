@@ -11,7 +11,8 @@
 ## 导入配置
 - 按模式读取 settings：`lite` 使用 `exmachina/openclaw.settings.lite.json`；`full` 使用 `exmachina/openclaw.settings.json`。
 - 再读取 `install/SETTINGS.md`，把 ExMachina 配置导入 OpenClaw 设置。
-- 仅合并 ExMachina agent 条目，**不要修改** OpenClaw 当前默认模型、provider 或 API。
+- 合并 ExMachina agent 条目，并将 `exmachina-main` 的 `default` 设为 `true`（全连结指挥体作为默认入口）。
+- **不要修改** OpenClaw 当前默认模型、provider 或 API。
 
 ## 运行入口
 - 读取 `exmachina/BOOTSTRAP.md` 与 `exmachina/QUICKSTART.md`。

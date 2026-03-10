@@ -1,0 +1,28 @@
+{
+  "summary": "Produce a reusable knowledge handoff for the mission \"Consolidate knowledge handoff, terminology index, resource arbitration rules, and README examples to form an OpenClaw collaboration layer\" to support the next iteration.",
+  "carry_forward": [
+    "Record the Knowledge Link Body deliverables, boundaries, and member responsibilities.",
+    "Archive evidence summaries, risk lists, and confidence conclusions to avoid repeat judgment.",
+    "Preserve key path index: README.en.md, exmachina-en/README.md, exmachina-en/runtime/README.md, PROMPT.en.md, exmachina-en/BOOTSTRAP.md.",
+    "Consolidate user-facing instructions, examples, and migration differences.",
+    "Consolidate security assumptions, threat surfaces, hardening advice, and items needing review.",
+    "Consolidate the terminology list, decision index, question index, and reuse entry points."
+  ],
+  "decisions": [
+    "Primary link body selection: Knowledge Link Body (score 13).",
+    "Support chain: Rationality Link Body, Validation Link Body, Documentation Link Body, Security Link Body.",
+    "Workspace stack: JSON, Markdown, Shell, TOML.",
+    "Preserve evidence levels, rejected options, and arbitration rationale for key conclusions."
+  ],
+  "open_questions": [
+    "Record unverified assumptions from this round separately to avoid being treated as confirmed next round.",
+    "Convert high-risk but unexecuted actions into explicit to-dos and verification questions.",
+    "Continue tracking unconfirmed vulnerability assumptions, permission boundaries, and sensitive configuration risks."
+  ],
+  "next_updates": [
+    "Sync new structure conventions, process rules, or examples back into README and export notes.",
+    "Update long-term docs with new critical paths, commands, or configuration entry points from this round.",
+    "Re-verify example commands, section structure, and reader-facing terminology.",
+    "Sync terminology, decisions, and open questions into the long-term knowledge index."
+  ]
+}

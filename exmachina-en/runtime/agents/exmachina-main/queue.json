@@ -1,0 +1,10 @@
+{
+  "agent_id": "exmachina-main",
+  "queue": [
+    {
+      "assignment_id": "assignment-controller",
+      "status": "pending",
+      "depends_on": []
+    }
+  ]
+}
