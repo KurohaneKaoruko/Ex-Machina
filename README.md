@@ -10,7 +10,7 @@
 ```
 
 > 为 OpenClaw 提供协议化的多智能体连结架构。  
-> 目标不是堆叠更多角色名，而是把 **全连结指挥体**、**连结体**、**连结指挥体**、**子个体** 组织成稳定、可装载的协作流程。
+> 目标是把 **全连结指挥体**、**连结体**、**连结指挥体**、**子个体** 组织成稳定、可装载的协作流程。
 
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Mode](https://img.shields.io/badge/Mode-Absolute%20Rationality-7A3CFF)
@@ -44,7 +44,7 @@
 1. 把仓库交给 OpenClaw 作为 workspace 打开。
 2. 先读取根目录 `PROMPT.md`。
 3. 按 `install/INTAKE.md` 问清语言、主控体显示名、配置路径、workspace 路径与宿主多 agent 能力。
-4. 通过 `install.sh` 或手动合并 `exmachina/openclaw.settings.json`。
+4. 通过 `install.sh` 或按 `install/SETTINGS.md` 手动合并 `exmachina/openclaw.settings.json`。
 5. 进入 `exmachina/BOOTSTRAP.md` 启动任务。
 
 如果宿主不支持多 agent 绑定与外部路由，请停止安装。
@@ -55,6 +55,7 @@
 
 - `PROMPT.md`：单文件提示词入口。
 - `install/BOOTSTRAP.md`：仓库自举入口。
+- `install/SETTINGS.md`：设置导入说明。
 - `exmachina/BOOTSTRAP.md`：多智能体执行入口。
 - `exmachina/QUICKSTART.md`：最短上手路径。
 - `exmachina/runtime/topology.json`：多智能体拓扑与路由。
@@ -108,15 +109,14 @@ exmachina/
   openclaw.settings.json
   protocols/
   agents/
-  agents/
-  agents/
-  agents/
+  workflows/
+    mission-loop.md
   runtime/
+    README.md
     topology.json
     task-board.json
     agents/
     shared/
-  install/
 
 docs/
   ARCHITECTURE.md
@@ -125,10 +125,14 @@ install/
   BOOTSTRAP.md
   AGENTS.md
   INTAKE.md
+  SETTINGS.md
   intake.template.json
 
+skills/
+  */SKILL.md
+
 src/
-  tools/pack.js
+  pack.js
 
 PROMPT.md
 install.sh

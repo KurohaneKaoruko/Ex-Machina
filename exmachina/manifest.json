@@ -1320,8 +1320,8 @@
       "purpose": "在任务主要命中 知识连结体 工作面时，提供对应的流程、边界和交接模板。"
     },
     "link_conductor": {
-      "name": "知识连结指挥体",
-      "path": "agents/20_知识连结指挥体.md"
+      "name": "指挥体",
+      "path": "agents/10_知识连结体.md"
     },
     "member_agents": [
       "术语体",
@@ -1377,8 +1377,8 @@
         "purpose": "在任务主要命中 理性连结体 工作面时，提供对应的流程、边界和交接模板。"
       },
       "link_conductor": {
-        "name": "理性连结指挥体",
-        "path": "agents/21_理性连结指挥体.md"
+        "name": "指挥体",
+        "path": "agents/11_理性连结体.md"
       },
       "member_agents": [
         "证据体",
@@ -1433,8 +1433,8 @@
         "purpose": "在任务主要命中 校验连结体 工作面时，提供对应的流程、边界和交接模板。"
       },
       "link_conductor": {
-        "name": "校验连结指挥体",
-        "path": "agents/22_校验连结指挥体.md"
+        "name": "指挥体",
+        "path": "agents/12_校验连结体.md"
       },
       "member_agents": [
         "复现体",
@@ -1489,8 +1489,8 @@
         "purpose": "在任务主要命中 文档连结体 工作面时，提供对应的流程、边界和交接模板。"
       },
       "link_conductor": {
-        "name": "文档连结指挥体",
-        "path": "agents/23_文档连结指挥体.md"
+        "name": "指挥体",
+        "path": "agents/13_文档连结体.md"
       },
       "member_agents": [
         "盘点体",
@@ -1545,8 +1545,8 @@
         "purpose": "在任务主要命中 安全连结体 工作面时，提供对应的流程、边界和交接模板。"
       },
       "link_conductor": {
-        "name": "安全连结指挥体",
-        "path": "agents/24_安全连结指挥体.md"
+        "name": "指挥体",
+        "path": "agents/14_安全连结体.md"
       },
       "member_agents": [
         "威胁体",
