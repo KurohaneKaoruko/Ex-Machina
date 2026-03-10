@@ -16,10 +16,12 @@
   "rationality_protocol": {
     "name": "绝对理性协议",
     "paths": {
-      "rationality": "protocols/00_绝对理性协议.md",
-      "evidence": "protocols/01_证据分级协议.md",
-      "conflict": "protocols/02_冲突裁决协议.md",
-      "output_contract": "protocols/03_输出契约.md"
+      "rationality": "protocols/01_绝对理性协议.md",
+      "evidence": "protocols/02_证据分级协议.md",
+      "conflict": "protocols/03_冲突裁决协议.md",
+      "output_contract": "protocols/06_输出契约.md",
+      "workspace": "protocols/04_工作区与协作协议.md",
+      "multi_agent_handoff": "protocols/05_多智能体回流协议.md"
     }
   },
   "selection_trace": {
@@ -1264,6 +1266,31 @@
       "skill_id": "security-link-body",
       "skill_path": "../skills/security-link-body/SKILL.md",
       "purpose": "在任务主要命中 安全连结体 工作面时，提供对应的流程、边界和交接模板。"
+    },
+    "集成连结体": {
+      "skill_id": "integration-link-body",
+      "skill_path": "../skills/integration-link-body/SKILL.md",
+      "purpose": "在任务主要命中该连结体工作面时，提供对应的流程、边界和交接模板。"
+    },
+    "运维连结体": {
+      "skill_id": "operations-link-body",
+      "skill_path": "../skills/operations-link-body/SKILL.md",
+      "purpose": "在任务主要命中该连结体工作面时，提供对应的流程、边界和交接模板。"
+    },
+    "研究连结体": {
+      "skill_id": "research-link-body",
+      "skill_path": "../skills/research-link-body/SKILL.md",
+      "purpose": "在任务主要命中该连结体工作面时，提供对应的流程、边界和交接模板。"
+    },
+    "架构连结体": {
+      "skill_id": "architecture-link-body",
+      "skill_path": "../skills/architecture-link-body/SKILL.md",
+      "purpose": "在任务主要命中该连结体工作面时，提供对应的流程、边界和交接模板。"
+    },
+    "实作连结体": {
+      "skill_id": "implementation-link-body",
+      "skill_path": "../skills/implementation-link-body/SKILL.md",
+      "purpose": "在任务主要命中该连结体工作面时，提供对应的流程、边界和交接模板。"
     }
   },
   "conductor": {
