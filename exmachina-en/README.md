@@ -16,7 +16,7 @@ Knowledge handoff: see `knowledge_handoff` in `manifest.json`.
 Execution stages: 4 stages, see `execution_stages` in `manifest.json`.
 Handoff contracts: 3 contracts, see `handoff_contracts` in `manifest.json`.
 Resource arbitration: see `resource_arbitration` in `manifest.json`.
-Settings import: see `openclaw.settings.lite.json` / `openclaw.settings.json` and `install/SETTINGS.en.md`.
+Settings import: see `openclaw.settings.lite.json` / `openclaw.settings.json` and `install/SETTINGS.en.md`, then apply via `install/apply-openclaw-settings.js` (or `install.sh` / `install.ps1` / `install.cmd`).
 Knowledge handoff summary: for the mission above, a reusable handoff is produced to support the next iteration.
 
 Key directories:
@@ -29,6 +29,7 @@ Key directories:
 - `openclaw.settings.json`: full settings template (creates all subagent agents in OpenClaw)
 - `install/INTAKE.en.md`: install intake and blocking rules
 - `install/intake.template.en.json`: install intake answer template
+- `install/apply-openclaw-settings.js`: merge OpenClaw config and create ExMachina agents (requires Node.js)
 - `install/`: settings-first notes and import guide
 - `QUICKSTART.md`: shortest onboarding path
 - `workflows/mission-loop.md`: execution cadence

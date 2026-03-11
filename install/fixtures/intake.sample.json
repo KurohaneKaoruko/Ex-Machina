@@ -1,0 +1,9 @@
+{
+  "install_language": "en-US",
+  "conductor_name": "ExMachina Controller",
+  "target_config_path": "./install/fixtures/openclaw.sample.json",
+  "workspace_root": "./",
+  "host_supports_multi_agent": true,
+  "install_mode": "full",
+  "extra_config_notes": ""
+}

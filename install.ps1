@@ -10,6 +10,10 @@ $PackDir = "exmachina"
 $Lang = ""
 $LangSuffix = ""
 $PackOverride = $false
+$IntakePath = ""
+$AllowMissing = $false
+$DryRun = $false
+$NoBackup = $false
 
 for ($i = 0; $i -lt $ArgsList.Count; $i++) {
   $arg = $ArgsList[$i]
@@ -39,6 +43,27 @@ for ($i = 0; $i -lt $ArgsList.Count; $i++) {
       $Lang = $ArgsList[$i + 1]
       $i++
     }
+    "--intake" {
+      if ($i + 1 -ge $ArgsList.Count) {
+        Write-Error "Missing value for --intake"
+        exit 1
+      }
+      $IntakePath = $ArgsList[$i + 1]
+      $i++
+    }
+    "--target" {
+      if ($i + 1 -ge $ArgsList.Count) {
+        Write-Error "Missing value for --target"
+        exit 1
+      }
+      $TargetPath = $ArgsList[$i + 1]
+      $i++
+    }
+    "--allow-missing" { $AllowMissing = $true }
+    "--dry-run" { $DryRun = $true }
+    "--dryrun" { $DryRun = $true }
+    "--dry" { $DryRun = $true }
+    "--no-backup" { $NoBackup = $true }
     "lite" { $Mode = "lite" }
     "full" { $Mode = "full" }
     default { $TargetPath = $arg }
@@ -84,31 +109,43 @@ if (-not (Test-Path $SettingsFile)) {
 
 $IntakeFile = Join-Path $RootDir ("install\\INTAKE{0}.md" -f $LangSuffix)
 $BootstrapFile = Join-Path $RootDir ("{0}\\BOOTSTRAP.md" -f $PackDir)
+$ApplyScript = Join-Path $RootDir "install\\apply-openclaw-settings.js"
+if ([string]::IsNullOrWhiteSpace($IntakePath)) {
+  $IntakePath = Join-Path $RootDir ("install\\intake.template{0}.json" -f $LangSuffix)
+}
 
 Write-Host "ExMachina Prompt-First Install"
 Write-Host "1) Read: $IntakeFile"
 Write-Host "2) Select mode: $Mode"
-Write-Host "3) Import: $SettingsFile (merge ExMachina agent entries; set exmachina-main as default)"
+Write-Host "3) Apply: $SettingsFile via $ApplyScript (merge ExMachina agent entries; set exmachina-main as default)"
 Write-Host "4) Follow: $BootstrapFile"
 Write-Host ""
 
 if ([string]::IsNullOrWhiteSpace($TargetPath)) {
-  Write-Host "Tip: You can copy the settings template into your OpenClaw config path."
-  Write-Host "Usage: .\\install.ps1 [--mode lite|full] [--pack exmachina|exmachina-en] [--lang zh|en] <target-config-path>"
-  exit 0
+  Write-Host "Note: No target path provided; using target_config_path from $IntakePath."
+  Write-Host "Usage: .\\install.ps1 [--mode lite|full] [--pack exmachina|exmachina-en] [--lang zh|en] [--intake <path>] [--target <path>]"
 }
 
-$TargetDir = Split-Path -Parent $TargetPath
-if (-not [string]::IsNullOrWhiteSpace($TargetDir)) {
-  New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
+if (-not (Test-Path $ApplyScript)) {
+  Write-Error "Missing: $ApplyScript"
+  exit 1
 }
 
-if (Test-Path $TargetPath) {
-  $BackupPath = "$TargetPath.exmachina.bak"
-  Copy-Item -Path $TargetPath -Destination $BackupPath -Force
-  Write-Host "Backup created: $BackupPath"
+if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+  Write-Error "Node.js not found. Please install Node.js or merge settings manually."
+  exit 1
 }
 
-Copy-Item -Path $SettingsFile -Destination $TargetPath -Force
-Write-Host "Copied settings template to: $TargetPath"
-Write-Host "Note: This replaces the target file; merge manually if needed."
+$ExtraArgs = @()
+if ($AllowMissing) { $ExtraArgs += "--allow-missing" }
+if ($DryRun) { $ExtraArgs += "--dry-run" }
+if ($NoBackup) { $ExtraArgs += "--no-backup" }
+
+$TargetArgs = @()
+if (-not [string]::IsNullOrWhiteSpace($TargetPath)) {
+  $TargetArgs += "--target"
+  $TargetArgs += $TargetPath
+}
+
+& node $ApplyScript --mode $Mode --pack $PackDir --lang $Lang --intake $IntakePath @TargetArgs @ExtraArgs
+exit $LASTEXITCODE

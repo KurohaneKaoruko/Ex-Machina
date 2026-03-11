@@ -1,0 +1,21 @@
+{
+  "default_entry_agent_id": "legacy",
+  "default_agent": "agent:exmachina-security",
+  "agents": {
+    "list": [
+      {
+        "id": "legacy",
+        "name": "Legacy Agent",
+        "default": true
+      },
+      {
+        "id": "exmachina-support-4",
+        "name": "Old Security",
+        "default": true,
+        "identity": {
+          "theme": "Old theme"
+        }
+      }
+    ]
+  }
+}

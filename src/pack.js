@@ -96,6 +96,7 @@ function checkPack(packName, langSuffix) {
   ensureRootExists(`install/BOOTSTRAP${langSuffix}.md`, errors);
   ensureRootExists(`install/AGENTS${langSuffix}.md`, errors);
   ensureRootExists(`install/intake.template${langSuffix}.json`, errors);
+  ensureRootExists("install/apply-openclaw-settings.js", errors);
   ensureRootExists(`PROMPT${langSuffix}.md`, errors);
 
   const manifestPath = path.join(packRoot, "manifest.json");

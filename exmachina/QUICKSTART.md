@@ -4,7 +4,7 @@
 
 ## 最短路径
 1. 先问清 `install/INTAKE.md` 中的全部问题（语言、主控体显示名、配置路径、workspace 路径、宿主多 agent 能力与安装模式）。
-2. 按模式合并 settings：`lite` 使用 `openclaw.settings.lite.json`；`full` 使用 `openclaw.settings.json`。
+2. 按模式应用 settings：`lite` 使用 `openclaw.settings.lite.json`；`full` 使用 `openclaw.settings.json`；推荐使用 `install/apply-openclaw-settings.js`（或 `install.sh` / `install.ps1` / `install.cmd`）并指定目标配置路径。
 3. 配置多 agent 绑定/路由（宿主要求的 channels、bindings、accounts 等）。
 4. 由 `exmachina-main` 读取 `runtime/` 并按任务板调度其他 agents。
 

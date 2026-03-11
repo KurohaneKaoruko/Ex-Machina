@@ -1,0 +1,37 @@
+{
+  "mode": "full",
+  "template_variables": {
+    "OPENCLAW_INSTALL_LANGUAGE": {
+      "default": "en-US"
+    },
+    "OPENCLAW_CONDUCTOR_NAME": {
+      "default": "ExMachina Controller"
+    },
+    "EXMACHINA_PACK_ROOT": {
+      "default": "{{EXMACHINA_PACK_ROOT}}"
+    }
+  },
+  "settings_patch": {
+    "agents": {
+      "list": [
+        {
+          "id": "exmachina-main",
+          "name": "{{OPENCLAW_CONDUCTOR_NAME}}",
+          "default": true,
+          "workspace": "{{EXMACHINA_PACK_ROOT}}",
+          "identity": {
+            "theme": "Install language: {{OPENCLAW_INSTALL_LANGUAGE}}"
+          }
+        },
+        {
+          "id": "exmachina-support-4",
+          "name": "ExMachina Support 4",
+          "workspace": "{{EXMACHINA_PACK_ROOT}}",
+          "identity": {
+            "theme": "New security body"
+          }
+        }
+      ]
+    }
+  }
+}

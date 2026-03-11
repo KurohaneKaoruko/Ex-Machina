@@ -16,7 +16,7 @@
 执行阶段：共 4 个阶段，详见 `manifest.json` 中的 `execution_stages`。
 交接契约：共 3 份，详见 `manifest.json` 中的 `handoff_contracts`。
 资源仲裁：见 `manifest.json` 中的 `resource_arbitration`。
-设置导入：见 `openclaw.settings.lite.json` / `openclaw.settings.json` 与 `install/SETTINGS.md`。
+设置导入：见 `openclaw.settings.lite.json` / `openclaw.settings.json` 与 `install/SETTINGS.md`，使用 `install/apply-openclaw-settings.js`（或 `install.sh` / `install.ps1` / `install.cmd`）合并 settings patch。
 知识交接摘要：围绕任务「沉淀知识交接、术语索引、资源仲裁规则与 README 示例，形成 OpenClaw 协作层」输出可复用的知识交接，支撑下一轮任务继续推进。
 
 关键目录：
@@ -29,6 +29,7 @@
 - `openclaw.settings.json`：全量模式设置模板（在 OpenClaw 中创建全部子个体 agent）
 - `install/INTAKE.md`：安装前问询清单与阻断规则
 - `install/intake.template.json`：安装问询答案模板
+- `install/apply-openclaw-settings.js`：合并 OpenClaw 配置并创建 ExMachina agents（需要 Node.js）
 - `install/`：settings-first 说明与设置导入指南
 - `QUICKSTART.md`：面向首次接入者的最短上手路径
 - `workflows/mission-loop.md`：执行节奏

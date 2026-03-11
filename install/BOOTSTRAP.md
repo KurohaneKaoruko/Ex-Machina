@@ -25,7 +25,7 @@
 2. 读取 `install/INTAKE.md`，先向用户问清语言、全连结指挥体显示名、配置路径、workspace 路径、宿主多 agent 能力与安装模式
 3. 在 `install/intake.template.json` 中记录答案，未确认前不要导入任何配置
 4. 根据模式选择 settings 模板：`lite` 使用 `exmachina/openclaw.settings.lite.json`；`full` 使用 `exmachina/openclaw.settings.json`
-5. 读取 `install/SETTINGS.md`
+5. 读取 `install/SETTINGS.md` 并使用 `install/apply-openclaw-settings.js`（或 `install.sh` / `install.ps1` / `install.cmd`）合并 settings patch
 6. 确认宿主已开启多 agent 绑定与外部路由
 7. 完成后回到 `exmachina/BOOTSTRAP.md`，按所选模式执行任务
 

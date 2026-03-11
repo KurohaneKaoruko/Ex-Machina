@@ -15,9 +15,6 @@ Before importing any OpenClaw configuration, you must ask the user the following
    Default: `Yes`
 6. Install mode: Choose `lite` (do not create subagent agents in OpenClaw, subagent responsibilities are executed inline by the link body) or `full` (create all subagent agents in OpenClaw).
    Default: `full`
-7. Persona settings: Do you want to customize the ExMachina persona?
-   Default: `No`
-   Note: If `Yes`, ask the user to provide the custom persona description.
 
 ## Optional
 1. Other configuration: Any channels, tokens, workspace, or style settings to record?
@@ -29,4 +26,4 @@ Before importing any OpenClaw configuration, you must ask the user the following
 
 ## Recording
 - Write answers to `install/intake.template.en.json`.
-- You may use `install.sh`, `install.ps1`, or `install.cmd` for manual import, or merge by hand.
+- Recommended: use `install/apply-openclaw-settings.js` to merge settings; `install.sh` / `install.ps1` / `install.cmd` already invoke it.

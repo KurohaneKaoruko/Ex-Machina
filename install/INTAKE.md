@@ -7,13 +7,14 @@
    默认值：`zh-CN`
 2. 全连结指挥体 / 主控体显示名：希望把顶层主控体显示成哪个名字？
    默认值：`ExMachina 主控体`
-3. 宿主多 agent 能力：宿主是否支持多 agent 绑定与外部路由？
+3. 配置文件路径：本次要写入哪份 OpenClaw 配置文件？
+   默认值：`~/.openclaw/openclaw.json`
+4. workspace 路径：把 workspace 指到哪个仓库或导出包路径？
+   默认值：`{{EXMACHINA_PACK_ROOT}}`
+5. 宿主多 agent 能力：宿主是否支持多 agent 绑定与外部路由？
    默认值：`是`
-4. 安装模式：选择 `lite`（不在 OpenClaw 中创建子个体 agent，子个体职责由连结体内联执行）或 `full`（在 OpenClaw 中创建全部子个体 agent）。
+6. 安装模式：选择 `lite`（不在 OpenClaw 中创建子个体 agent，子个体职责由连结体内联执行）或 `full`（在 OpenClaw 中创建全部子个体 agent）。
    默认值：`full`
-5. 人格设定：是否需要自定义 ExMachina 的人格设定？
-   默认值：`否`
-   说明：如果选择 `是`，则会要求用户输入自定义人格设定的文字说明。
 
 ## 可选补充项
 1. 其它配置：是否还需要记录渠道绑定、token、workspace 或风格配置？
@@ -25,4 +26,4 @@
 
 ## 记录方式
 - 把答案写入同目录 `intake.template.json`。
-- 可配合仓库根目录的 `install.sh` 进行手动导入，或由用户手工合并配置。
+- 推荐使用 `install/apply-openclaw-settings.js` 合并配置，仓库根目录的 `install.sh` / `install.ps1` / `install.cmd` 已内置调用。

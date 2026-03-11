@@ -756,6 +756,7 @@
   "bindings_template": [],
   "merge_instructions": [
     "Read `install/INTAKE.en.md` and confirm language, primary conductor display name, config path, and multi-agent capability before installing.",
+    "Recommended: use `install/apply-openclaw-settings.js` to merge the settings patch (`install.sh` / `install.ps1` / `install.cmd` already invoke it).",
     "Merge ExMachina agent entries from `openclaw.settings.json` into the OpenClaw config.",
     "Ensure the primary conductor is the default entry: set `default: true` on `exmachina-main`.",
     "Point each ExMachina agent `workspace` to the repository or export package path.",

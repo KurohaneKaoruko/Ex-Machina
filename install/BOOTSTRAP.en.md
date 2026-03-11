@@ -25,7 +25,7 @@ Recommended first reads:
 2. Read `install/INTAKE.en.md` and confirm language, conductor display name, config path, workspace path, host multi-agent capability, and install mode.
 3. Record answers in `install/intake.template.en.json`. Do not import any configuration before confirmation.
 4. Select the settings template by mode: `lite` uses `exmachina-en/openclaw.settings.lite.json`; `full` uses `exmachina-en/openclaw.settings.json`.
-5. Read `install/SETTINGS.en.md`.
+5. Read `install/SETTINGS.en.md` and apply the settings patch with `install/apply-openclaw-settings.js` (or `install.sh` / `install.ps1` / `install.cmd`).
 6. Confirm the host has multi-agent binding and external routing enabled.
 7. Return to `exmachina-en/BOOTSTRAP.md` and execute by the selected mode.
 

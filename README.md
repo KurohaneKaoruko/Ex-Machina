@@ -44,8 +44,10 @@
 
 1. 把仓库交给 OpenClaw 作为 workspace 打开。
 2. 先读取根目录 `PROMPT.md`。
-3. 按 `install/INTAKE.md` 问清语言、主控体显示名、配置路径、workspace 路径、宿主多 agent 能力与安装模式。
-4. 通过 `install.sh --mode lite|full --pack exmachina`（或 `--lang zh`）、`install.ps1 --mode lite|full --pack exmachina`（或 `--lang zh`）、`install.cmd --mode lite|full --pack exmachina`，或按 `install/SETTINGS.md` 手动合并对应 settings：`exmachina/openclaw.settings.lite.json` 或 `exmachina/openclaw.settings.json`。
+3. 按 `install/INTAKE.md` 问清语言、主控体显示名、配置路径、workspace 路径、宿主多 agent 能力与安装模式，并写入 `install/intake.template.json`。
+4. 通过 `install.sh --mode lite|full --pack exmachina --target <openclaw-config>`（或 `--lang zh`）、`install.ps1 --mode lite|full --pack exmachina --target <openclaw-config>`（或 `--lang zh`）、`install.cmd --mode lite|full --pack exmachina --target <openclaw-config>` 自动合并（脚本会调用 `install/apply-openclaw-settings.js`）；或按 `install/SETTINGS.md` 手动合并对应 settings：`exmachina/openclaw.settings.lite.json` 或 `exmachina/openclaw.settings.json`。
+5. 如果 `install/intake.template.json` 已填写 `target_config_path`，可省略 `--target`。
+6. 自动合并需要 Node.js；无 Node.js 时请手动合并。
 5. 进入 `exmachina/BOOTSTRAP.md` 启动任务。
 
 如需英文版，请改用 `PROMPT.en.md`、`install/INTAKE.en.md`、`install/SETTINGS.en.md`，并在脚本中使用 `--pack exmachina-en` 或 `--lang en`，入口为 `exmachina-en/BOOTSTRAP.md`。
@@ -165,6 +167,7 @@ install/
   SETTINGS.en.md
   intake.template.json
   intake.template.en.json
+  apply-openclaw-settings.js
 
 skills/
   */SKILL.md

@@ -44,8 +44,10 @@ The simplest path:
 
 1. Open this repository as the OpenClaw workspace.
 2. Read `PROMPT.en.md`.
-3. Use `install/INTAKE.en.md` to confirm language, conductor display name, config path, workspace path, host multi-agent capability, and install mode.
-4. Run `install.sh --mode lite|full --pack exmachina-en` (or `--lang en`), `install.ps1 --mode lite|full --pack exmachina-en` (or `--lang en`), or `install.cmd --mode lite|full --pack exmachina-en` (or `--lang en`), or follow `install/SETTINGS.en.md` to merge the settings template: `exmachina-en/openclaw.settings.lite.json` or `exmachina-en/openclaw.settings.json`.
+3. Use `install/INTAKE.en.md` to confirm language, conductor display name, config path, workspace path, host multi-agent capability, and install mode, then record them in `install/intake.template.en.json`.
+4. Run `install.sh --mode lite|full --pack exmachina-en --target <openclaw-config>` (or `--lang en`), `install.ps1 --mode lite|full --pack exmachina-en --target <openclaw-config>` (or `--lang en`), or `install.cmd --mode lite|full --pack exmachina-en --target <openclaw-config>` (or `--lang en`) to apply settings (they invoke `install/apply-openclaw-settings.js`), or follow `install/SETTINGS.en.md` to merge the settings template manually: `exmachina-en/openclaw.settings.lite.json` or `exmachina-en/openclaw.settings.json`.
+5. If `install/intake.template.en.json` already has `target_config_path`, you can omit `--target`.
+6. Scripted merge requires Node.js; if Node.js is unavailable, merge manually.
 5. Enter `exmachina-en/BOOTSTRAP.md` to start the mission.
 
 If the host does not support multi-agent binding and external routing, stop the installation.
@@ -163,6 +165,7 @@ install/
   SETTINGS.en.md
   intake.template.json
   intake.template.en.json
+  apply-openclaw-settings.js
 
 skills/
   */SKILL.md

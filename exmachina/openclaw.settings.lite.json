@@ -257,12 +257,14 @@
           }
         }
       ]
-    }
+    },
+    "default_entry_agent_id": "exmachina-main"
   },
   "channels_template": {},
   "bindings_template": [],
   "merge_instructions": [
     "先读取 `install/INTAKE.md`，问清语言、全连结指挥体显示名、配置路径与多 agent 能力，再继续安装。",
+    "推荐使用 `install/apply-openclaw-settings.js` 合并 settings patch（`install.sh` / `install.ps1` / `install.cmd` 已内置调用）。",
     "将 `openclaw.settings.lite.json` 中的 ExMachina agent 条目合并进 OpenClaw 主配置。",
     "确保全连结指挥体为默认入口：在 OpenClaw 配置中将 `exmachina-main` 的 `default` 设为 `true`。",
     "把 ExMachina agent 的 `workspace` 指向当前仓库或导出包所在路径。",

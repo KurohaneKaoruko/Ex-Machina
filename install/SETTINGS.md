@@ -9,6 +9,8 @@
 - 将 `exmachina-main` 的 `default` 设为 `true`（全连结指挥体作为默认入口）。
 - 不要修改 OpenClaw 现有 provider、API、默认模型与非 ExMachina 配置。
 - 按模式选择 settings 文件：`lite` 使用 `exmachina/openclaw.settings.lite.json`（不在 OpenClaw 中创建子个体 agent，子个体职责由连结体内联执行）；`full` 使用 `exmachina/openclaw.settings.json`（在 OpenClaw 中创建全部子个体 agent）。
+- 推荐使用 `install/apply-openclaw-settings.js` 合并 settings patch（`install.sh` / `install.ps1` / `install.cmd` 已内置调用）。
+- 使用脚本合并需要 Node.js；无 Node.js 时请手动合并。
 
 ## 模板变量
 - `{{OPENCLAW_INSTALL_LANGUAGE}}`：安装期与后续默认输出语言。
@@ -18,6 +20,8 @@
 ## 运行前置
 - 确认 bindings/路由已配置。
 - 确认 workspace 路径已指向本仓库或导出包。
+- 目标 OpenClaw 配置文件建议先由宿主生成；需要新建最小配置时可在脚本中使用 `--allow-missing`。
+- 如果 `install/intake.template.json` 已填写 `target_config_path`，可在脚本中省略 `--target`。
 
 ## 语言版本
 - 中文版使用：`exmachina/openclaw.settings.lite.json` / `exmachina/openclaw.settings.json` + `install/SETTINGS.md`

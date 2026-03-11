@@ -8,6 +8,10 @@ PACK_DIR="exmachina"
 LANG=""
 LANG_SUFFIX=""
 PACK_OVERRIDE=""
+INTAKE_PATH=""
+ALLOW_MISSING=""
+DRY_RUN=""
+NO_BACKUP=""
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -23,6 +27,26 @@ while [ "$#" -gt 0 ]; do
     --lang)
       LANG="$2"
       shift 2
+      ;;
+    --intake)
+      INTAKE_PATH="$2"
+      shift 2
+      ;;
+    --target)
+      TARGET_PATH="$2"
+      shift 2
+      ;;
+    --allow-missing)
+      ALLOW_MISSING="1"
+      shift
+      ;;
+    --dry-run|--dry|--dryrun)
+      DRY_RUN="1"
+      shift
+      ;;
+    --no-backup)
+      NO_BACKUP="1"
+      shift
       ;;
     lite|full)
       MODE="$1"
@@ -83,31 +107,49 @@ fi
 
 INTAKE_FILE="$ROOT_DIR/install/INTAKE${LANG_SUFFIX}.md"
 BOOTSTRAP_FILE="$ROOT_DIR/$PACK_DIR/BOOTSTRAP.md"
+APPLY_SCRIPT="$ROOT_DIR/install/apply-openclaw-settings.js"
+if [ -z "$INTAKE_PATH" ]; then
+  INTAKE_PATH="$ROOT_DIR/install/intake.template${LANG_SUFFIX}.json"
+fi
 
 echo "ExMachina Prompt-First Install"
 echo "1) Read: $INTAKE_FILE"
 echo "2) Select mode: $MODE"
-echo "3) Import: $SETTINGS_FILE (merge ExMachina agent entries; set exmachina-main as default)"
+echo "3) Apply: $SETTINGS_FILE via $APPLY_SCRIPT (merge ExMachina agent entries; set exmachina-main as default)"
 echo "4) Follow: $BOOTSTRAP_FILE"
 
 echo ""
+if [ ! -f "$APPLY_SCRIPT" ]; then
+  echo "Missing: $APPLY_SCRIPT"
+  exit 1
+fi
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "Node.js not found. Please install Node.js or merge settings manually."
+  exit 1
+fi
+
+EXTRA_ARGS=""
+if [ -n "$ALLOW_MISSING" ]; then
+  EXTRA_ARGS="$EXTRA_ARGS --allow-missing"
+fi
+if [ -n "$DRY_RUN" ]; then
+  EXTRA_ARGS="$EXTRA_ARGS --dry-run"
+fi
+if [ -n "$NO_BACKUP" ]; then
+  EXTRA_ARGS="$EXTRA_ARGS --no-backup"
+fi
+
 if [ -z "$TARGET_PATH" ]; then
-  echo "Tip: You can copy the settings template into your OpenClaw config path."
-  echo "Usage: ./install.sh [--mode lite|full] [--pack exmachina|exmachina-en] [--lang zh|en] <target-config-path>"
-  exit 0
+  echo "Note: No target path provided; using target_config_path from $INTAKE_PATH."
+  echo "Usage: ./install.sh [--mode lite|full] [--pack exmachina|exmachina-en] [--lang zh|en] [--intake <path>] [--target <path>]"
 fi
 
-TARGET_DIR=$(dirname "$TARGET_PATH")
-
-mkdir -p "$TARGET_DIR"
-if [ -f "$TARGET_PATH" ]; then
-  BACKUP_PATH="$TARGET_PATH.exmachina.bak"
-  cp "$TARGET_PATH" "$BACKUP_PATH"
-  echo "Backup created: $BACKUP_PATH"
+TARGET_ARG=""
+if [ -n "$TARGET_PATH" ]; then
+  TARGET_ARG="--target $TARGET_PATH"
 fi
 
-cp "$SETTINGS_FILE" "$TARGET_PATH"
-echo "Copied settings template to: $TARGET_PATH"
-echo "Note: This replaces the target file; merge manually if needed."
+node "$APPLY_SCRIPT" --mode "$MODE" --pack "$PACK_DIR" --lang "$LANG" --intake "$INTAKE_PATH" $TARGET_ARG $EXTRA_ARGS
 
 

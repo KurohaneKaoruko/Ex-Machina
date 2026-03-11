@@ -15,7 +15,7 @@
 
 ## 安装动作
 1. 先完成 `install/INTAKE.md` 中的问询：语言、全连结指挥体显示名、配置路径、workspace 路径、宿主多 agent 能力与安装模式。
-2. 选择 settings 模板并合并 ExMachina agents：`lite` 使用 `openclaw.settings.lite.json`；`full` 使用 `openclaw.settings.json`。
+2. 选择 settings 模板并应用 ExMachina agents：`lite` 使用 `openclaw.settings.lite.json`；`full` 使用 `openclaw.settings.json`；推荐使用 `install/apply-openclaw-settings.js`（或 `install.sh` / `install.ps1` / `install.cmd`）。
 3. 把 ExMachina agent 的 `workspace` 指向当前仓库或导出包路径。
 4. 按宿主要求配置 bindings/路由。
 
