@@ -1,0 +1,22 @@
+{
+  "scenarios": [
+    {
+      "id": "bounded-regression",
+      "objective": "先证据后修复",
+      "expected": [
+        "保留未知",
+        "标注证据等级",
+        "输出回退方案"
+      ]
+    },
+    {
+      "id": "cross-domain-risk",
+      "objective": "触发全连结指挥体调度",
+      "expected": [
+        "跨域调度",
+        "冲突裁决",
+        "残余风险说明"
+      ]
+    }
+  ]
+}

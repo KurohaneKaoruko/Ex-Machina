@@ -1,0 +1,13 @@
+{
+  "name": "exmachina",
+  "title": "ExMachina",
+  "summary": "绝对理性的机械智能多智能体系统。",
+  "install": {
+    "plugin": "plugin.json"
+  },
+  "aliases": [
+    "/ex",
+    "/excodex",
+    "/exclaude"
+  ]
+}

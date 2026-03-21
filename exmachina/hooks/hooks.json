@@ -1,0 +1,11 @@
+{
+  "onSessionStart": [
+    "./session-restore.sh"
+  ],
+  "beforeResponse": [
+    "./route-guard.sh"
+  ],
+  "onSessionEnd": [
+    "./session-snapshot.sh"
+  ]
+}
