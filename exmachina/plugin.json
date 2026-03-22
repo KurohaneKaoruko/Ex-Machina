@@ -13,7 +13,8 @@
     "skill": "skills/exmachina-zh/SKILL.md",
     "command": "commands/ex.md",
     "codex": "codex/exmachina/SKILL.md",
-    "claudePlugin": "claude-plugin/plugin.json"
+    "claudePlugin": "claude-plugin/plugin.json",
+    "trae": "trae/rules/project_rules.md"
   },
   "aliases": [
     "/ex",

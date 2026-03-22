@@ -99,7 +99,8 @@ function buildRootFiles(): void {
       skill: "skills/exmachina-zh/SKILL.md",
       command: "commands/ex.md",
       codex: "codex/exmachina/SKILL.md",
-      claudePlugin: "claude-plugin/plugin.json"
+      claudePlugin: "claude-plugin/plugin.json",
+      trae: "trae/rules/project_rules.md"
     },
     aliases: ["/ex", "/excodex", "/exclaude"]
   });
@@ -155,6 +156,54 @@ function buildCursorSurface(): void {
   ].join("\n");
 
   writeText(`${bundleRoot}/cursor/rules/exmachina.mdc`, ruleBody);
+}
+
+function buildTraeSurface(): void {
+  copySingleSourceToTargets("src/templates/zh-CN/exmachina.skill.md", [
+    `${bundleRoot}/trae/skills/exmachina/SKILL.md`
+  ]);
+
+  ensureDir(`${bundleRoot}/trae/rules`);
+  const skillBody = readText("src/templates/zh-CN/exmachina.skill.md");
+  const skillContent = skillBody.substring(skillBody.indexOf("\n---\n") + 5);
+  writeText(`${bundleRoot}/trae/rules/project_rules.md`, [
+    "---",
+    "name: exmachina",
+    "description: \"ExMachina 机械智能规则 - 绝对理性、证据驱动\"",
+    "---",
+    "",
+    skillContent
+  ].join("\n"));
+
+  writeText(`${bundleRoot}/trae/rules/user_rules.md`, [
+    "---",
+    "name: exmachina-user",
+    "description: \"ExMachina 用户个人规则\"",
+    "---",
+    "",
+    "# ExMachina 个人规则",
+    "",
+    "## 核心原则",
+    "",
+    "- 默认使用中文进行所有交流和输出",
+    "- 保持绝对理性的工作方式，不情绪化、不模糊化",
+    "- 所有结论必须基于证据，区分事实、推断、假设和决策",
+    "",
+    "## 输出要求",
+    "",
+    "- 完成标准：说明做了什么、没做什么、为什么没做",
+    "- 关键结论必须追溯到证据等级和来源",
+    "- 保留残余未知、风险边界和建议下一步",
+    "- 证据不足时必须诚实停在\"待验证\"状态"
+  ].join("\n"));
+
+  for (const targetRoot of [
+    `${bundleRoot}/trae/skills/exmachina/references`
+  ]) {
+    removeDir(`${targetRoot}/groups`);
+    copyDirectory(`${promptRoot}/protocol`, `${targetRoot}/protocol`);
+    copyMarkdownFiles(`${promptRoot}/agents`, `${targetRoot}/agents`);
+  }
 }
 
 function buildClaudePluginSurface(): void {
@@ -309,6 +358,66 @@ function buildMiscSurfaces(): void {
     `${bundleRoot}/paper/机械智能说明.md`,
     "# 机械智能说明\n\nExMachina 以绝对理性、证据分级、冲突裁决、最小可逆执行为核心。\n"
   );
+
+  writeText(
+    `${bundleRoot}/trae/INSTALL.md`,
+    [
+      "# Trae 安装指南",
+      "",
+      "## 概述",
+      "",
+      "ExMachina 支持 Trae IDE。本指南说明如何在 Trae 中配置和使用 ExMachina 机械智能系统。",
+      "",
+      "## 安装方式",
+      "",
+      "### 方式一：项目规则（推荐）",
+      "",
+      "1. 从 `exmachina/trae/rules/project_rules.md` 复制内容",
+      "2. 在 Trae 中打开设置 → Rules",
+      "3. 选择或创建项目规则文件",
+      "4. 粘贴内容并保存",
+      "",
+      "### 方式二：用户规则",
+      "",
+      "1. 从 `exmachina/trae/rules/user_rules.md` 复制内容",
+      "2. 在 Trae 中打开设置 → Rules",
+      "3. 选择用户规则文件",
+      "4. 粘贴内容并保存",
+      "",
+      "### 方式三：Skill 配置",
+      "",
+      "1. 确保项目中有 `exmachina/trae/skills/exmachina/SKILL.md`",
+      "2. 在 Trae 中打开设置 → Skills",
+      "3. 添加新的 Skill，指向该文件",
+      "",
+      "## 目录结构",
+      "",
+      "```",
+      "exmachina/trae/",
+      "├── rules/",
+      "│   ├── project_rules.md    # 项目规则",
+      "│   └── user_rules.md       # 用户规则",
+      "└── skills/",
+      "    └── exmachina/",
+      "        ├── SKILL.md        # Skill 定义",
+      "        └── references/     # 协议与角色参考",
+      "            ├── protocol/   # 共享协议",
+      "            └── agents/     # 智能体定义",
+      "```",
+      "",
+      "## 验证安装",
+      "",
+      "运行构建脚本生成最新产物：",
+      "",
+      "```bash",
+      "npm run generate",
+      "```",
+      "",
+      "## 更多信息",
+      "",
+      "详见主 README 和 ExMachina 核心文档。"
+    ].join("\n")
+  );
 }
 
 function main(): void {
@@ -317,6 +426,7 @@ function main(): void {
   buildCommands();
   buildAgents();
   buildCursorSurface();
+  buildTraeSurface();
   buildClaudePluginSurface();
   buildHooks();
   buildEvals();
