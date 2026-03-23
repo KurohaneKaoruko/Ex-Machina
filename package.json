@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc --noEmit -p tsconfig.json",
-    "generate": "npm run build && node build/build.js"
+    "generate": "npm run build && node build/build.js",
+    "verify": "node scripts/dev/verify-generated.mjs"
   },
   "devDependencies": {
     "typescript": "^5.8.2"

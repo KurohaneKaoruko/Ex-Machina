@@ -1,4 +1,3 @@
 build/
-.*/
-!.gitignore
-!.github/
+.tmp/
+.omx/
