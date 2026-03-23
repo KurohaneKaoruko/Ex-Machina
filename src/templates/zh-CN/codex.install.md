@@ -19,21 +19,21 @@ ExMachina 现在提供面向 Codex 的原生安装面，直接把仓库里的 `e
 
 ## 快速安装
 
+仓库可以放在任意目录。下面统一用 `~/exmachina` / `$HOME/exmachina` 作为示例路径。
+
 ### macOS / Linux
 
 ```bash
-mkdir -p ~/.codex
-git clone {{REPOSITORY_URL}} ~/.codex/exmachina-repo
-cd ~/.codex/exmachina-repo
+git clone {{REPOSITORY_URL}} ~/exmachina
+cd ~/exmachina
 bash ./scripts/setup-exmachina.sh
 ```
 
 ### Windows PowerShell
 
 ```powershell
-New-Item -ItemType Directory -Force "$HOME/.codex" | Out-Null
-git clone {{REPOSITORY_URL}} "$HOME/.codex/exmachina-repo"
-Set-Location "$HOME/.codex/exmachina-repo"
+git clone {{REPOSITORY_URL}} "$HOME/exmachina"
+Set-Location "$HOME/exmachina"
 powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 ```
 
@@ -41,7 +41,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 
 安装脚本会创建这样一条本地链接：
 
-- `~/.codex/skills/exmachina -> ~/.codex/exmachina-repo/exmachina/skills`
+- `~/.codex/skills/exmachina -> <repo-root>/exmachina/skills`
+- 例如：`~/.codex/skills/exmachina -> ~/exmachina/exmachina/skills`
 
 仓库内的 `exmachina/skills/` 是已经生成好的可发现技能目录，因此普通安装用户不需要先运行 `npm install` 或 `npm run generate`。
 
@@ -71,7 +72,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 ### macOS / Linux
 
 ```bash
-cd ~/.codex/exmachina-repo
+cd ~/exmachina
 git pull --ff-only
 bash ./scripts/setup-exmachina.sh
 ```
@@ -79,7 +80,7 @@ bash ./scripts/setup-exmachina.sh
 ### Windows PowerShell
 
 ```powershell
-Set-Location "$HOME/.codex/exmachina-repo"
+Set-Location "$HOME/exmachina"
 git pull --ff-only
 powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 ```
@@ -100,14 +101,14 @@ npm run verify
 
 ```bash
 rm ~/.codex/skills/exmachina
-rm -rf ~/.codex/exmachina-repo
+rm -rf ~/exmachina
 ```
 
 ### Windows PowerShell
 
 ```powershell
 Remove-Item "$HOME/.codex/skills/exmachina" -Force
-Remove-Item "$HOME/.codex/exmachina-repo" -Recurse -Force
+Remove-Item "$HOME/exmachina" -Recurse -Force
 ```
 
 ## 故障排查

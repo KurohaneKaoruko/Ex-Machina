@@ -112,6 +112,11 @@ assert(
     installDoc.includes(".\\scripts\\setup-exmachina.ps1"),
   "[verify-generated] install doc does not point to root scripts/"
 );
+assert(
+  installDoc.includes("git clone https://github.com/KurohaneKaoruko/Ex-Machina ~/exmachina") &&
+    installDoc.includes("Set-Location \"$HOME/exmachina\""),
+  "[verify-generated] install doc still uses the old repository clone path"
+);
 assert(!installDoc.includes("{{"), "[verify-generated] unresolved template token in install doc");
 assert(
   !installDoc.includes(forbiddenExternalProjectName),
@@ -120,6 +125,11 @@ assert(
 assert(
   !installDoc.includes("exmachina/scripts"),
   "[verify-generated] install doc still points to exmachina/scripts"
+);
+assert(
+  !installDoc.includes("~/.codex/exmachina-repo") &&
+    !installDoc.includes("$HOME/.codex/exmachina-repo"),
+  "[verify-generated] install doc still hardcodes the old repository location"
 );
 assert(
   installDocEn.includes("exmachina/codex/INSTALL.en.md"),
@@ -136,8 +146,18 @@ assert(
   "[verify-generated] english install doc does not point to root scripts/"
 );
 assert(
+  installDocEn.includes("git clone https://github.com/KurohaneKaoruko/Ex-Machina ~/exmachina") &&
+    installDocEn.includes("Set-Location \"$HOME/exmachina\""),
+  "[verify-generated] english install doc still uses the old repository clone path"
+);
+assert(
   !installDocEn.includes("exmachina/scripts"),
   "[verify-generated] english install doc still points to exmachina/scripts"
+);
+assert(
+  !installDocEn.includes("~/.codex/exmachina-repo") &&
+    !installDocEn.includes("$HOME/.codex/exmachina-repo"),
+  "[verify-generated] english install doc still hardcodes the old repository location"
 );
 
 const codexGuide = readText("exmachina/codex/README.md");
@@ -202,6 +222,10 @@ for (const file of ["README.md", "README-en.md"]) {
   assert(
     !readText(file).includes(forbiddenExternalProjectName),
     `[verify-generated] forbidden external project wording remains in ${file}`
+  );
+  assert(
+    !readText(file).includes("~/.codex/exmachina-repo"),
+    `[verify-generated] old repository location remains in ${file}`
   );
 }
 

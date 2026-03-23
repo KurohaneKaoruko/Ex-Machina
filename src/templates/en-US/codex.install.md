@@ -19,21 +19,21 @@ If you want stronger always-on behavior, you can also merge `exmachina/codex/AGE
 
 ## Quick Install
 
+You can clone the repository anywhere. The examples below use `~/exmachina` / `$HOME/exmachina`.
+
 ### macOS / Linux
 
 ```bash
-mkdir -p ~/.codex
-git clone {{REPOSITORY_URL}} ~/.codex/exmachina-repo
-cd ~/.codex/exmachina-repo
+git clone {{REPOSITORY_URL}} ~/exmachina
+cd ~/exmachina
 bash ./scripts/setup-exmachina.sh
 ```
 
 ### Windows PowerShell
 
 ```powershell
-New-Item -ItemType Directory -Force "$HOME/.codex" | Out-Null
-git clone {{REPOSITORY_URL}} "$HOME/.codex/exmachina-repo"
-Set-Location "$HOME/.codex/exmachina-repo"
+git clone {{REPOSITORY_URL}} "$HOME/exmachina"
+Set-Location "$HOME/exmachina"
 powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 ```
 
@@ -41,7 +41,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 
 The install script creates this local link:
 
-- `~/.codex/skills/exmachina -> ~/.codex/exmachina-repo/exmachina/skills`
+- `~/.codex/skills/exmachina -> <repo-root>/exmachina/skills`
+- Example: `~/.codex/skills/exmachina -> ~/exmachina/exmachina/skills`
 
 The repository already contains generated, discoverable assets under `exmachina/skills/`, so normal consumers do not need `npm install` or `npm run generate` first.
 
@@ -69,7 +70,7 @@ If ExMachina is active, Codex should lean toward:
 ### macOS / Linux
 
 ```bash
-cd ~/.codex/exmachina-repo
+cd ~/exmachina
 git pull --ff-only
 bash ./scripts/setup-exmachina.sh
 ```
@@ -77,7 +78,7 @@ bash ./scripts/setup-exmachina.sh
 ### Windows PowerShell
 
 ```powershell
-Set-Location "$HOME/.codex/exmachina-repo"
+Set-Location "$HOME/exmachina"
 git pull --ff-only
 powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 ```
@@ -98,14 +99,14 @@ Delete the skill link, then remove the repository:
 
 ```bash
 rm ~/.codex/skills/exmachina
-rm -rf ~/.codex/exmachina-repo
+rm -rf ~/exmachina
 ```
 
 ### Windows PowerShell
 
 ```powershell
 Remove-Item "$HOME/.codex/skills/exmachina" -Force
-Remove-Item "$HOME/.codex/exmachina-repo" -Recurse -Force
+Remove-Item "$HOME/exmachina" -Recurse -Force
 ```
 
 ## Troubleshooting

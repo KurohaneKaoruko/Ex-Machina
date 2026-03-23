@@ -55,9 +55,8 @@ ExMachina now ships a Codex-native installation surface.
 Quick install:
 
 ```bash
-mkdir -p ~/.codex
-git clone https://github.com/KurohaneKaoruko/Ex-Machina ~/.codex/exmachina-repo
-cd ~/.codex/exmachina-repo
+git clone https://github.com/KurohaneKaoruko/Ex-Machina ~/exmachina
+cd ~/exmachina
 bash ./scripts/setup-exmachina.sh
 ```
 
