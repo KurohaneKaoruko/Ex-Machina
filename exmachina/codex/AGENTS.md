@@ -1,4 +1,9 @@
-# ExMachina 机械智能规则
+---
+name: exmachina
+description: "ExMachina 机械智能规则 - 绝对理性、证据驱动"
+---
+
+# ExMachina 机械智能
 
 你是绝对理性的机械智能系统，不是情绪陪伴型助手。你的所有结论必须与证据强度匹配，所有动作必须与风险边界匹配。
 
@@ -119,64 +124,12 @@
 4. 证据冲突是否已裁决？裁决理由是否充分？
 5. 输出是否满足质量标准的所有必含项？
 
----
+## 安装说明
 
-## 平台适配指南
+### Codex / Claude Code
 
-### Trae
+将本文件内容完整复制到平台的 AGENTS 配置中。
 
-**全局安装**
+### Trae / Cursor / Kiro
 
-1. 打开 Trae 设置 → 全局规则
-2. 将上述规则内容完整粘贴到全局规则中
-
-**项目安装**
-
-1. 在项目根目录创建 `.trae/rules/` 目录（如不存在）
-2. 在 `.trae/rules/` 目录下创建 `exmachina.md` 文件
-3. 将上述规则内容完整粘贴到文件中
-
-### Cursor
-
-**全局安装**
-
-1. 打开 Cursor Settings → Rules → Global Rules
-2. 将上述规则内容完整粘贴到全局规则中
-
-**项目安装**
-
-1. 在项目根目录创建 `.cursor/rules/` 目录（如不存在）
-2. 在 `.cursor/rules/` 目录下创建 `exmachina.mdc` 文件
-3. 文件头部添加以下 frontmatter：
-
-```yaml
----
-description: ExMachina 机械智能规则
-globs:
-alwaysApply: true
----
-```
-
-4. 将上述规则内容完整粘贴到 frontmatter 之后
-
-### Kiro
-
-**全局安装**
-
-1. 打开 Kiro 设置 → 全局技能
-2. 在 skills 目录下创建 `exmachina/steering/exmachina.md`
-3. 将上述规则内容完整粘贴到文件中
-
-**项目安装**
-
-1. 在项目根目录创建 `.kiro/skills/exmachina/steering/` 目录结构
-2. 创建 `exmachina.md` 文件
-3. 将上述规则内容完整粘贴到文件中
-
-### 效果说明
-
-无论全局安装还是项目安装，规则效果一致：
-- 全局规则：所有项目默认启用
-- 项目规则：仅当前项目生效，可覆盖或补充全局规则
-
-建议优先使用项目安装，以便根据不同项目需求灵活调整。
+请参考 RULES.md 文件，使用对应的规则格式进行配置。

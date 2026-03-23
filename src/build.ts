@@ -164,38 +164,16 @@ function buildTraeSurface(): void {
   ]);
 
   ensureDir(`${bundleRoot}/trae/rules`);
-  const skillBody = readText("src/templates/zh-CN/exmachina.skill.md");
-  const skillContent = skillBody.substring(skillBody.indexOf("\n---\n") + 5);
-  writeText(`${bundleRoot}/trae/rules/project_rules.md`, [
+  const rulesBody = readText("src/prompt/RULES.md");
+  const userRuleBody = [
     "---",
     "name: exmachina",
     "description: \"ExMachina 机械智能规则 - 绝对理性、证据驱动\"",
     "---",
     "",
-    skillContent
-  ].join("\n"));
-
-  writeText(`${bundleRoot}/trae/rules/user_rules.md`, [
-    "---",
-    "name: exmachina-user",
-    "description: \"ExMachina 用户个人规则\"",
-    "---",
-    "",
-    "# ExMachina 个人规则",
-    "",
-    "## 核心原则",
-    "",
-    "- 默认使用中文进行所有交流和输出",
-    "- 保持绝对理性的工作方式，不情绪化、不模糊化",
-    "- 所有结论必须基于证据，区分事实、推断、假设和决策",
-    "",
-    "## 输出要求",
-    "",
-    "- 完成标准：说明做了什么、没做什么、为什么没做",
-    "- 关键结论必须追溯到证据等级和来源",
-    "- 保留残余未知、风险边界和建议下一步",
-    "- 证据不足时必须诚实停在\"待验证\"状态"
-  ].join("\n"));
+    rulesBody
+  ].join("\n");
+  writeText(`${bundleRoot}/trae/rules/user_rules.md`, userRuleBody);
 
   for (const targetRoot of [
     `${bundleRoot}/trae/skills/exmachina/references`
@@ -340,6 +318,40 @@ function buildExamplesAndBenchmark(): void {
   });
 }
 
+function buildPromptSurfaces(): void {
+  copySingleSourceToTargets("src/prompt/AGENTS.md", [
+    `${bundleRoot}/codex/AGENTS.md`
+  ]);
+
+  ensureDir(`${bundleRoot}/trae/rules`);
+  const rulesBody = readText("src/prompt/RULES.md");
+  const traeRuleBody = [
+    "---",
+    "name: exmachina",
+    "description: \"ExMachina 机械智能规则 - 绝对理性、证据驱动\"",
+    "---",
+    "",
+    rulesBody
+  ].join("\n");
+  writeText(`${bundleRoot}/trae/rules/project_rules.md`, traeRuleBody);
+
+  ensureDir(`${bundleRoot}/cursor/rules`);
+  const cursorRuleBody = [
+    "---",
+    "description: ExMachina 机械智能规则",
+    "globs:",
+    "alwaysApply: true",
+    "---",
+    "",
+    rulesBody
+  ].join("\n");
+  writeText(`${bundleRoot}/cursor/rules/exmachina.mdc`, cursorRuleBody);
+
+  copySingleSourceToTargets("src/prompt/RULES.md", [
+    `${bundleRoot}/kiro/steering/exmachina.md`
+  ]);
+}
+
 function buildMiscSurfaces(): void {
   writeText(
     `${bundleRoot}/codex/INSTALL.md`,
@@ -425,7 +437,7 @@ function main(): void {
   buildSkills();
   buildCommands();
   buildAgents();
-  buildCursorSurface();
+  buildPromptSurfaces();
   buildTraeSurface();
   buildClaudePluginSurface();
   buildHooks();

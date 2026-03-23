@@ -1,0 +1,24 @@
+{
+  "name": "exmachina",
+  "version": "0.1.0",
+  "description": "绝对理性的机械智能多智能体系统。",
+  "author": {
+    "name": "ExMachina"
+  },
+  "homepage": "https://github.com/<owner>/<repo>",
+  "repository": "https://github.com/<owner>/<repo>",
+  "license": "MIT",
+  "defaultLanguage": "zh-CN",
+  "entrypoints": {
+    "skill": "skills/exmachina-zh/SKILL.md",
+    "command": "commands/ex.md",
+    "codex": "codex/exmachina/SKILL.md",
+    "claudePlugin": "claude-plugin/plugin.json",
+    "trae": "trae/rules/project_rules.md"
+  },
+  "aliases": [
+    "/ex",
+    "/excodex",
+    "/exclaude"
+  ]
+}
