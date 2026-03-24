@@ -33,10 +33,12 @@ function assertMissing(relativePath) {
 }
 
 const requiredFiles = [
+  "AGENTS.md",
   "exmachina/codex/INSTALL.md",
   "exmachina/codex/INSTALL.en.md",
   "exmachina/codex/README.md",
   "exmachina/codex/README.en.md",
+  "exmachina/codex/AGENTS.md",
   "scripts/setup-exmachina.sh",
   "scripts/setup-exmachina.ps1",
   "exmachina/skills/using-exmachina/SKILL.md",

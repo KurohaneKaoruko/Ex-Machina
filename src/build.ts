@@ -461,7 +461,7 @@ function buildExamplesAndBenchmark(): void {
 }
 
 function buildPromptSurfaces(): void {
-  copySingleSourceToTargets("src/prompt/AGENTS.md", [`${bundleRoot}/codex/AGENTS.md`]);
+  copySingleSourceToTargets("src/prompt/AGENTS.md", [`${bundleRoot}/AGENTS.md`, `${bundleRoot}/codex/AGENTS.md`]);
 
   ensureDir(`${bundleRoot}/trae/rules`);
   const zhRulesBody = readText("src/prompt/RULES.md");
