@@ -45,7 +45,7 @@ Some lower-level prompts and internal references may remain single-language when
 
 ## Codex Install
 
-ExMachina now ships a Codex-native installation surface.
+ExMachina now ships a Codex-native installation surface for both `exmachina/skills/` and `exmachina/agents/`.
 
 - Chinese install guide: [`exmachina/codex/INSTALL.md`](exmachina/codex/INSTALL.md)
 - English install guide: [`exmachina/codex/INSTALL.en.md`](exmachina/codex/INSTALL.en.md)
@@ -73,7 +73,7 @@ bash ./scripts/setup-exmachina.sh
 
 ## Platform Surfaces
 
-- Codex: `scripts/`, `exmachina/skills/`, and `exmachina/codex/`
+- Codex: `scripts/`, `exmachina/skills/`, `exmachina/agents/`, and `exmachina/codex/`
 - Trae: `exmachina/trae/`
 - Cursor: `exmachina/cursor/`
 - VS Code-style prompt surfaces: `exmachina/vscode/`

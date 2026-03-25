@@ -3,7 +3,7 @@
 ExMachina 把 Codex 使用面拆成三层：
 
 1. 安装层
-通过 `exmachina/codex/INSTALL*.md` 和根目录 `scripts/setup-exmachina.*` 把仓库 `exmachina/skills/` 目录注册到本地 Codex 技能库。
+通过 `exmachina/codex/INSTALL*.md` 和根目录 `scripts/setup-exmachina.*`，把仓库里的 `exmachina/skills/` 接到本地 Codex 技能库，并把 `exmachina/agents/` 同步到 `~/.codex/agents/`。
 
 2. 引导层
 `using-exmachina-zh` 和 `using-exmachina-en` 负责在“值得更严格工作流”的任务里触发 ExMachina 风格，而不要求每次都显式点名。
@@ -13,7 +13,7 @@ ExMachina 把 Codex 使用面拆成三层：
 
 ## 推荐使用方式
 
-- 普通安装用户：按 `exmachina/codex/INSTALL.md` 或 `exmachina/codex/INSTALL.en.md` 安装技能即可。
+- 普通安装用户：按 `exmachina/codex/INSTALL.md` 或 `exmachina/codex/INSTALL.en.md` 安装技能和原生 agents。
 - 重度用户：再把 `exmachina/codex/AGENTS.md` 合并进自己的 `~/.codex/AGENTS.md` 或项目 `AGENTS.md`。
 - 贡献者：编辑 `src/`，然后运行 `npm run generate && npm run verify`。
 
@@ -49,6 +49,23 @@ ExMachina 把 Codex 使用面拆成三层：
 - `using-exmachina-*` 负责发现与接入
 - `exmachina-*` 负责严肃执行
 
+## Agent 安装面
+
+安装脚本还会把 `exmachina/agents/` 中的编号 agent 文件同步到 `~/.codex/agents/` 根层，便于 Codex 直接把它们当作原生子智能体使用。
+
+安装脚本维护：
+
+- `~/.codex/agents/.exmachina-installed-agents.txt`
+
+它只管理 ExMachina 自己的 agent 文件，不会主动删除其他无关 agent。
+
+生命周期命令：
+
+- 安装：`bash ./scripts/setup-exmachina.sh`
+- 校验：`bash ./scripts/setup-exmachina.sh --verify`
+- 卸载：`bash ./scripts/setup-exmachina.sh --uninstall`
+- PowerShell 对应：`-Verify` / `-Uninstall`
+
 ## 目录约定
 
 仓库里与 Codex 直接相关的关键路径：
@@ -59,6 +76,9 @@ ExMachina 把 Codex 使用面拆成三层：
 - `exmachina/codex/README.en.md`
 - `scripts/setup-exmachina.sh`
 - `scripts/setup-exmachina.ps1`
+- `exmachina/agents/00_全连结指挥体.md`
+- `exmachina/agents/19_实作连结指挥体.md`
+- `exmachina/agents/69_编码体.md`
 - `exmachina/skills/using-exmachina-zh/SKILL.md`
 - `exmachina/skills/using-exmachina-en/SKILL.md`
 - `exmachina/skills/exmachina-zh/SKILL.md`

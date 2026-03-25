@@ -1,6 +1,6 @@
 # ExMachina for Codex
 
-ExMachina 现在提供面向 Codex 的原生安装面，直接把仓库里的 `exmachina/skills/` 目录接入你的本地 Codex 技能库。
+ExMachina 现在提供面向 Codex 的原生安装面，可以同时把仓库里的 `exmachina/skills/` 和 `exmachina/agents/` 接入本地 Codex。
 
 原始安装文档地址：
 
@@ -8,12 +8,13 @@ ExMachina 现在提供面向 Codex 的原生安装面，直接把仓库里的 `e
 
 ## 你会得到什么
 
-安装后，Codex 会发现这一组技能：
+安装后，Codex 会得到三层入口：
 
 - `using-exmachina-zh`：中文轻量引导与路由入口
 - `using-exmachina-en`：英文轻量引导与路由入口
 - `exmachina-zh`：中文主技能，负责严格的证据驱动、路由和裁决
 - `exmachina-en`：英文主技能
+- 一组原生智能体文件：`00_全连结指挥体`、`10-19` 连结指挥体、`30-70` 子个体，会被同步到 `~/.codex/agents/`
 
 高级模式下，你还可以把 `exmachina/codex/AGENTS.md` 合并到自己的 `~/.codex/AGENTS.md` 或项目 `AGENTS.md`，让 ExMachina 规则更强地常驻生效。
 
@@ -37,14 +38,26 @@ Set-Location "$HOME/exmachina"
 powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 ```
 
+脚本支持三种模式：
+
+- 默认直接安装
+- `bash ./scripts/setup-exmachina.sh --verify`
+- `bash ./scripts/setup-exmachina.sh --uninstall`
+- `powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1 -Verify`
+- `powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1 -Uninstall`
+
 ## 安装原理
 
-安装脚本会创建这样一条本地链接：
+安装脚本会做两件事：
 
-- `~/.codex/skills/exmachina -> <repo-root>/exmachina/skills`
-- 例如：`~/.codex/skills/exmachina -> ~/exmachina/exmachina/skills`
+- macOS / Linux：创建链接 `~/.codex/skills/exmachina -> <repo-root>/exmachina/skills`
+- Windows PowerShell：同步一个受 ExMachina 管理的目录到 `~/.codex/skills/exmachina`，并写入 `.exmachina-managed.txt`
+- 把 `exmachina/agents/` 里的编号智能体文件同步到 `~/.codex/agents/`
+- 维护清单文件：`~/.codex/agents/.exmachina-installed-agents.txt`
 
-仓库内的 `exmachina/skills/` 是已经生成好的可发现技能目录，因此普通安装用户不需要先运行 `npm install` 或 `npm run generate`。
+脚本只会管理 ExMachina 自己的 skills 安装面和 agent 文件，不会主动删除其他无关条目。
+
+仓库内的 `exmachina/skills/` 和 `exmachina/agents/` 都是已经生成好的可发现产物，因此普通安装用户不需要先运行 `npm install` 或 `npm run generate`。
 
 ## 验证安装
 
@@ -54,6 +67,10 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 - `~/.codex/skills/exmachina/using-exmachina-en/SKILL.md`
 - `~/.codex/skills/exmachina/exmachina-zh/SKILL.md`
 - `~/.codex/skills/exmachina/exmachina-en/SKILL.md`
+- `~/.codex/agents/00_全连结指挥体.md`
+- `~/.codex/agents/19_实作连结指挥体.md`
+- `~/.codex/agents/69_编码体.md`
+- `~/.codex/agents/.exmachina-installed-agents.txt`
 
 然后重启 Codex 会话，发起这些任务之一：
 
@@ -95,12 +112,34 @@ npm run verify
 
 ## 卸载
 
-删除技能链接，再删除仓库目录：
+优先使用脚本卸载：
+
+### macOS / Linux
+
+```bash
+bash ./scripts/setup-exmachina.sh --uninstall
+rm -rf ~/exmachina
+```
+
+### Windows PowerShell
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1 -Uninstall
+Remove-Item "$HOME/exmachina" -Recurse -Force
+```
+
+如果你需要手动删除，步骤如下：
 
 ### macOS / Linux
 
 ```bash
 rm ~/.codex/skills/exmachina
+if [ -f ~/.codex/agents/.exmachina-installed-agents.txt ]; then
+  while IFS= read -r name; do
+    rm -f "$HOME/.codex/agents/$name"
+  done < ~/.codex/agents/.exmachina-installed-agents.txt
+  rm -f ~/.codex/agents/.exmachina-installed-agents.txt
+fi
 rm -rf ~/exmachina
 ```
 
@@ -108,12 +147,20 @@ rm -rf ~/exmachina
 
 ```powershell
 Remove-Item "$HOME/.codex/skills/exmachina" -Force
+if (Test-Path "$HOME/.codex/agents/.exmachina-installed-agents.txt") {
+  Get-Content "$HOME/.codex/agents/.exmachina-installed-agents.txt" |
+    Where-Object { $_ } |
+    ForEach-Object { Remove-Item (Join-Path "$HOME/.codex/agents" $_) -Force -ErrorAction SilentlyContinue }
+  Remove-Item "$HOME/.codex/agents/.exmachina-installed-agents.txt" -Force
+}
 Remove-Item "$HOME/exmachina" -Recurse -Force
 ```
 
 ## 故障排查
 
 - 如果 `~/.codex/skills/exmachina` 已存在且不是链接，安装脚本会停止，避免误删你的本地目录。确认无误后用 `--force` 或手动清理。
+- 如果 `~/.codex/agents/` 里已经有同名文件，但看起来不是 ExMachina 管理的 agent，安装脚本会停止；确认要覆盖时再用 `--force`。
+- 如果你只想检查当前安装状态，不改任何文件，可用 `--verify` / `-Verify`。
 - 如果你在自定义 Codex 主目录下安装，可把 `CODEX_HOME` 设为目标目录，或给脚本传 `--codex-home` / `-CodexHome`。
 - 如果你希望更强的常驻约束，把 `exmachina/codex/AGENTS.md` 合并到自己的 `AGENTS.md`。
 
