@@ -1,0 +1,51 @@
+{
+  "name": "exmachina",
+  "version": "0.1.0",
+  "description": "绝对理性的机械智能多智能体系统。",
+  "author": {
+    "name": "ExMachina"
+  },
+  "homepage": "https://github.com/KurohaneKaoruko/Ex-Machina",
+  "repository": "https://github.com/KurohaneKaoruko/Ex-Machina",
+  "license": "MIT",
+  "defaultLanguage": "zh-CN",
+  "languages": [
+    "zh-CN",
+    "en-US"
+  ],
+  "entrypoints": {
+    "skill": "skills/using-exmachina-zh/SKILL.md",
+    "skillAlias": "skills/using-exmachina/SKILL.md",
+    "skillEnglish": "skills/using-exmachina-en/SKILL.md",
+    "coreSkill": "skills/exmachina-zh/SKILL.md",
+    "coreSkillEnglish": "skills/exmachina-en/SKILL.md",
+    "command": "commands/ex.md",
+    "commandEnglish": "commands/ex.en.md",
+    "codex": "codex/exmachina/SKILL.md",
+    "codexEnglish": "codex/exmachina-en/SKILL.md",
+    "codexInstall": "codex/INSTALL.md",
+    "codexInstallEnglish": "codex/INSTALL.en.md",
+    "claudePlugin": ".claude-plugin/plugin.json",
+    "claudeInstall": ".claude-plugin/INSTALL.md",
+    "claudeInstallEnglish": ".claude-plugin/INSTALL.en.md",
+    "cursorPlugin": ".cursor-plugin/plugin.json",
+    "cursorRules": ".cursor/rules/exmachina.mdc",
+    "cursorRulesEnglish": ".cursor/rules/exmachina-en.mdc",
+    "cursorInstall": ".cursor-plugin/INSTALL.md",
+    "cursorInstallEnglish": ".cursor-plugin/INSTALL.en.md",
+    "opencodePlugin": ".opencode/plugins/exmachina.mjs",
+    "opencodeInstall": ".opencode/INSTALL.md",
+    "opencodeInstallEnglish": ".opencode/INSTALL.en.md",
+    "geminiExtension": "gemini-extension.json",
+    "geminiContext": "GEMINI.md",
+    "geminiInstall": ".gemini/INSTALL.md",
+    "geminiInstallEnglish": ".gemini/INSTALL.en.md",
+    "trae": "trae/rules/project_rules.md",
+    "traeEnglish": "trae/rules/project_rules.en.md"
+  },
+  "aliases": [
+    "/ex",
+    "/excodex",
+    "/exclaude"
+  ]
+}

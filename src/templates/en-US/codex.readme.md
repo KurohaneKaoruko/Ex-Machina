@@ -3,7 +3,7 @@
 ExMachina splits the Codex surface into three layers:
 
 1. Install layer
-`exmachina/codex/INSTALL*.md` and the root `scripts/setup-exmachina.*` files register the repository `exmachina/skills/` directory into the local Codex skill library and sync `exmachina/agents/` into `~/.codex/agents/`.
+`codex/INSTALL*.md` and the root `scripts/setup-exmachina.*` files register the repository `skills/` directory into the local Codex skill library and sync `agents/` into `~/.codex/agents/`.
 
 2. Bootstrap layer
 `using-exmachina-zh` and `using-exmachina-en` help Codex recognize when a task should move into the stricter ExMachina workflow.
@@ -13,8 +13,8 @@ ExMachina splits the Codex surface into three layers:
 
 ## Recommended Usage
 
-- Normal installers: follow `exmachina/codex/INSTALL.md` or `exmachina/codex/INSTALL.en.md` and install both skills and native agents.
-- Power users: also merge `exmachina/codex/AGENTS.md` into `~/.codex/AGENTS.md` or a project `AGENTS.md`.
+- Normal installers: follow `codex/INSTALL.md` or `codex/INSTALL.en.md` and install both skills and native agents.
+- Power users: also merge `codex/AGENTS.md` into `~/.codex/AGENTS.md` or a project `AGENTS.md`.
 - Contributors: edit `src/`, then run `npm run generate && npm run verify`.
 
 ## Skill Responsibilities
@@ -51,7 +51,7 @@ So ExMachina keeps bootstrap and core responsibilities separate:
 
 ## Agent Surface
 
-The installer also syncs numbered agent files from `exmachina/agents/` into the root `~/.codex/agents/` directory so Codex can treat them as native subagents.
+The installer also syncs numbered agent files from `agents/` into the root `~/.codex/agents/` directory so Codex can treat them as native subagents.
 
 The installer keeps a manifest at:
 
@@ -68,23 +68,23 @@ Lifecycle commands:
 
 ## Key Paths
 
-- `exmachina/codex/INSTALL.md`
-- `exmachina/codex/INSTALL.en.md`
-- `exmachina/codex/README.md`
-- `exmachina/codex/README.en.md`
+- `codex/INSTALL.md`
+- `codex/INSTALL.en.md`
+- `codex/README.md`
+- `codex/README.en.md`
 - `scripts/setup-exmachina.sh`
 - `scripts/setup-exmachina.ps1`
-- `exmachina/agents/00_全连结指挥体.md`
-- `exmachina/agents/19_实作连结指挥体.md`
-- `exmachina/agents/69_编码体.md`
-- `exmachina/skills/using-exmachina-zh/SKILL.md`
-- `exmachina/skills/using-exmachina-en/SKILL.md`
-- `exmachina/skills/exmachina-zh/SKILL.md`
-- `exmachina/skills/exmachina-en/SKILL.md`
-- `exmachina/codex/AGENTS.md`
+- `agents/00_全连结指挥体.md`
+- `agents/19_实作连结指挥体.md`
+- `agents/69_编码体.md`
+- `skills/using-exmachina-zh/SKILL.md`
+- `skills/using-exmachina-en/SKILL.md`
+- `skills/exmachina-zh/SKILL.md`
+- `skills/exmachina-en/SKILL.md`
+- `codex/AGENTS.md`
 
 ## Version And Source
 
 - Repository: `{{REPOSITORY_URL}}`
-- Raw install guide: `{{RAW_BASE_URL}}/exmachina/codex/INSTALL.en.md`
+- Raw install guide: `{{RAW_BASE_URL}}/codex/INSTALL.en.md`
 - Bundle version: `{{VERSION}}`

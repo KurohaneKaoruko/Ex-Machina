@@ -1,10 +1,10 @@
 # ExMachina for Codex
 
-ExMachina 现在提供面向 Codex 的原生安装面，可以同时把仓库里的 `exmachina/skills/` 和 `exmachina/agents/` 接入本地 Codex。
+ExMachina 现在提供面向 Codex 的原生安装面，可以同时把仓库里的 `skills/` 和 `agents/` 接入本地 Codex。
 
 原始安装文档地址：
 
-- `{{RAW_BASE_URL}}/exmachina/codex/INSTALL.md`
+- `{{RAW_BASE_URL}}/codex/INSTALL.md`
 
 ## 你会得到什么
 
@@ -16,7 +16,7 @@ ExMachina 现在提供面向 Codex 的原生安装面，可以同时把仓库里
 - `exmachina-en`：英文主技能
 - 一组原生智能体文件：`00_全连结指挥体`、`10-19` 连结指挥体、`30-70` 子个体，会被同步到 `~/.codex/agents/`
 
-高级模式下，你还可以把 `exmachina/codex/AGENTS.md` 合并到自己的 `~/.codex/AGENTS.md` 或项目 `AGENTS.md`，让 ExMachina 规则更强地常驻生效。
+高级模式下，你还可以把 `codex/AGENTS.md` 合并到自己的 `~/.codex/AGENTS.md` 或项目 `AGENTS.md`，让 ExMachina 规则更强地常驻生效。
 
 ## 快速安装
 
@@ -50,14 +50,14 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1
 
 安装脚本会做两件事：
 
-- macOS / Linux：创建链接 `~/.codex/skills/exmachina -> <repo-root>/exmachina/skills`
+- macOS / Linux：创建链接 `~/.codex/skills/exmachina -> <repo-root>/skills`
 - Windows PowerShell：同步一个受 ExMachina 管理的目录到 `~/.codex/skills/exmachina`，并写入 `.exmachina-managed.txt`
-- 把 `exmachina/agents/` 里的编号智能体文件同步到 `~/.codex/agents/`
+- 把 `agents/` 里的编号智能体文件同步到 `~/.codex/agents/`
 - 维护清单文件：`~/.codex/agents/.exmachina-installed-agents.txt`
 
 脚本只会管理 ExMachina 自己的 skills 安装面和 agent 文件，不会主动删除其他无关条目。
 
-仓库内的 `exmachina/skills/` 和 `exmachina/agents/` 都是已经生成好的可发现产物，因此普通安装用户不需要先运行 `npm install` 或 `npm run generate`。
+仓库内的 `skills/` 和 `agents/` 都是已经生成好的可发现产物，因此普通安装用户不需要先运行 `npm install` 或 `npm run generate`。
 
 ## 验证安装
 
@@ -162,10 +162,10 @@ Remove-Item "$HOME/exmachina" -Recurse -Force
 - 如果 `~/.codex/agents/` 里已经有同名文件，但看起来不是 ExMachina 管理的 agent，安装脚本会停止；确认要覆盖时再用 `--force`。
 - 如果你只想检查当前安装状态，不改任何文件，可用 `--verify` / `-Verify`。
 - 如果你在自定义 Codex 主目录下安装，可把 `CODEX_HOME` 设为目标目录，或给脚本传 `--codex-home` / `-CodexHome`。
-- 如果你希望更强的常驻约束，把 `exmachina/codex/AGENTS.md` 合并到自己的 `AGENTS.md`。
+- 如果你希望更强的常驻约束，把 `codex/AGENTS.md` 合并到自己的 `AGENTS.md`。
 
 ## 相关入口
 
 - 仓库主页：`{{REPOSITORY_URL}}`
-- Codex 使用说明：`exmachina/codex/README.md`
-- 打包产物入口：`exmachina/plugin.json`
+- Codex 使用说明：`codex/README.md`
+- 打包产物入口：`plugin.json`

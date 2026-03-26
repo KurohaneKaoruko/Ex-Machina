@@ -1,0 +1,18 @@
+{
+  "name": "exmachina-dev",
+  "description": "Development marketplace for ExMachina mechanical-intelligence surfaces",
+  "owner": {
+    "name": "ExMachina"
+  },
+  "plugins": [
+    {
+      "name": "exmachina",
+      "description": "Evidence-bound mechanical-intelligence operating layer for Claude Code.",
+      "version": "0.1.0",
+      "source": "./",
+      "author": {
+        "name": "ExMachina"
+      }
+    }
+  ]
+}

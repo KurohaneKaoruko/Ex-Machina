@@ -1,0 +1,6 @@
+{
+  "name": "exmachina",
+  "version": "0.1.0",
+  "description": "Evidence-bound mechanical-intelligence operating layer for Gemini CLI.",
+  "contextFileName": "GEMINI.md"
+}

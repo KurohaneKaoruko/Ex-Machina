@@ -1,10 +1,10 @@
 # ExMachina for Codex
 
-ExMachina now ships a Codex-native install surface so you can attach both this repository's `exmachina/skills/` and `exmachina/agents/` surfaces directly to local Codex.
+ExMachina now ships a Codex-native install surface so you can attach both this repository's `skills/` and `agents/` surfaces directly to local Codex.
 
 Raw install guide:
 
-- `{{RAW_BASE_URL}}/exmachina/codex/INSTALL.en.md`
+- `{{RAW_BASE_URL}}/codex/INSTALL.en.md`
 
 ## What You Get
 
@@ -16,7 +16,7 @@ After installation, Codex gets three entry layers:
 - `exmachina-en`: full English operating surface
 - a native agent set: `00_全连结指挥体`, the `10-19` link commanders, and the `30-70` worker units, synced into `~/.codex/agents/`
 
-If you want stronger always-on behavior, you can also merge `exmachina/codex/AGENTS.md` into your own `~/.codex/AGENTS.md` or project-level `AGENTS.md`.
+If you want stronger always-on behavior, you can also merge `codex/AGENTS.md` into your own `~/.codex/AGENTS.md` or project-level `AGENTS.md`.
 
 ## Quick Install
 
@@ -50,14 +50,14 @@ The installer supports three modes:
 
 The install script does two things:
 
-- macOS / Linux: creates a link at `~/.codex/skills/exmachina -> <repo-root>/exmachina/skills`
+- macOS / Linux: creates a link at `~/.codex/skills/exmachina -> <repo-root>/skills`
 - Windows PowerShell: syncs a managed directory into `~/.codex/skills/exmachina` and writes `.exmachina-managed.txt`
-- syncs numbered agent files from `exmachina/agents/` into `~/.codex/agents/`
+- syncs numbered agent files from `agents/` into `~/.codex/agents/`
 - maintains a manifest at `~/.codex/agents/.exmachina-installed-agents.txt`
 
 The script only manages ExMachina-owned skill and agent surfaces and leaves unrelated entries alone.
 
-The repository already contains generated, discoverable assets under `exmachina/skills/` and `exmachina/agents/`, so normal consumers do not need `npm install` or `npm run generate` first.
+The repository already contains generated, discoverable assets under `skills/` and `agents/`, so normal consumers do not need `npm install` or `npm run generate` first.
 
 ## Verify The Install
 
@@ -160,10 +160,10 @@ Remove-Item "$HOME/exmachina" -Recurse -Force
 - If a same-named file already exists under `~/.codex/agents/` and does not look managed by ExMachina, the installer stops. Remove it manually or rerun with `--force` / `-Force` if replacement is intended.
 - If you only want to inspect the current installation state without changing files, use `--verify` / `-Verify`.
 - If you install under a custom Codex home, set `CODEX_HOME` or pass `--codex-home` / `-CodexHome`.
-- If you want stronger always-on guidance, merge `exmachina/codex/AGENTS.md` into your own `AGENTS.md`.
+- If you want stronger always-on guidance, merge `codex/AGENTS.md` into your own `AGENTS.md`.
 
 ## Related Entry Points
 
 - Repository: `{{REPOSITORY_URL}}`
-- Codex guide: `exmachina/codex/README.en.md`
-- Bundle manifest: `exmachina/plugin.json`
+- Codex guide: `codex/README.en.md`
+- Bundle manifest: `plugin.json`

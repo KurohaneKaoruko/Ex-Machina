@@ -21,8 +21,8 @@ function Resolve-RepoRoot {
   foreach ($candidate in $candidates) {
     $resolved = (Resolve-Path -LiteralPath $candidate).Path
     if (
-      (Test-Path -LiteralPath (Join-Path $resolved "exmachina\\skills")) -and
-      (Test-Path -LiteralPath (Join-Path $resolved "exmachina\\agents"))
+      (Test-Path -LiteralPath (Join-Path $resolved "skills")) -and
+      (Test-Path -LiteralPath (Join-Path $resolved "agents"))
     ) {
       return $resolved
     }
@@ -207,12 +207,12 @@ if (-not $RepoRoot) {
   $RepoRoot = Resolve-RepoRoot -StartDirectory $scriptDirectory
 }
 
-$skillsSource = Join-Path $RepoRoot "exmachina\\skills"
+$skillsSource = Join-Path $RepoRoot "skills"
 if (-not (Test-Path -LiteralPath $skillsSource)) {
   throw "[ExMachina] skills directory not found: $skillsSource`n[ExMachina] run npm run generate if you are working from source."
 }
 
-$agentsSource = Join-Path $RepoRoot "exmachina\\agents"
+$agentsSource = Join-Path $RepoRoot "agents"
 if (-not (Test-Path -LiteralPath $agentsSource)) {
   throw "[ExMachina] agents directory not found: $agentsSource`n[ExMachina] run npm run generate if you are working from source."
 }

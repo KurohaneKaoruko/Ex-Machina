@@ -1,0 +1,29 @@
+{
+  "name": "exmachina",
+  "displayName": "ExMachina",
+  "description": "Evidence-bound mechanical-intelligence operating layer for AI coding tools.",
+  "version": "0.1.0",
+  "author": {
+    "name": "ExMachina"
+  },
+  "homepage": "https://github.com/KurohaneKaoruko/Ex-Machina",
+  "repository": "https://github.com/KurohaneKaoruko/Ex-Machina",
+  "license": "MIT",
+  "keywords": [
+    "mechanical-intelligence",
+    "multi-agent",
+    "skills",
+    "codex",
+    "claude",
+    "cursor",
+    "opencode",
+    "gemini"
+  ],
+  "defaultLanguage": "zh-CN",
+  "entrypoints": {
+    "commands": "../commands",
+    "skills": "../skills",
+    "agents": "../agents",
+    "hooks": "../hooks"
+  }
+}

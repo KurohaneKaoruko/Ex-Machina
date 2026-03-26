@@ -11,8 +11,8 @@ usage() {
 Usage: setup-exmachina.sh [--repo-root PATH] [--codex-home PATH] [--force] [--verify|--uninstall]
 
 Default mode installs ExMachina into Codex by:
-  <codex-home>/skills/exmachina -> <repo-root>/exmachina/skills
-  syncing numbered agent files from <repo-root>/exmachina/agents into <codex-home>/agents
+  <codex-home>/skills/exmachina -> <repo-root>/skills
+  syncing numbered agent files from <repo-root>/agents into <codex-home>/agents
 
 Additional modes:
   --verify     Validate that ExMachina skills and managed agents are present
@@ -25,7 +25,7 @@ resolve_repo_root() {
   local candidate
 
   for candidate in "$script_dir/.." "$script_dir/../.."; do
-    if [ -d "$candidate/exmachina/skills" ] && [ -d "$candidate/exmachina/agents" ]; then
+    if [ -d "$candidate/skills" ] && [ -d "$candidate/agents" ]; then
       (cd "$candidate" && pwd)
       return 0
     fi
@@ -283,8 +283,8 @@ if [ -z "$repo_root" ]; then
   }
 fi
 
-skills_source="$repo_root/exmachina/skills"
-agents_source="$repo_root/exmachina/agents"
+skills_source="$repo_root/skills"
+agents_source="$repo_root/agents"
 install_root="$codex_home/skills"
 install_path="$install_root/exmachina"
 agents_root="$codex_home/agents"

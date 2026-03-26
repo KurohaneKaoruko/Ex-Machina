@@ -1,8 +1,25 @@
 {
   "name": "exmachina",
   "version": "0.1.0",
-  "private": true,
   "description": "ExMachina - a mechanical-intelligence multi-agent system",
+  "private": true,
+  "homepage": "https://github.com/KurohaneKaoruko/Ex-Machina",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KurohaneKaoruko/Ex-Machina.git"
+  },
+  "license": "MIT",
+  "main": ".opencode/plugins/exmachina.mjs",
+  "keywords": [
+    "mechanical-intelligence",
+    "multi-agent",
+    "skills",
+    "codex",
+    "claude",
+    "cursor",
+    "opencode",
+    "gemini"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc --noEmit -p tsconfig.json",

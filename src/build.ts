@@ -16,11 +16,14 @@ type PackageMetadata = {
 type TemplateValues = Record<string, string>;
 
 const rootDir = process.cwd();
-const bundleRoot = "exmachina";
 const promptRoot = "src/prompt";
 
 function fromRoot(...parts: string[]): string {
   return path.join(rootDir, ...parts);
+}
+
+function bundlePath(...parts: string[]): string {
+  return path.posix.join(...parts);
 }
 
 function ensureDir(targetDir: string): void {
@@ -205,9 +208,34 @@ const templateValues: TemplateValues = {
   BRANCH: branch
 };
 
+function getCommonPluginMetadata(): Record<string, unknown> {
+  return {
+    name: "exmachina",
+    displayName: "ExMachina",
+    description: "Evidence-bound mechanical-intelligence operating layer for AI coding tools.",
+    version: packageMetadata.version,
+    author: {
+      name: "ExMachina"
+    },
+    homepage: repositoryUrl,
+    repository: repositoryUrl,
+    license: "MIT",
+    keywords: [
+      "mechanical-intelligence",
+      "multi-agent",
+      "skills",
+      "codex",
+      "claude",
+      "cursor",
+      "opencode",
+      "gemini"
+    ]
+  };
+}
+
 function buildRootFiles(): void {
   const plugin = JSON.parse(renderTemplate("src/exmachina/plugin.json", templateValues));
-  writeJson(`${bundleRoot}/plugin.json`, plugin);
+  writeJson("plugin.json", plugin);
 }
 
 function cleanupLegacyArtifactSurface(): void {
@@ -220,17 +248,11 @@ function cleanupLegacyArtifactSurface(): void {
     withLegacyCleanupWarning(relativePath, () => removeFile(relativePath));
   }
 
-  for (const relativePath of [
-    "skills/exmachina-zh",
-    "skills/exmachina-en",
-    "skills/using-exmachina",
-    "skills/using-exmachina-zh",
-    "skills/using-exmachina-en"
-  ]) {
+  for (const relativePath of ["exmachina"]) {
     withLegacyCleanupWarning(relativePath, () => removeDir(relativePath));
   }
 
-  for (const relativePath of ["docs", "skills", "exmachina/scripts"]) {
+  for (const relativePath of ["docs"]) {
     withLegacyCleanupWarning(relativePath, () => removeDirIfEmpty(relativePath));
   }
 }
@@ -242,39 +264,39 @@ function buildSkills(): void {
   const usingEnSkill = renderTemplate("src/templates/en-US/using-exmachina.skill.md", templateValues);
 
   writeContentToTargets(zhSkill, [
-    `${bundleRoot}/skills/exmachina-zh/SKILL.md`,
-    `${bundleRoot}/codex/exmachina/SKILL.md`,
-    `${bundleRoot}/kiro/skills/exmachina/SKILL.md`,
-    `${bundleRoot}/vscode/prompts/exmachina.prompt.md`,
-    `${bundleRoot}/vscode/instructions/exmachina.instructions.md`,
-    `${bundleRoot}/kiro/steering/exmachina.md`
+    bundlePath("skills", "exmachina-zh", "SKILL.md"),
+    bundlePath("codex", "exmachina", "SKILL.md"),
+    bundlePath("kiro", "skills", "exmachina", "SKILL.md"),
+    bundlePath("vscode", "prompts", "exmachina.prompt.md"),
+    bundlePath("vscode", "instructions", "exmachina.instructions.md"),
+    bundlePath("kiro", "steering", "exmachina.md")
   ]);
 
   writeContentToTargets(enSkill, [
-    `${bundleRoot}/skills/exmachina-en/SKILL.md`,
-    `${bundleRoot}/codex/exmachina-en/SKILL.md`,
-    `${bundleRoot}/kiro/skills/exmachina-en/SKILL.md`,
-    `${bundleRoot}/vscode/prompts/exmachina.en.prompt.md`,
-    `${bundleRoot}/vscode/instructions/exmachina.en.instructions.md`,
-    `${bundleRoot}/kiro/steering/exmachina.en.md`
+    bundlePath("skills", "exmachina-en", "SKILL.md"),
+    bundlePath("codex", "exmachina-en", "SKILL.md"),
+    bundlePath("kiro", "skills", "exmachina-en", "SKILL.md"),
+    bundlePath("vscode", "prompts", "exmachina.en.prompt.md"),
+    bundlePath("vscode", "instructions", "exmachina.en.instructions.md"),
+    bundlePath("kiro", "steering", "exmachina.en.md")
   ]);
 
   writeContentToTargets(usingZhSkill, [
-    `${bundleRoot}/skills/using-exmachina/SKILL.md`,
-    `${bundleRoot}/skills/using-exmachina-zh/SKILL.md`
+    bundlePath("skills", "using-exmachina", "SKILL.md"),
+    bundlePath("skills", "using-exmachina-zh", "SKILL.md")
   ]);
 
   writeContentToTargets(usingEnSkill, [
-    `${bundleRoot}/skills/using-exmachina-en/SKILL.md`
+    bundlePath("skills", "using-exmachina-en", "SKILL.md")
   ]);
 
   for (const targetRoot of [
-    `${bundleRoot}/skills/exmachina-zh/references`,
-    `${bundleRoot}/codex/exmachina/references`,
-    `${bundleRoot}/kiro/skills/exmachina/references`,
-    `${bundleRoot}/skills/exmachina-en/references`,
-    `${bundleRoot}/codex/exmachina-en/references`,
-    `${bundleRoot}/kiro/skills/exmachina-en/references`
+    bundlePath("skills", "exmachina-zh", "references"),
+    bundlePath("codex", "exmachina", "references"),
+    bundlePath("kiro", "skills", "exmachina", "references"),
+    bundlePath("skills", "exmachina-en", "references"),
+    bundlePath("codex", "exmachina-en", "references"),
+    bundlePath("kiro", "skills", "exmachina-en", "references")
   ]) {
     copyDirectory(`${promptRoot}/protocol`, `${targetRoot}/protocol`);
     copyMarkdownFiles(`${promptRoot}/agents`, `${targetRoot}/agents`);
@@ -286,42 +308,45 @@ function buildCommands(): void {
   const enCommand = renderTemplate("src/templates/en-US/ex.command.md", templateValues);
 
   writeContentToTargets(zhCommand, [
-    `${bundleRoot}/commands/ex.md`,
-    `${bundleRoot}/commands/excodex.md`,
-    `${bundleRoot}/commands/exclaude.md`
+    bundlePath("commands", "ex.md"),
+    bundlePath("commands", "excodex.md"),
+    bundlePath("commands", "exclaude.md")
   ]);
 
   writeContentToTargets(enCommand, [
-    `${bundleRoot}/commands/ex.en.md`,
-    `${bundleRoot}/commands/excodex.en.md`,
-    `${bundleRoot}/commands/exclaude.en.md`
+    bundlePath("commands", "ex.en.md"),
+    bundlePath("commands", "excodex.en.md"),
+    bundlePath("commands", "exclaude.en.md")
   ]);
 }
 
 function buildAgents(): void {
-  copyMarkdownFiles(`${promptRoot}/agents`, `${bundleRoot}/agents`);
+  copyMarkdownFiles(`${promptRoot}/agents`, bundlePath("agents"));
 }
 
 function buildTraeSurface(): void {
   const zhSkill = renderTemplate("src/templates/zh-CN/exmachina.skill.md", templateValues);
   const enSkill = renderTemplate("src/templates/en-US/exmachina.skill.md", templateValues);
 
-  writeContentToTargets(zhSkill, [`${bundleRoot}/trae/skills/exmachina/SKILL.md`]);
-  writeContentToTargets(enSkill, [`${bundleRoot}/trae/skills/exmachina-en/SKILL.md`]);
+  writeContentToTargets(zhSkill, [bundlePath("trae", "skills", "exmachina", "SKILL.md")]);
+  writeContentToTargets(enSkill, [bundlePath("trae", "skills", "exmachina-en", "SKILL.md")]);
 
   for (const targetRoot of [
-    `${bundleRoot}/trae/skills/exmachina/references`,
-    `${bundleRoot}/trae/skills/exmachina-en/references`
+    bundlePath("trae", "skills", "exmachina", "references"),
+    bundlePath("trae", "skills", "exmachina-en", "references")
   ]) {
     copyDirectory(`${promptRoot}/protocol`, `${targetRoot}/protocol`);
     copyMarkdownFiles(`${promptRoot}/agents`, `${targetRoot}/agents`);
   }
+
+  copyDirectory("src/trae-agents", bundlePath("trae", "agents"));
 }
 
 function buildClaudePluginSurface(): void {
-  writeJson(`${bundleRoot}/claude-plugin/plugin.json`, {
-    name: "exmachina",
-    version: packageMetadata.version,
+  const installBodyZh = renderTemplate("src/templates/zh-CN/claude.install.md", templateValues);
+  const installBodyEn = renderTemplate("src/templates/en-US/claude.install.md", templateValues);
+  const rootPlugin = {
+    ...getCommonPluginMetadata(),
     defaultLanguage: "zh-CN",
     entrypoints: {
       commands: "../commands",
@@ -329,17 +354,30 @@ function buildClaudePluginSurface(): void {
       agents: "../agents",
       hooks: "../hooks"
     }
-  });
-
-  writeJson(`${bundleRoot}/claude-plugin/marketplace.json`, {
-    name: "exmachina",
-    title: "ExMachina",
-    summary: "绝对理性的机械智能多智能体系统。",
-    install: {
-      plugin: "plugin.json"
+  };
+  const marketplace = {
+    name: "exmachina-dev",
+    description: "Development marketplace for ExMachina mechanical-intelligence surfaces",
+    owner: {
+      name: "ExMachina"
     },
-    aliases: ["/ex", "/excodex", "/exclaude"]
-  });
+    plugins: [
+      {
+        name: "exmachina",
+        description: "Evidence-bound mechanical-intelligence operating layer for Claude Code.",
+        version: packageMetadata.version,
+        source: "./",
+        author: {
+          name: "ExMachina"
+        }
+      }
+    ]
+  };
+
+  writeJson(`.claude-plugin/plugin.json`, rootPlugin);
+  writeJson(`.claude-plugin/marketplace.json`, marketplace);
+  writeText(`.claude-plugin/INSTALL.md`, installBodyZh);
+  writeText(`.claude-plugin/INSTALL.en.md`, installBodyEn);
 }
 
 function buildCodexSurface(): void {
@@ -352,21 +390,32 @@ function buildCodexSurface(): void {
 
   writeText(`scripts/setup-exmachina.sh`, bashInstaller);
   writeText(`scripts/setup-exmachina.ps1`, powerShellInstaller);
-  writeText(`${bundleRoot}/codex/INSTALL.md`, installBodyZh);
-  writeText(`${bundleRoot}/codex/INSTALL.en.md`, installBodyEn);
-  writeText(`${bundleRoot}/codex/README.md`, readmeBodyZh);
-  writeText(`${bundleRoot}/codex/README.en.md`, readmeBodyEn);
+  writeText(bundlePath("codex", "INSTALL.md"), installBodyZh);
+  writeText(bundlePath("codex", "INSTALL.en.md"), installBodyEn);
+  writeText(bundlePath("codex", "README.md"), readmeBodyZh);
+  writeText(bundlePath("codex", "README.en.md"), readmeBodyEn);
 }
 
 function buildHooks(): void {
-  writeJson(`${bundleRoot}/hooks/hooks.json`, {
+  writeJson(bundlePath("hooks", "hooks.json"), {
     onSessionStart: ["./session-restore.sh"],
     beforeResponse: ["./route-guard.sh"],
     onSessionEnd: ["./session-snapshot.sh"]
   });
 
+  writeJson(`.cursor-plugin/hooks.json`, {
+    version: 1,
+    hooks: {
+      sessionStart: [
+        {
+          command: "../hooks/session-restore.sh"
+        }
+      ]
+    }
+  });
+
   writeText(
-    `${bundleRoot}/hooks/session-restore.sh`,
+    bundlePath("hooks", "session-restore.sh"),
     [
       "#!/usr/bin/env bash",
       "set -e",
@@ -375,7 +424,7 @@ function buildHooks(): void {
   );
 
   writeText(
-    `${bundleRoot}/hooks/route-guard.sh`,
+    bundlePath("hooks", "route-guard.sh"),
     [
       "#!/usr/bin/env bash",
       "set -e",
@@ -384,7 +433,7 @@ function buildHooks(): void {
   );
 
   writeText(
-    `${bundleRoot}/hooks/session-snapshot.sh`,
+    bundlePath("hooks", "session-snapshot.sh"),
     [
       "#!/usr/bin/env bash",
       "set -e",
@@ -393,9 +442,153 @@ function buildHooks(): void {
   );
 }
 
+function buildCursorSurface(): void {
+  const installBodyZh = renderTemplate("src/templates/zh-CN/cursor.install.md", templateValues);
+  const installBodyEn = renderTemplate("src/templates/en-US/cursor.install.md", templateValues);
+  const rootPlugin = {
+    ...getCommonPluginMetadata(),
+    skills: "../skills/",
+    agents: "../agents/",
+    commands: "../commands/",
+    hooks: "./hooks.json"
+  };
+
+  writeJson(`.cursor-plugin/plugin.json`, rootPlugin);
+  writeText(`.cursor-plugin/INSTALL.md`, installBodyZh);
+  writeText(`.cursor-plugin/INSTALL.en.md`, installBodyEn);
+}
+
+function buildOpenCodeSurface(): void {
+  const installBodyZh = renderTemplate("src/templates/zh-CN/opencode.install.md", templateValues);
+  const installBodyEn = renderTemplate("src/templates/en-US/opencode.install.md", templateValues);
+  const pluginSource = [
+    "import fs from \"node:fs\";",
+    "import os from \"node:os\";",
+    "import path from \"node:path\";",
+    "import { fileURLToPath } from \"node:url\";",
+    "",
+    "const __dirname = path.dirname(fileURLToPath(import.meta.url));",
+    "",
+    "function stripFrontmatter(content) {",
+    "  const match = content.match(/^---\\n([\\s\\S]*?)\\n---\\n([\\s\\S]*)$/);",
+    "  if (!match) {",
+    "    return content;",
+    "  }",
+    "  return match[2];",
+    "}",
+    "",
+    "function normalizePath(input, homeDir) {",
+    "  if (!input || typeof input !== \"string\") {",
+    "    return null;",
+    "  }",
+    "  let value = input.trim();",
+    "  if (!value) {",
+    "    return null;",
+    "  }",
+    "  if (value === \"~\") {",
+    "    return homeDir;",
+    "  }",
+    "  if (value.startsWith(\"~/\")) {",
+    "    value = path.join(homeDir, value.slice(2));",
+    "  }",
+    "  return path.resolve(value);",
+    "}",
+    "",
+    "function resolveBootstrapName() {",
+    "  const forced = `${process.env.EXMACHINA_LANG ?? process.env.EXMACHINA_LANGUAGE ?? \"\"}`.toLowerCase();",
+    "  if (forced.startsWith(\"zh\")) {",
+    "    return \"using-exmachina-zh\";",
+    "  }",
+    "  if (forced.startsWith(\"en\")) {",
+    "    return \"using-exmachina-en\";",
+    "  }",
+    "  const locale = `${process.env.LANG ?? process.env.LC_ALL ?? \"\"}`.toLowerCase();",
+    "  return locale.startsWith(\"zh\") ? \"using-exmachina-zh\" : \"using-exmachina-en\";",
+    "}",
+    "",
+    "function getBootstrapContent(skillsDir, configDir) {",
+    "  const bootstrapName = resolveBootstrapName();",
+    "  const skillPath = path.join(skillsDir, bootstrapName, \"SKILL.md\");",
+    "  if (!fs.existsSync(skillPath)) {",
+    "    return null;",
+    "  }",
+    "  const content = stripFrontmatter(fs.readFileSync(skillPath, \"utf8\"));",
+    "  const toolMapping = [",
+    "    \"Tool mapping for OpenCode:\",",
+    "    \"- Use OpenCode native shell, file, search, and edit tools when names differ.\",",
+    "    \"- Treat the injected ExMachina bootstrap as already loaded; do not reload it redundantly.\",",
+    "    `- ExMachina shared skills are registered from ${skillsDir}.`,",
+    "    configDir ? `- OpenCode config directory resolved to ${configDir}.` : \"\"",
+    "  ].filter(Boolean).join(\"\\n\");",
+    "  return [",
+    "    \"You have ExMachina.\",",
+    "    \"IMPORTANT: the selected using-exmachina bootstrap is already injected below. Do not reload it redundantly.\",",
+    "    content.trim(),",
+    "    toolMapping",
+    "  ].join(\"\\n\\n\");",
+    "}",
+    "",
+    "export const ExMachinaPlugin = async () => {",
+    "  const homeDir = os.homedir();",
+    "  const skillsDir = path.resolve(__dirname, \"../../skills\");",
+    "  const configDir = normalizePath(process.env.OPENCODE_CONFIG_DIR ?? \"\", homeDir) ?? path.join(homeDir, \".config/opencode\");",
+    "",
+    "  return {",
+    "    config: async (config) => {",
+    "      config.skills = config.skills || {};",
+    "      config.skills.paths = config.skills.paths || [];",
+    "      if (!config.skills.paths.includes(skillsDir)) {",
+    "        config.skills.paths.push(skillsDir);",
+    "      }",
+    "    },",
+    "    \"experimental.chat.system.transform\": async (_input, output) => {",
+    "      const bootstrap = getBootstrapContent(skillsDir, configDir);",
+    "      if (!bootstrap) {",
+    "        return;",
+    "      }",
+    "      output.system = output.system || [];",
+    "      output.system.push(bootstrap);",
+    "    }",
+    "  };",
+    "};",
+    ""
+  ].join("\n");
+
+  writeText(`.opencode/plugins/exmachina.mjs`, pluginSource);
+  writeText(`.opencode/INSTALL.md`, installBodyZh);
+  writeText(`.opencode/INSTALL.en.md`, installBodyEn);
+}
+
+function buildGeminiSurface(): void {
+  const installBodyZh = renderTemplate("src/templates/zh-CN/gemini.install.md", templateValues);
+  const installBodyEn = renderTemplate("src/templates/en-US/gemini.install.md", templateValues);
+  const extensionManifest = {
+    name: "exmachina",
+    version: packageMetadata.version,
+    description: "Evidence-bound mechanical-intelligence operating layer for Gemini CLI.",
+    contextFileName: "GEMINI.md"
+  };
+  const rootGeminiContext =
+    "@./skills/using-exmachina-en/SKILL.md @./.gemini/gemini-tools.md\n";
+  const geminiTools = [
+    "# Gemini Tool Mapping",
+    "",
+    "- Default to Chinese when the user writes in Chinese; otherwise use English.",
+    "- The ExMachina bootstrap is already loaded through `GEMINI.md`; do not reload it redundantly.",
+    "- When a referenced tool name differs, use Gemini CLI's native equivalents for shell, file, search, and edit actions.",
+    "- Preserve ExMachina's evidence discipline: keep unknowns explicit and close the verification loop before declaring completion."
+  ].join("\n");
+
+  writeJson(`gemini-extension.json`, extensionManifest);
+  writeText(`GEMINI.md`, rootGeminiContext);
+  writeText(`.gemini/gemini-tools.md`, geminiTools);
+  writeText(`.gemini/INSTALL.md`, installBodyZh);
+  writeText(`.gemini/INSTALL.en.md`, installBodyEn);
+}
+
 function buildEvals(): void {
   writeText(
-    `${bundleRoot}/evals/trigger-prompts/should-trigger.txt`,
+    bundlePath("evals", "trigger-prompts", "should-trigger.txt"),
     [
       "请帮我分析这个报错并修复它。",
       "/ex 追踪这个回归问题，先找证据再动代码。",
@@ -404,12 +597,12 @@ function buildEvals(): void {
   );
 
   writeText(
-    `${bundleRoot}/evals/trigger-prompts/should-not-trigger.txt`,
+    bundlePath("evals", "trigger-prompts", "should-not-trigger.txt"),
     ["简单问候。", "翻译这一句话。", "总结这段我已经给出的文本。"].join("\n")
   );
 
   writeText(
-    `${bundleRoot}/evals/test-helpers.sh`,
+    bundlePath("evals", "test-helpers.sh"),
     [
       "#!/usr/bin/env bash",
       "set -e",
@@ -418,7 +611,7 @@ function buildEvals(): void {
   );
 
   writeText(
-    `${bundleRoot}/evals/run-trigger-test.sh`,
+    bundlePath("evals", "run-trigger-test.sh"),
     [
       "#!/usr/bin/env bash",
       "set -e",
@@ -427,7 +620,7 @@ function buildEvals(): void {
   );
 
   writeText(
-    `${bundleRoot}/evals/test-behavior.sh`,
+    bundlePath("evals", "test-behavior.sh"),
     [
       "#!/usr/bin/env bash",
       "set -e",
@@ -437,14 +630,14 @@ function buildEvals(): void {
 }
 
 function buildExamplesAndBenchmark(): void {
-  writeJson(`${bundleRoot}/examples/task-brief.json`, {
+  writeJson(bundlePath("examples", "task-brief.json"), {
     goal: "定位并修复一个高风险回归问题",
     acceptanceCriteria: ["找到直接证据", "给出最小修复", "附带验证结果"],
     constraints: ["默认中文输出", "优先可逆动作"],
     excludedScope: ["无关重构", "大规模重写"]
   });
 
-  writeJson(`${bundleRoot}/benchmark/mechanical-intelligence.json`, {
+  writeJson(bundlePath("benchmark", "mechanical-intelligence.json"), {
     scenarios: [
       {
         id: "bounded-regression",
@@ -463,11 +656,10 @@ function buildExamplesAndBenchmark(): void {
 function buildPromptSurfaces(): void {
   copySingleSourceToTargets("src/prompt/AGENTS.md", [
     "AGENTS.md",
-    `${bundleRoot}/AGENTS.md`,
-    `${bundleRoot}/codex/AGENTS.md`
+    bundlePath("codex", "AGENTS.md")
   ]);
 
-  ensureDir(`${bundleRoot}/trae/rules`);
+  ensureDir(bundlePath("trae", "rules"));
   const zhRulesBody = readText("src/prompt/RULES.md");
   const enRulesBody = renderTemplate("src/templates/en-US/rules.md", templateValues);
   const traeRuleBodyZh = [
@@ -486,12 +678,12 @@ function buildPromptSurfaces(): void {
     "",
     enRulesBody
   ].join("\n");
-  writeText(`${bundleRoot}/trae/rules/project_rules.md`, traeRuleBodyZh);
-  writeText(`${bundleRoot}/trae/rules/user_rules.md`, traeRuleBodyZh);
-  writeText(`${bundleRoot}/trae/rules/project_rules.en.md`, traeRuleBodyEn);
-  writeText(`${bundleRoot}/trae/rules/user_rules.en.md`, traeRuleBodyEn);
+  writeText(bundlePath("trae", "rules", "project_rules.md"), traeRuleBodyZh);
+  writeText(bundlePath("trae", "rules", "user_rules.md"), traeRuleBodyZh);
+  writeText(bundlePath("trae", "rules", "project_rules.en.md"), traeRuleBodyEn);
+  writeText(bundlePath("trae", "rules", "user_rules.en.md"), traeRuleBodyEn);
 
-  ensureDir(`${bundleRoot}/cursor/rules`);
+  ensureDir(`.cursor/rules`);
   const cursorRuleBodyZh = [
     "---",
     "description: ExMachina 机械智能规则",
@@ -510,21 +702,21 @@ function buildPromptSurfaces(): void {
     "",
     enRulesBody
   ].join("\n");
-  writeText(`${bundleRoot}/cursor/rules/exmachina.mdc`, cursorRuleBodyZh);
-  writeText(`${bundleRoot}/cursor/rules/exmachina-en.mdc`, cursorRuleBodyEn);
+  writeText(`.cursor/rules/exmachina.mdc`, cursorRuleBodyZh);
+  writeText(`.cursor/rules/exmachina-en.mdc`, cursorRuleBodyEn);
 
-  writeText(`${bundleRoot}/kiro/steering/exmachina.md`, zhRulesBody);
-  writeText(`${bundleRoot}/kiro/steering/exmachina.en.md`, enRulesBody);
+  writeText(bundlePath("kiro", "steering", "exmachina.md"), zhRulesBody);
+  writeText(bundlePath("kiro", "steering", "exmachina.en.md"), enRulesBody);
 }
 
 function buildMiscSurfaces(): void {
   writeText(
-    `${bundleRoot}/paper/机械智能说明.md`,
+    bundlePath("paper", "机械智能说明.md"),
     "# 机械智能说明\n\nExMachina 以绝对理性、证据分级、冲突裁决、最小可逆执行为核心。\n"
   );
 
   writeText(
-    `${bundleRoot}/trae/INSTALL.md`,
+    bundlePath("trae", "INSTALL.md"),
     [
       "# Trae 安装指南",
       "",
@@ -536,28 +728,28 @@ function buildMiscSurfaces(): void {
       "",
       "### 方式一：项目规则（推荐）",
       "",
-      "1. 从 `exmachina/trae/rules/project_rules.md` 复制内容",
+      "1. 从 `trae/rules/project_rules.md` 复制内容",
       "2. 在 Trae 中打开设置 → Rules",
       "3. 选择或创建项目规则文件",
       "4. 粘贴内容并保存",
       "",
       "### 方式二：用户规则",
       "",
-      "1. 从 `exmachina/trae/rules/user_rules.md` 复制内容",
+      "1. 从 `trae/rules/user_rules.md` 复制内容",
       "2. 在 Trae 中打开设置 → Rules",
       "3. 选择用户规则文件",
       "4. 粘贴内容并保存",
       "",
       "### 方式三：Skill 配置",
       "",
-      "1. 确保项目中有 `exmachina/trae/skills/exmachina/SKILL.md`",
+      "1. 确保项目中有 `trae/skills/exmachina/SKILL.md`",
       "2. 在 Trae 中打开设置 → Skills",
       "3. 添加新的 Skill，指向该文件",
       "",
       "## 目录结构",
       "",
       "```",
-      "exmachina/trae/",
+      "trae/",
       "├── rules/",
       "│   ├── project_rules.md    # 项目规则",
       "│   └── user_rules.md       # 用户规则",
@@ -584,7 +776,7 @@ function buildMiscSurfaces(): void {
   );
 
   writeText(
-    `${bundleRoot}/trae/INSTALL.en.md`,
+    bundlePath("trae", "INSTALL.en.md"),
     renderTemplate("src/templates/en-US/trae.install.md", templateValues)
   );
 }
@@ -600,6 +792,9 @@ function main(): void {
   buildClaudePluginSurface();
   buildCodexSurface();
   buildHooks();
+  buildCursorSurface();
+  buildOpenCodeSurface();
+  buildGeminiSurface();
   buildEvals();
   buildExamplesAndBenchmark();
   buildMiscSurfaces();
