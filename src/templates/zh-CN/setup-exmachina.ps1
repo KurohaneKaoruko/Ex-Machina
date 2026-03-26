@@ -4,7 +4,11 @@ param(
   [string]$CodexHome = (Join-Path $HOME ".codex"),
   [switch]$Force,
   [switch]$Verify,
-  [switch]$Uninstall
+  [switch]$Uninstall,
+  [switch]$InstallGuidance,
+  [switch]$RemoveGuidance,
+  [ValidateSet("zh", "en")]
+  [string]$GuidanceLanguage = "zh"
 )
 
 Set-StrictMode -Version Latest
@@ -146,6 +150,35 @@ function Remove-ManagedAgents {
   }
 }
 
+function Get-GuidanceSourcePath {
+  param(
+    [string]$RepoRootPath,
+    [string]$Language
+  )
+
+  switch ($Language) {
+    "zh" { return (Join-Path $RepoRootPath ".codex\AGENTS.md") }
+    "en" { return (Join-Path $RepoRootPath ".codex\AGENTS.en.md") }
+    default { throw "[ExMachina] unsupported guidance language: $Language" }
+  }
+}
+
+function Get-GuidanceWithoutManagedBlock {
+  param(
+    [string]$GuidancePath,
+    [string]$GuidanceBegin,
+    [string]$GuidanceEnd
+  )
+
+  if (-not (Test-Path -LiteralPath $GuidancePath)) {
+    return ""
+  }
+
+  $content = Get-Content -LiteralPath $GuidancePath -Raw
+  $pattern = "(?ms)^\Q$GuidanceBegin\E\r?\n.*?^\Q$GuidanceEnd\E\r?\n?"
+  return ([regex]::Replace($content, $pattern, "")).Trim()
+}
+
 function Assert-InstallState {
   param(
     [string]$InstallPath,
@@ -198,8 +231,62 @@ function Show-InstallSummary {
   Write-Host "[ExMachina] managed agents: $($agentCount.Count)"
 }
 
-if ($Verify -and $Uninstall) {
-  throw "[ExMachina] choose only one mode: -Verify or -Uninstall"
+function Install-GuidanceBlock {
+  param(
+    [string]$GuidancePath,
+    [string]$GuidanceSourcePath,
+    [string]$GuidanceBegin,
+    [string]$GuidanceEnd
+  )
+
+  if (-not (Test-Path -LiteralPath $GuidanceSourcePath)) {
+    throw "[ExMachina] guidance source not found: $GuidanceSourcePath"
+  }
+
+  $existing = Get-GuidanceWithoutManagedBlock -GuidancePath $GuidancePath -GuidanceBegin $GuidanceBegin -GuidanceEnd $GuidanceEnd
+  $sourceContent = (Get-Content -LiteralPath $GuidanceSourcePath -Raw).Trim()
+
+  $finalContent = ""
+  if (-not [string]::IsNullOrWhiteSpace($existing)) {
+    $finalContent = $existing.TrimEnd() + "`r`n`r`n"
+  }
+
+  $finalContent += $GuidanceBegin + "`r`n" + $sourceContent + "`r`n" + $GuidanceEnd + "`r`n"
+  Set-Content -LiteralPath $GuidancePath -Value $finalContent
+  Write-Host "[ExMachina] installed managed guidance block at: $GuidancePath"
+}
+
+function Remove-GuidanceBlock {
+  param(
+    [string]$GuidancePath,
+    [string]$GuidanceBegin,
+    [string]$GuidanceEnd
+  )
+
+  if (-not (Test-Path -LiteralPath $GuidancePath)) {
+    Write-Host "[ExMachina] no AGENTS.md guidance file found at: $GuidancePath"
+    return
+  }
+
+  $cleanContent = Get-GuidanceWithoutManagedBlock -GuidancePath $GuidancePath -GuidanceBegin $GuidanceBegin -GuidanceEnd $GuidanceEnd
+  if ([string]::IsNullOrWhiteSpace($cleanContent)) {
+    Remove-Item -LiteralPath $GuidancePath -Force -ErrorAction SilentlyContinue
+  } else {
+    Set-Content -LiteralPath $GuidancePath -Value ($cleanContent.TrimEnd() + "`r`n")
+  }
+
+  Write-Host "[ExMachina] removed managed guidance block from: $GuidancePath"
+}
+
+$selectedModes = @(
+  [bool]$Verify,
+  [bool]$Uninstall,
+  [bool]$InstallGuidance,
+  [bool]$RemoveGuidance
+) | Where-Object { $_ }
+
+if ($selectedModes.Count -gt 1) {
+  throw "[ExMachina] choose only one mode: -Verify, -Uninstall, -InstallGuidance, or -RemoveGuidance"
 }
 
 $scriptDirectory = Split-Path -Parent $PSCommandPath
@@ -222,6 +309,10 @@ $installPath = Join-Path $skillsRoot "exmachina"
 $skillsMarkerPath = Join-Path $installPath ".exmachina-managed.txt"
 $agentsRoot = Join-Path $CodexHome "agents"
 $agentManifestPath = Join-Path $agentsRoot ".exmachina-installed-agents.txt"
+$guidancePath = Join-Path $CodexHome "AGENTS.md"
+$guidanceBegin = "# >>> ExMachina managed block >>>"
+$guidanceEnd = "# <<< ExMachina managed block <<<"
+$guidanceSourcePath = Get-GuidanceSourcePath -RepoRootPath $RepoRoot -Language $GuidanceLanguage
 
 New-Item -ItemType Directory -Force -Path $skillsRoot | Out-Null
 New-Item -ItemType Directory -Force -Path $agentsRoot | Out-Null
@@ -239,6 +330,16 @@ if ($Uninstall) {
 
   Remove-ManagedAgents -AgentsRoot $agentsRoot -AgentManifestPath $agentManifestPath -AgentsSource $agentsSource -ForceRemoval $Force.IsPresent
   Write-Host "[ExMachina] removed ExMachina skills link and managed agents."
+  return
+}
+
+if ($InstallGuidance) {
+  Install-GuidanceBlock -GuidancePath $guidancePath -GuidanceSourcePath $guidanceSourcePath -GuidanceBegin $guidanceBegin -GuidanceEnd $guidanceEnd
+  return
+}
+
+if ($RemoveGuidance) {
+  Remove-GuidanceBlock -GuidancePath $guidancePath -GuidanceBegin $guidanceBegin -GuidanceEnd $guidanceEnd
   return
 }
 
@@ -300,3 +401,4 @@ Set-Content -LiteralPath $agentManifestPath -Value $agentNames
 Assert-InstallState -InstallPath $installPath -AgentsRoot $agentsRoot -AgentManifestPath $agentManifestPath
 Show-InstallSummary -InstallPath $installPath -AgentsRoot $agentsRoot -AgentManifestPath $agentManifestPath
 Write-Host "[ExMachina] restart Codex so it reloads installed skills and agents."
+Write-Host "[ExMachina] for stronger always-on guidance, run: powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1 -InstallGuidance"

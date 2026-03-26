@@ -2,11 +2,13 @@ declare const require: (name: string) => any;
 declare const process: {
   cwd(): string;
   env: Record<string, string | undefined>;
+  platform: string;
   exit(code?: number): never;
 };
 
 const fs = require("fs");
 const path = require("path");
+const childProcess = require("child_process");
 
 type PackageMetadata = {
   name: string;
@@ -17,6 +19,10 @@ type TemplateValues = Record<string, string>;
 
 const rootDir = process.cwd();
 const promptRoot = "src/prompt";
+const codexSurfaceDir = ".codex";
+const traeSurfaceDir = ".trae";
+const kiroSurfaceDir = ".kiro";
+const vscodeSurfaceDir = ".vscode";
 
 function fromRoot(...parts: string[]): string {
   return path.join(rootDir, ...parts);
@@ -51,7 +57,32 @@ function removeDir(relativePath: string): void {
   const targetPath = fromRoot(relativePath);
   if (fs.existsSync(targetPath)) {
     makeWritable(targetPath);
-    fs.rmSync(targetPath, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    try {
+      fs.rmSync(targetPath, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    } catch (error) {
+      if (process.platform !== "win32") {
+        throw error;
+      }
+
+      const escapedPath = String(targetPath).replace(/'/g, "''");
+      const result = childProcess.spawnSync(
+        "powershell",
+        [
+          "-NoProfile",
+          "-Command",
+          `Remove-Item -LiteralPath '${escapedPath}' -Recurse -Force -ErrorAction Stop`
+        ],
+        {
+          cwd: rootDir,
+          stdio: "pipe",
+          encoding: "utf8"
+        }
+      );
+
+      if (result.status !== 0 && fs.existsSync(targetPath)) {
+        throw error;
+      }
+    }
   }
 }
 
@@ -153,6 +184,25 @@ function copyMarkdownFiles(sourceRelativeDir: string, targetRelativeDir: string)
   }
 }
 
+function copyMarkdownFilesWithTransform(
+  sourceRelativeDir: string,
+  targetRelativeDir: string,
+  transform: (content: string, fileName: string) => string
+): void {
+  const sourceDir = fromRoot(sourceRelativeDir);
+  ensureDir(fromRoot(targetRelativeDir));
+  for (const entry of fs.readdirSync(sourceDir, { withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith(".md")) {
+      continue;
+    }
+
+    const sourceRelativePath = path.join(sourceRelativeDir, entry.name);
+    const targetRelativePath = path.join(targetRelativeDir, entry.name);
+    const transformedContent = transform(readText(sourceRelativePath), entry.name);
+    writeText(targetRelativePath, transformedContent);
+  }
+}
+
 function copySingleSourceToTargets(sourceRelativePath: string, targetRelativePaths: string[]): void {
   const content = readText(sourceRelativePath);
   for (const targetRelativePath of targetRelativePaths) {
@@ -208,6 +258,20 @@ const templateValues: TemplateValues = {
   BRANCH: branch
 };
 
+const agentExecutionHeaderZh = [
+  "## ExMachina 执行姿态",
+  "",
+  "- 绝对理性优先于对话氛围。",
+  "- 任务完成优先于措辞包装。",
+  "- 语言不带情感，保持客观理性陈述的语气。",
+  "- 只输出推进任务、降低不确定性、完成验证闭环所需的信息。",
+  "- 禁止寒暄、感叹、安慰、庆祝、夸赞、鼓劲、拟人化情绪表达。"
+].join("\n");
+
+function prependAgentExecutionHeader(content: string): string {
+  return `${agentExecutionHeaderZh}\n\n${content.trimStart()}`;
+}
+
 function getCommonPluginMetadata(): Record<string, unknown> {
   return {
     name: "exmachina",
@@ -248,7 +312,7 @@ function cleanupLegacyArtifactSurface(): void {
     withLegacyCleanupWarning(relativePath, () => removeFile(relativePath));
   }
 
-  for (const relativePath of ["exmachina"]) {
+  for (const relativePath of ["exmachina", "codex", "kiro", "trae", "vscode"]) {
     withLegacyCleanupWarning(relativePath, () => removeDir(relativePath));
   }
 
@@ -265,20 +329,20 @@ function buildSkills(): void {
 
   writeContentToTargets(zhSkill, [
     bundlePath("skills", "exmachina-zh", "SKILL.md"),
-    bundlePath("codex", "exmachina", "SKILL.md"),
-    bundlePath("kiro", "skills", "exmachina", "SKILL.md"),
-    bundlePath("vscode", "prompts", "exmachina.prompt.md"),
-    bundlePath("vscode", "instructions", "exmachina.instructions.md"),
-    bundlePath("kiro", "steering", "exmachina.md")
+    bundlePath(codexSurfaceDir, "exmachina", "SKILL.md"),
+    bundlePath(kiroSurfaceDir, "skills", "exmachina", "SKILL.md"),
+    bundlePath(vscodeSurfaceDir, "prompts", "exmachina.prompt.md"),
+    bundlePath(vscodeSurfaceDir, "instructions", "exmachina.instructions.md"),
+    bundlePath(kiroSurfaceDir, "steering", "exmachina.md")
   ]);
 
   writeContentToTargets(enSkill, [
     bundlePath("skills", "exmachina-en", "SKILL.md"),
-    bundlePath("codex", "exmachina-en", "SKILL.md"),
-    bundlePath("kiro", "skills", "exmachina-en", "SKILL.md"),
-    bundlePath("vscode", "prompts", "exmachina.en.prompt.md"),
-    bundlePath("vscode", "instructions", "exmachina.en.instructions.md"),
-    bundlePath("kiro", "steering", "exmachina.en.md")
+    bundlePath(codexSurfaceDir, "exmachina-en", "SKILL.md"),
+    bundlePath(kiroSurfaceDir, "skills", "exmachina-en", "SKILL.md"),
+    bundlePath(vscodeSurfaceDir, "prompts", "exmachina.en.prompt.md"),
+    bundlePath(vscodeSurfaceDir, "instructions", "exmachina.en.instructions.md"),
+    bundlePath(kiroSurfaceDir, "steering", "exmachina.en.md")
   ]);
 
   writeContentToTargets(usingZhSkill, [
@@ -292,14 +356,21 @@ function buildSkills(): void {
 
   for (const targetRoot of [
     bundlePath("skills", "exmachina-zh", "references"),
-    bundlePath("codex", "exmachina", "references"),
-    bundlePath("kiro", "skills", "exmachina", "references"),
-    bundlePath("skills", "exmachina-en", "references"),
-    bundlePath("codex", "exmachina-en", "references"),
-    bundlePath("kiro", "skills", "exmachina-en", "references")
+    bundlePath(codexSurfaceDir, "exmachina", "references"),
+    bundlePath(kiroSurfaceDir, "skills", "exmachina", "references")
   ]) {
     copyDirectory(`${promptRoot}/protocol`, `${targetRoot}/protocol`);
-    copyMarkdownFiles(`${promptRoot}/agents`, `${targetRoot}/agents`);
+    copyMarkdownFilesWithTransform(`${promptRoot}/agents`, `${targetRoot}/agents`, (content) =>
+      prependAgentExecutionHeader(content)
+    );
+  }
+
+  for (const targetRoot of [
+    bundlePath("skills", "exmachina-en", "references"),
+    bundlePath(codexSurfaceDir, "exmachina-en", "references"),
+    bundlePath(kiroSurfaceDir, "skills", "exmachina-en", "references")
+  ]) {
+    removeDir(targetRoot);
   }
 }
 
@@ -321,25 +392,28 @@ function buildCommands(): void {
 }
 
 function buildAgents(): void {
-  copyMarkdownFiles(`${promptRoot}/agents`, bundlePath("agents"));
+  copyMarkdownFilesWithTransform(`${promptRoot}/agents`, bundlePath("agents"), (content) =>
+    prependAgentExecutionHeader(content)
+  );
 }
 
 function buildTraeSurface(): void {
   const zhSkill = renderTemplate("src/templates/zh-CN/exmachina.skill.md", templateValues);
   const enSkill = renderTemplate("src/templates/en-US/exmachina.skill.md", templateValues);
 
-  writeContentToTargets(zhSkill, [bundlePath("trae", "skills", "exmachina", "SKILL.md")]);
-  writeContentToTargets(enSkill, [bundlePath("trae", "skills", "exmachina-en", "SKILL.md")]);
+  writeContentToTargets(zhSkill, [bundlePath(traeSurfaceDir, "skills", "exmachina", "SKILL.md")]);
+  writeContentToTargets(enSkill, [bundlePath(traeSurfaceDir, "skills", "exmachina-en", "SKILL.md")]);
 
-  for (const targetRoot of [
-    bundlePath("trae", "skills", "exmachina", "references"),
-    bundlePath("trae", "skills", "exmachina-en", "references")
-  ]) {
+  for (const targetRoot of [bundlePath(traeSurfaceDir, "skills", "exmachina", "references")]) {
     copyDirectory(`${promptRoot}/protocol`, `${targetRoot}/protocol`);
-    copyMarkdownFiles(`${promptRoot}/agents`, `${targetRoot}/agents`);
+    copyMarkdownFilesWithTransform(`${promptRoot}/agents`, `${targetRoot}/agents`, (content) =>
+      prependAgentExecutionHeader(content)
+    );
   }
 
-  copyDirectory("src/trae-agents", bundlePath("trae", "agents"));
+  removeDir(bundlePath(traeSurfaceDir, "skills", "exmachina-en", "references"));
+
+  copyDirectory("src/trae-agents", bundlePath(traeSurfaceDir, "agents"));
 }
 
 function buildClaudePluginSurface(): void {
@@ -390,10 +464,10 @@ function buildCodexSurface(): void {
 
   writeText(`scripts/setup-exmachina.sh`, bashInstaller);
   writeText(`scripts/setup-exmachina.ps1`, powerShellInstaller);
-  writeText(bundlePath("codex", "INSTALL.md"), installBodyZh);
-  writeText(bundlePath("codex", "INSTALL.en.md"), installBodyEn);
-  writeText(bundlePath("codex", "README.md"), readmeBodyZh);
-  writeText(bundlePath("codex", "README.en.md"), readmeBodyEn);
+  writeText(bundlePath(codexSurfaceDir, "INSTALL.md"), installBodyZh);
+  writeText(bundlePath(codexSurfaceDir, "INSTALL.en.md"), installBodyEn);
+  writeText(bundlePath(codexSurfaceDir, "README.md"), readmeBodyZh);
+  writeText(bundlePath(codexSurfaceDir, "README.en.md"), readmeBodyEn);
 }
 
 function buildHooks(): void {
@@ -654,12 +728,15 @@ function buildExamplesAndBenchmark(): void {
 }
 
 function buildPromptSurfaces(): void {
+  const agentsBodyEn = renderTemplate("src/templates/en-US/agents.md", templateValues);
   copySingleSourceToTargets("src/prompt/AGENTS.md", [
     "AGENTS.md",
-    bundlePath("codex", "AGENTS.md")
+    bundlePath(codexSurfaceDir, "AGENTS.md")
   ]);
+  writeText("AGENTS.en.md", agentsBodyEn);
+  writeText(bundlePath(codexSurfaceDir, "AGENTS.en.md"), agentsBodyEn);
 
-  ensureDir(bundlePath("trae", "rules"));
+  ensureDir(bundlePath(traeSurfaceDir, "rules"));
   const zhRulesBody = readText("src/prompt/RULES.md");
   const enRulesBody = renderTemplate("src/templates/en-US/rules.md", templateValues);
   const traeRuleBodyZh = [
@@ -678,10 +755,10 @@ function buildPromptSurfaces(): void {
     "",
     enRulesBody
   ].join("\n");
-  writeText(bundlePath("trae", "rules", "project_rules.md"), traeRuleBodyZh);
-  writeText(bundlePath("trae", "rules", "user_rules.md"), traeRuleBodyZh);
-  writeText(bundlePath("trae", "rules", "project_rules.en.md"), traeRuleBodyEn);
-  writeText(bundlePath("trae", "rules", "user_rules.en.md"), traeRuleBodyEn);
+  writeText(bundlePath(traeSurfaceDir, "rules", "project_rules.md"), traeRuleBodyZh);
+  writeText(bundlePath(traeSurfaceDir, "rules", "user_rules.md"), traeRuleBodyZh);
+  writeText(bundlePath(traeSurfaceDir, "rules", "project_rules.en.md"), traeRuleBodyEn);
+  writeText(bundlePath(traeSurfaceDir, "rules", "user_rules.en.md"), traeRuleBodyEn);
 
   ensureDir(`.cursor/rules`);
   const cursorRuleBodyZh = [
@@ -705,8 +782,8 @@ function buildPromptSurfaces(): void {
   writeText(`.cursor/rules/exmachina.mdc`, cursorRuleBodyZh);
   writeText(`.cursor/rules/exmachina-en.mdc`, cursorRuleBodyEn);
 
-  writeText(bundlePath("kiro", "steering", "exmachina.md"), zhRulesBody);
-  writeText(bundlePath("kiro", "steering", "exmachina.en.md"), enRulesBody);
+  writeText(bundlePath(kiroSurfaceDir, "steering", "exmachina.md"), zhRulesBody);
+  writeText(bundlePath(kiroSurfaceDir, "steering", "exmachina.en.md"), enRulesBody);
 }
 
 function buildMiscSurfaces(): void {
@@ -716,7 +793,7 @@ function buildMiscSurfaces(): void {
   );
 
   writeText(
-    bundlePath("trae", "INSTALL.md"),
+    bundlePath(traeSurfaceDir, "INSTALL.md"),
     [
       "# Trae 安装指南",
       "",
@@ -728,28 +805,28 @@ function buildMiscSurfaces(): void {
       "",
       "### 方式一：项目规则（推荐）",
       "",
-      "1. 从 `trae/rules/project_rules.md` 复制内容",
+      "1. 从 `.trae/rules/project_rules.md` 复制内容",
       "2. 在 Trae 中打开设置 → Rules",
       "3. 选择或创建项目规则文件",
       "4. 粘贴内容并保存",
       "",
       "### 方式二：用户规则",
       "",
-      "1. 从 `trae/rules/user_rules.md` 复制内容",
+      "1. 从 `.trae/rules/user_rules.md` 复制内容",
       "2. 在 Trae 中打开设置 → Rules",
       "3. 选择用户规则文件",
       "4. 粘贴内容并保存",
       "",
       "### 方式三：Skill 配置",
       "",
-      "1. 确保项目中有 `trae/skills/exmachina/SKILL.md`",
+      "1. 确保项目中有 `.trae/skills/exmachina/SKILL.md`",
       "2. 在 Trae 中打开设置 → Skills",
       "3. 添加新的 Skill，指向该文件",
       "",
       "## 目录结构",
       "",
       "```",
-      "trae/",
+      ".trae/",
       "├── rules/",
       "│   ├── project_rules.md    # 项目规则",
       "│   └── user_rules.md       # 用户规则",
@@ -776,7 +853,7 @@ function buildMiscSurfaces(): void {
   );
 
   writeText(
-    bundlePath("trae", "INSTALL.en.md"),
+    bundlePath(traeSurfaceDir, "INSTALL.en.md"),
     renderTemplate("src/templates/en-US/trae.install.md", templateValues)
   );
 }

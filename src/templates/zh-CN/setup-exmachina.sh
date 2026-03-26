@@ -5,18 +5,23 @@ repo_root=""
 codex_home="${CODEX_HOME:-$HOME/.codex}"
 force="false"
 mode="install"
+guidance_language="zh"
+guidance_begin="# >>> ExMachina managed block >>>"
+guidance_end="# <<< ExMachina managed block <<<"
 
 usage() {
   cat <<'EOF'
-Usage: setup-exmachina.sh [--repo-root PATH] [--codex-home PATH] [--force] [--verify|--uninstall]
+Usage: setup-exmachina.sh [--repo-root PATH] [--codex-home PATH] [--force] [--guidance-language zh|en] [--verify|--uninstall|--install-guidance|--remove-guidance]
 
 Default mode installs ExMachina into Codex by:
   <codex-home>/skills/exmachina -> <repo-root>/skills
   syncing numbered agent files from <repo-root>/agents into <codex-home>/agents
 
 Additional modes:
-  --verify     Validate that ExMachina skills and managed agents are present
-  --uninstall  Remove the ExMachina skills link plus managed agents
+  --verify            Validate that ExMachina skills and managed agents are present
+  --uninstall         Remove the ExMachina skills link plus managed agents
+  --install-guidance  Install or update a managed ExMachina block in <codex-home>/AGENTS.md
+  --remove-guidance   Remove the managed ExMachina block from <codex-home>/AGENTS.md
 EOF
 }
 
@@ -115,6 +120,37 @@ remove_managed_agents() {
   done < <(list_installable_agent_names)
 }
 
+guidance_source_path() {
+  case "$guidance_language" in
+    zh)
+      printf '%s\n' "$repo_root/.codex/AGENTS.md"
+      ;;
+    en)
+      printf '%s\n' "$repo_root/.codex/AGENTS.en.md"
+      ;;
+    *)
+      echo "[ExMachina] unsupported guidance language: $guidance_language" >&2
+      exit 1
+      ;;
+  esac
+}
+
+strip_managed_guidance() {
+  local source_path="$1"
+  local output_path="$2"
+
+  if [ ! -f "$source_path" ]; then
+    : > "$output_path"
+    return 0
+  fi
+
+  awk -v begin="$guidance_begin" -v end="$guidance_end" '
+    $0 == begin { skip = 1; next }
+    $0 == end { skip = 0; next }
+    skip != 1 { print }
+  ' "$source_path" > "$output_path"
+}
+
 verify_installation() {
   if [ ! -f "$install_path/using-exmachina/SKILL.md" ]; then
     echo "[ExMachina] verification failed: using-exmachina skill missing." >&2
@@ -150,6 +186,49 @@ verify_installation() {
   echo "[ExMachina] skills path: $install_path"
   echo "[ExMachina] agents path: $agents_root"
   echo "[ExMachina] managed agents: $agent_count"
+}
+
+install_guidance_mode() {
+  mkdir -p "$codex_home"
+
+  local source_path
+  source_path="$(guidance_source_path)"
+  if [ ! -f "$source_path" ]; then
+    echo "[ExMachina] guidance source not found: $source_path" >&2
+    exit 1
+  fi
+
+  strip_managed_guidance "$guidance_path" "$guidance_clean_path"
+
+  {
+    if [ -s "$guidance_clean_path" ]; then
+      cat "$guidance_clean_path"
+      printf '\n\n'
+    fi
+    printf '%s\n' "$guidance_begin"
+    cat "$source_path"
+    printf '\n%s\n' "$guidance_end"
+  } > "$guidance_tmp_path"
+
+  mv "$guidance_tmp_path" "$guidance_path"
+  rm -f "$guidance_clean_path"
+  echo "[ExMachina] installed managed guidance block at: $guidance_path"
+}
+
+remove_guidance_mode() {
+  if [ ! -f "$guidance_path" ]; then
+    echo "[ExMachina] no AGENTS.md guidance file found at: $guidance_path"
+    return 0
+  fi
+
+  strip_managed_guidance "$guidance_path" "$guidance_clean_path"
+  if [ -s "$guidance_clean_path" ]; then
+    mv "$guidance_clean_path" "$guidance_path"
+  else
+    rm -f "$guidance_path" "$guidance_clean_path"
+  fi
+
+  echo "[ExMachina] removed managed guidance block from: $guidance_path"
 }
 
 install_mode() {
@@ -222,6 +301,7 @@ install_mode() {
 
   verify_installation
   echo "[ExMachina] restart Codex so it reloads installed skills and agents."
+  echo "[ExMachina] for stronger always-on guidance, run: bash ./scripts/setup-exmachina.sh --install-guidance"
 }
 
 uninstall_mode() {
@@ -255,12 +335,24 @@ while [ "$#" -gt 0 ]; do
       force="true"
       shift
       ;;
+    --guidance-language)
+      guidance_language="$2"
+      shift 2
+      ;;
     --verify)
       mode="verify"
       shift
       ;;
     --uninstall)
       mode="uninstall"
+      shift
+      ;;
+    --install-guidance)
+      mode="install-guidance"
+      shift
+      ;;
+    --remove-guidance)
+      mode="remove-guidance"
       shift
       ;;
     -h|--help)
@@ -290,6 +382,9 @@ install_path="$install_root/exmachina"
 agents_root="$codex_home/agents"
 agent_manifest_path="$agents_root/.exmachina-installed-agents.txt"
 tmp_manifest_path="$agents_root/.exmachina-installed-agents.txt.tmp"
+guidance_path="$codex_home/AGENTS.md"
+guidance_tmp_path="$codex_home/.exmachina-guidance.tmp"
+guidance_clean_path="$codex_home/.exmachina-guidance.clean.tmp"
 
 case "$mode" in
   install)
@@ -300,6 +395,12 @@ case "$mode" in
     ;;
   uninstall)
     uninstall_mode
+    ;;
+  install-guidance)
+    install_guidance_mode
+    ;;
+  remove-guidance)
+    remove_guidance_mode
     ;;
   *)
     echo "[ExMachina] unsupported mode: $mode" >&2

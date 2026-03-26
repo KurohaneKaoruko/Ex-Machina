@@ -21,10 +21,10 @@
     "coreSkillEnglish": "skills/exmachina-en/SKILL.md",
     "command": "commands/ex.md",
     "commandEnglish": "commands/ex.en.md",
-    "codex": "codex/exmachina/SKILL.md",
-    "codexEnglish": "codex/exmachina-en/SKILL.md",
-    "codexInstall": "codex/INSTALL.md",
-    "codexInstallEnglish": "codex/INSTALL.en.md",
+    "codex": ".codex/exmachina/SKILL.md",
+    "codexEnglish": ".codex/exmachina-en/SKILL.md",
+    "codexInstall": ".codex/INSTALL.md",
+    "codexInstallEnglish": ".codex/INSTALL.en.md",
     "claudePlugin": ".claude-plugin/plugin.json",
     "claudeInstall": ".claude-plugin/INSTALL.md",
     "claudeInstallEnglish": ".claude-plugin/INSTALL.en.md",
@@ -40,8 +40,8 @@
     "geminiContext": "GEMINI.md",
     "geminiInstall": ".gemini/INSTALL.md",
     "geminiInstallEnglish": ".gemini/INSTALL.en.md",
-    "trae": "trae/rules/project_rules.md",
-    "traeEnglish": "trae/rules/project_rules.en.md"
+    "trae": ".trae/rules/project_rules.md",
+    "traeEnglish": ".trae/rules/project_rules.en.md"
   },
   "aliases": [
     "/ex",

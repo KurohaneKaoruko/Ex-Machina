@@ -3,7 +3,7 @@
 ExMachina splits the Codex surface into three layers:
 
 1. Install layer
-`codex/INSTALL*.md` and the root `scripts/setup-exmachina.*` files register the repository `skills/` directory into the local Codex skill library and sync `agents/` into `~/.codex/agents/`.
+`.codex/INSTALL*.md` and the root `scripts/setup-exmachina.*` files register the repository `skills/` directory into the local Codex skill library and sync `agents/` into `~/.codex/agents/`.
 
 2. Bootstrap layer
 `using-exmachina-zh` and `using-exmachina-en` help Codex recognize when a task should move into the stricter ExMachina workflow.
@@ -13,8 +13,8 @@ ExMachina splits the Codex surface into three layers:
 
 ## Recommended Usage
 
-- Normal installers: follow `codex/INSTALL.md` or `codex/INSTALL.en.md` and install both skills and native agents.
-- Power users: also merge `codex/AGENTS.md` into `~/.codex/AGENTS.md` or a project `AGENTS.md`.
+- Normal installers: follow `.codex/INSTALL.md` or `.codex/INSTALL.en.md` and install both skills and native agents.
+- Power users: install a managed guidance block with `--install-guidance` / `-InstallGuidance` so `.codex/AGENTS.en.md` or `.codex/AGENTS.md` is written into `~/.codex/AGENTS.md`.
 - Contributors: edit `src/`, then run `npm run generate && npm run verify`.
 
 ## Skill Responsibilities
@@ -53,6 +53,12 @@ So ExMachina keeps bootstrap and core responsibilities separate:
 
 The installer also syncs numbered agent files from `agents/` into the root `~/.codex/agents/` directory so Codex can treat them as native subagents.
 
+If you also install the managed guidance block, Codex holds the ExMachina output stance more consistently:
+
+- absolute rationality
+- task priority
+- affectless language
+
 The installer keeps a manifest at:
 
 - `~/.codex/agents/.exmachina-installed-agents.txt`
@@ -62,29 +68,30 @@ Only ExMachina-managed agent files are touched by that sync path.
 Lifecycle commands:
 
 - install: `bash ./scripts/setup-exmachina.sh`
+- install always-on guidance: `bash ./scripts/setup-exmachina.sh --install-guidance --guidance-language en`
 - verify: `bash ./scripts/setup-exmachina.sh --verify`
 - uninstall: `bash ./scripts/setup-exmachina.sh --uninstall`
-- PowerShell equivalents: `-Verify` and `-Uninstall`
+- remove always-on guidance: `bash ./scripts/setup-exmachina.sh --remove-guidance`
+- PowerShell equivalents: `-InstallGuidance`, `-RemoveGuidance`, `-Verify`, and `-Uninstall`
 
 ## Key Paths
 
-- `codex/INSTALL.md`
-- `codex/INSTALL.en.md`
-- `codex/README.md`
-- `codex/README.en.md`
+- `.codex/INSTALL.md`
+- `.codex/INSTALL.en.md`
+- `.codex/README.md`
+- `.codex/README.en.md`
 - `scripts/setup-exmachina.sh`
 - `scripts/setup-exmachina.ps1`
-- `agents/00_全连结指挥体.md`
-- `agents/19_实作连结指挥体.md`
-- `agents/69_编码体.md`
+- `agents/`
 - `skills/using-exmachina-zh/SKILL.md`
 - `skills/using-exmachina-en/SKILL.md`
 - `skills/exmachina-zh/SKILL.md`
 - `skills/exmachina-en/SKILL.md`
-- `codex/AGENTS.md`
+- `.codex/AGENTS.md`
+- `.codex/AGENTS.en.md`
 
 ## Version And Source
 
 - Repository: `{{REPOSITORY_URL}}`
-- Raw install guide: `{{RAW_BASE_URL}}/codex/INSTALL.en.md`
+- Raw install guide: `{{RAW_BASE_URL}}/.codex/INSTALL.en.md`
 - Bundle version: `{{VERSION}}`

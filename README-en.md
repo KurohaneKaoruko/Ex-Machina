@@ -100,12 +100,13 @@ The most important distinction is:
 
 - a `cluster` is a team concept, not a single agent
 - a single agent must be named as an `xx commander`
-- one `xx cluster` means `xx commander + its attached specialist units`
+- one `xx cluster` means `xx commander + the specialist units dynamically mounted for the current task`
+- one specialist unit can be reused by multiple clusters when its function matches; cluster membership is not exclusive ownership
 
 For example:
 
 - `research commander` is one agent
-- `research cluster` means the research commander plus its source-tracing, comparison, hypothesis, evidence, counter-evidence, and related units
+- `research cluster` means the research commander plus whichever context, tracing, comparison, hypothesis, evidence, counter-evidence, and related units the current task requires
 
 ### 3. Team Up for Large Tasks, Route Directly for Small Ones
 
@@ -121,7 +122,7 @@ This lets the system handle complex work while still simulating partial speciali
 
 ### Top Layer
 
-- `00_全连结指挥体`
+- the global commander, stored as the canonical `00_*.md` file under `agents/`
 
 Responsibilities:
 
@@ -133,37 +134,20 @@ Responsibilities:
 
 ### Middle Layer
 
-Current domain commanders include:
+Current domain commanders occupy the canonical `10_*.md` through `19_*.md` files under `agents/`, covering knowledge, rational arbitration, verification, documentation, security, integration, operations, research, architecture, and implementation.
 
-- `10_知识连结指挥体`
-- `11_理性连结指挥体`
-- `12_校验连结指挥体`
-- `13_文档连结指挥体`
-- `14_安全连结指挥体`
-- `15_集成连结指挥体`
-- `16_运维连结指挥体`
-- `17_研究连结指挥体`
-- `18_架构连结指挥体`
-- `19_实作连结指挥体`
-
-These roles route their own specialist units, constrain output shape, and control the return-flow rhythm inside each work domain.
+These roles route the specialist units mounted for the current task, constrain output shape, and control the return-flow rhythm inside each work domain.
 
 ### Lower Layer
 
 Specialist units span `30_` to `70_`, covering context, tracing, comparison, hypothesis, bridging, configuration, release, observation, rollback, terminology, decision, indexing, questioning, reporting, evidence, counter-evidence, arbitration, calibration, reproduction, assertion, regression, structure, examples, editing, threats, auditing, hardening, compliance, boundaries, interfaces, risk control, scouting, decomposition, constraints, route design, coding, and review.
 
 They are not meant to be “independent personalities”. They are stable, composable, replaceable capability units.
+They are reusable by function and can appear in multiple domain clusters.
 
 ## Protocol Layer
 
-ExMachina does not rely on agents to “figure out how to collaborate”. The collaboration rules are fixed as explicit protocols under `src/prompt/protocol/`:
-
-- `01_绝对理性协议`
-- `02_证据分级协议`
-- `03_冲突裁决协议`
-- `04_工作区与协作协议`
-- `05_多智能体回流协议`
-- `06_输出契约`
+ExMachina does not rely on agents to “figure out how to collaborate”. The collaboration rules are fixed as explicit protocols under `src/prompt/protocol/`, covering rationality, evidence grading, conflict arbitration, workspace collaboration, multi-agent return flow, and output contracts.
 
 These protocols define things such as:
 
@@ -183,8 +167,8 @@ You can now connect the repository `skills/` directly into a local Codex skill l
 
 Install docs:
 
-- in-repo: [`codex/INSTALL.en.md`](codex/INSTALL.en.md)
-- raw URL: `https://raw.githubusercontent.com/KurohaneKaoruko/Ex-Machina/main/codex/INSTALL.en.md`
+- in-repo: [`.codex/INSTALL.en.md`](.codex/INSTALL.en.md)
+- raw URL: `https://raw.githubusercontent.com/KurohaneKaoruko/Ex-Machina/main/.codex/INSTALL.en.md`
 
 Quick install:
 
@@ -200,7 +184,7 @@ bash ./scripts/setup-exmachina.sh
 .
 ├─ agents/                # shared agent prompts
 ├─ benchmark/             # benchmark scenarios
-├─ codex/                 # Codex docs and skill surfaces
+├─ .codex/                # Codex docs and skill surfaces
 ├─ commands/              # command entry docs
 ├─ .claude-plugin/        # repository-level Claude plugin entry
 ├─ .cursor/               # repository-level Cursor rules fallback
@@ -212,7 +196,7 @@ bash ./scripts/setup-exmachina.sh
 ├─ gemini-extension.json  # repository-level Gemini extension manifest
 ├─ GEMINI.md              # repository-level Gemini context
 ├─ hooks/                 # shared hooks
-├─ kiro/                  # Kiro skill and steering surfaces
+├─ .kiro/                 # Kiro skill and steering surfaces
 ├─ paper/                 # long-form docs
 ├─ skills/                # shared skill surfaces
 ├─ src/
@@ -227,8 +211,8 @@ bash ./scripts/setup-exmachina.sh
 │  ├─ setup-exmachina.ps1
 │  └─ dev/
 │     └─ verify-generated.mjs
-├─ trae/                  # Trae rules, skills, and custom agents
-├─ vscode/                # VS Code-style prompt / instruction surfaces
+├─ .trae/                 # Trae rules, skills, and custom agents
+├─ .vscode/               # VS Code-style prompt / instruction surfaces
 └─ README-en.md
 ```
 
@@ -238,14 +222,14 @@ Choose the install surface that matches your tool:
 
 | Platform | Install Surface | Reference Docs |
 | --- | --- | --- |
-| OpenAI Codex | `scripts/` + `skills/` + `agents/` + `codex/` | [codex/INSTALL.md](codex/INSTALL.md), [codex/INSTALL.en.md](codex/INSTALL.en.md), [codex/README.md](codex/README.md), [codex/README.en.md](codex/README.en.md) |
-| Trae | `trae/` | [trae/INSTALL.md](trae/INSTALL.md), [trae/INSTALL.en.md](trae/INSTALL.en.md) |
+| OpenAI Codex | `scripts/` + `skills/` + `agents/` + `.codex/` | [`.codex/INSTALL.md`](.codex/INSTALL.md), [`.codex/INSTALL.en.md`](.codex/INSTALL.en.md), [`.codex/README.md`](.codex/README.md), [`.codex/README.en.md`](.codex/README.en.md) |
+| Trae | `.trae/` | [`.trae/INSTALL.md`](.trae/INSTALL.md), [`.trae/INSTALL.en.md`](.trae/INSTALL.en.md) |
 | Cursor | `.cursor-plugin/` + `.cursor/` | [`.cursor-plugin/INSTALL.md`](.cursor-plugin/INSTALL.md), [`.cursor-plugin/INSTALL.en.md`](.cursor-plugin/INSTALL.en.md) |
 | Claude Code | `.claude-plugin/` | [`.claude-plugin/INSTALL.md`](.claude-plugin/INSTALL.md), [`.claude-plugin/INSTALL.en.md`](.claude-plugin/INSTALL.en.md) |
 | OpenCode | `.opencode/` | [`.opencode/INSTALL.md`](.opencode/INSTALL.md), [`.opencode/INSTALL.en.md`](.opencode/INSTALL.en.md) |
 | Gemini CLI | `gemini-extension.json` + `GEMINI.md` + `.gemini/` | [`.gemini/INSTALL.md`](.gemini/INSTALL.md), [`.gemini/INSTALL.en.md`](.gemini/INSTALL.en.md) |
-| VS Code | `vscode/` | prompt and instruction surfaces are generated |
-| Kiro | `kiro/` | skill and steering surfaces are generated |
+| VS Code | `.vscode/` | prompt and instruction surfaces are generated |
+| Kiro | `.kiro/` | skill and steering surfaces are generated |
 
 ### Contributor Build Flow
 
@@ -279,7 +263,7 @@ For contributors, verify the latest generated surfaces with:
 npm run verify
 ```
 
-After generation, shared content lives directly at the repository root in `skills/`, `agents/`, `commands/`, `hooks/`, `codex/`, `trae/`, and related directories. Platform installation scripts remain under root `scripts/`.
+After generation, shared content lives directly at the repository root in `skills/`, `agents/`, `commands/`, `hooks/`, `.codex/`, `.trae/`, `.kiro/`, `.vscode/`, and related directories. Platform installation scripts remain under root `scripts/`.
 
 ## Source Layer and Distributed Surfaces
 
@@ -301,10 +285,10 @@ Prompt structure:
 
 | Path | Component Type | Count | Description |
 | --- | --- | ---: | --- |
-| `src/prompt/agents/00_全连结指挥体.md` | top commander | 1 | the highest routing layer, directly facing the user and responsible for global routing, arbitration, and closure |
-| `src/prompt/agents/10_*.md ~ 19_*.md` | domain commanders | 10 | one commander per work domain such as `17_研究连结指挥体.md` or `19_实作连结指挥体.md`; one file means one commander, not a whole cluster |
-| `src/prompt/agents/30_*.md ~ 70_*.md` | specialist units | 41 | atomic execution units for concrete subtasks such as `30_上下文体.md`, `45_证据体.md`, `69_编码体.md`, and `70_审核体.md` |
-| `src/prompt/protocol/*.md` | protocol layer | 6 | shared protocols that apply to every role such as `01_绝对理性协议.md`, `02_证据分级协议.md`, and `03_冲突裁决协议.md` |
+| `src/prompt/agents/00_*.md` | top commander | 1 | the highest routing layer, directly facing the user and responsible for global routing, arbitration, and closure |
+| `src/prompt/agents/10_*.md ~ 19_*.md` | domain commanders | 10 | one commander per work domain; one file means one commander, while a cluster is that commander plus its dynamically mounted specialist units |
+| `src/prompt/agents/30_*.md ~ 70_*.md` | specialist units | 41 | atomic execution units for concrete subtasks such as context capture, evidence tracing, coding, and review |
+| `src/prompt/protocol/*.md` | protocol layer | 6 | shared protocols that apply to every role, including rationality, evidence grading, and conflict arbitration |
 
 ### `src/templates/`
 
@@ -340,16 +324,16 @@ The command entry surface. Current main command and aliases:
 - `/excodex`
 - `/exclaude`
 
-### `codex/`
+### `.codex/`
 
 The Codex-facing surface, including:
 
-- `codex/exmachina/SKILL.md`
-- `codex/exmachina-en/SKILL.md`
+- `.codex/exmachina/SKILL.md`
+- `.codex/exmachina-en/SKILL.md`
 - `INSTALL.md`
 - `README.md`
 
-### `trae/`
+### `.trae/`
 
 The Trae-facing surface, including rules, skills, and custom agents.
 
@@ -384,8 +368,8 @@ Platform entry surfaces now stay intentionally thin. Their job is only to let ea
 - `.claude-plugin/`: Claude plugin manifest and marketplace metadata
 - `.opencode/`: OpenCode repository plugin entry
 - `gemini-extension.json`, `GEMINI.md`, and `.gemini/`: Gemini CLI native extension surface
-- `kiro/`: Kiro skill and steering entry
-- `vscode/`: VS Code-style prompt / instruction surface
+- `.kiro/`: Kiro skill and steering entry
+- `.vscode/`: VS Code-style prompt / instruction surface
 - `plugin.json`: repository-level entry metadata
 
 ### `scripts/`
@@ -398,7 +382,7 @@ Repository tooling and installation scripts:
 
 ## Migration Note
 
-The old nested distribution directory `./exmachina` has been removed from the current architecture. The only authoritative shared-content paths are now the root-level `skills/`, `agents/`, `commands/`, `hooks/`, `codex/`, `trae/`, and related directories.
+The old nested distribution directory `./exmachina` has been removed from the current architecture. The only authoritative shared-content paths are now the root-level `skills/`, `agents/`, `commands/`, `hooks/`, `.codex/`, `.trae/`, `.kiro/`, `.vscode/`, and related directories.
 
 The new rule set is:
 
