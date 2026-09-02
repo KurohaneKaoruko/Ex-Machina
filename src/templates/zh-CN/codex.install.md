@@ -90,7 +90,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1 -InstallG
 - `~/.codex/skills/exmachina/exmachina-zh/SKILL.md`
 - `~/.codex/skills/exmachina/exmachina-en/SKILL.md`
 - `~/.codex/agents/00_全连结指挥体.md`
-- `~/.codex/agents/19_实作连结指挥体.md`
+- `~/.codex/agents/04_实作连结体.md`
 - `~/.codex/agents/69_编码体.md`
 - `~/.codex/agents/.exmachina-installed-agents.txt`
 - 如果已安装常驻指导：`~/.codex/AGENTS.md`

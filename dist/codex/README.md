@@ -86,7 +86,7 @@ ExMachina 把 Codex 使用面拆成三层：
 - `scripts/setup-exmachina.sh`
 - `scripts/setup-exmachina.ps1`
 - `agents/00_全连结指挥体.md`
-- `agents/19_实作连结指挥体.md`
+- `agents/04_实作连结体.md`
 - `agents/69_编码体.md`
 - `skills/using-exmachina-zh/SKILL.md`
 - `skills/using-exmachina-en/SKILL.md`

@@ -33,7 +33,7 @@
     "opencodePlugin": "dist/opencode/plugins/exmachina.mjs",
     "opencodeInstall": "dist/opencode/INSTALL.md",
     "opencodeInstallEnglish": "dist/opencode/INSTALL.en.md",
-    "geminiExtension": "dist/gemini-extension.json",
+    "geminiExtension": "gemini-extension.json",
     "geminiContext": "dist/GEMINI.md",
     "geminiInstall": "dist/gemini/INSTALL.md",
     "geminiInstallEnglish": "dist/gemini/INSTALL.en.md",

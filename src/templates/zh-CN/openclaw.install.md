@@ -87,17 +87,17 @@ node scripts/apply-openclaw-settings.mjs --target ~/.openclaw/openclaw.json --wo
 
 安装后，`~/.openclaw/openclaw.json` 的 `agents.entries` 中新增：
 
-- `exmachina-main`：全连结指挥体，workspace 指向 `<仓库>/dist/openclaw/workspaces/exmachina-main`，允许派发全部 19 个连结指挥体
-- `exmachina-link-<slug>`（19 个）：各连结指挥体，workspace 指向 `<仓库>/dist/openclaw/workspaces/exmachina-link-<slug>`，各自加载角色 AGENTS.md
+- `exmachina-main`：全连结指挥体，workspace 指向 `<仓库>/dist/openclaw/workspaces/exmachina-main`，允许派发全部 11 个连结体
+- `exmachina-link-<slug>`（11 个）：各连结体，workspace 指向 `<仓库>/dist/openclaw/workspaces/exmachina-link-<slug>`，各自加载角色 AGENTS.md
 
 仓库内 `dist/openclaw/workspaces/` 的目录结构：
 
 ```text
 dist/openclaw/workspaces/
 ├── exmachina-main/AGENTS.md            # 全连结指挥体 + 资源地图与派发规约
-├── exmachina-link-knowledge/AGENTS.md  # 知识连结指挥体 + 附录
+├── exmachina-link-research/AGENTS.md   # 研究连结体 + 附录
 ├── exmachina-link-rationality/AGENTS.md
-└── ...（共 20 个 workspace）
+└── ...（共 12 个 workspace）
 ```
 
 主控体的使用入口（任选其一）：

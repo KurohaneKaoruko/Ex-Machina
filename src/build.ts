@@ -667,25 +667,17 @@ type AgentFrontmatter = {
 };
 
 const openclawLinkSlugs: Record<string, string> = {
-  "01_协调连结指挥体.md": "coordination",
-  "02_质量连结指挥体.md": "quality",
-  "03_数据连结指挥体.md": "data",
-  "04_体验连结指挥体.md": "experience",
-  "05_性能连结指挥体.md": "performance",
-  "06_依赖连结指挥体.md": "dependency",
-  "07_环境连结指挥体.md": "environment",
-  "08_监控连结指挥体.md": "monitoring",
-  "09_应急连结指挥体.md": "contingency",
-  "10_知识连结指挥体.md": "knowledge",
-  "11_理性连结指挥体.md": "rationality",
-  "12_校验连结指挥体.md": "validation",
-  "13_文档连结指挥体.md": "documentation",
-  "14_安全连结指挥体.md": "security",
-  "15_集成连结指挥体.md": "integration",
-  "16_运维连结指挥体.md": "operations",
-  "17_研究连结指挥体.md": "research",
-  "18_架构连结指挥体.md": "architecture",
-  "19_实作连结指挥体.md": "implementation"
+  "01_协调连结体.md": "coordination",
+  "02_研究连结体.md": "research",
+  "03_架构连结体.md": "architecture",
+  "04_实作连结体.md": "implementation",
+  "05_校验连结体.md": "validation",
+  "06_理性连结体.md": "rationality",
+  "07_文档连结体.md": "documentation",
+  "08_集成连结体.md": "integration",
+  "09_运维连结体.md": "operations",
+  "10_安全连结体.md": "security",
+  "11_体验连结体.md": "experience"
 };
 
 function parseAgentFrontmatter(content: string): AgentFrontmatter {

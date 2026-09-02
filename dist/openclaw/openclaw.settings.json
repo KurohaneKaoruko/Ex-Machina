@@ -31,24 +31,16 @@
           "subagents": {
             "allowAgents": [
               "exmachina-link-coordination",
-              "exmachina-link-quality",
-              "exmachina-link-data",
-              "exmachina-link-experience",
-              "exmachina-link-performance",
-              "exmachina-link-dependency",
-              "exmachina-link-environment",
-              "exmachina-link-monitoring",
-              "exmachina-link-contingency",
-              "exmachina-link-knowledge",
-              "exmachina-link-rationality",
-              "exmachina-link-validation",
-              "exmachina-link-documentation",
-              "exmachina-link-security",
-              "exmachina-link-integration",
-              "exmachina-link-operations",
               "exmachina-link-research",
               "exmachina-link-architecture",
-              "exmachina-link-implementation"
+              "exmachina-link-implementation",
+              "exmachina-link-validation",
+              "exmachina-link-rationality",
+              "exmachina-link-documentation",
+              "exmachina-link-integration",
+              "exmachina-link-operations",
+              "exmachina-link-security",
+              "exmachina-link-experience"
             ]
           }
         },
@@ -60,132 +52,12 @@
             "theme": "多链路协调、任务分解、进度管理、资源调度 - 协调多链路协作、管理任务进度、处理资源冲突"
           }
         },
-        "exmachina-link-quality": {
-          "name": "质量连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-quality",
-          "identity": {
-            "name": "质量连结指挥体",
-            "theme": "质量标准、测试策略、质量度量、改进方案 - 定义质量标准、设计测试策略、跟踪质量度量"
-          }
-        },
-        "exmachina-link-data": {
-          "name": "数据连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-data",
-          "identity": {
-            "name": "数据连结指挥体",
-            "theme": "数据模型、数据质量、数据安全、数据支持 - 管理数据资产、确保数据质量、保护数据安全"
-          }
-        },
-        "exmachina-link-experience": {
-          "name": "体验连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-experience",
-          "identity": {
-            "name": "体验连结指挥体",
-            "theme": "体验设计、可用性评估、用户反馈、改进建议 - 设计用户体验、优化可用性、收集用户反馈"
-          }
-        },
-        "exmachina-link-performance": {
-          "name": "性能连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-performance",
-          "identity": {
-            "name": "性能连结指挥体",
-            "theme": "性能优化、资源管理、容量规划、问题定位 - 优化系统性能、管理资源使用、规划容量"
-          }
-        },
-        "exmachina-link-dependency": {
-          "name": "依赖连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-dependency",
-          "identity": {
-            "name": "依赖连结指挥体",
-            "theme": "依赖管理、版本控制、兼容性评估、冲突解决 - 管理依赖关系、控制版本、确保兼容性"
-          }
-        },
-        "exmachina-link-environment": {
-          "name": "环境连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-environment",
-          "identity": {
-            "name": "环境连结指挥体",
-            "theme": "环境配置、环境隔离、环境差异、部署支持 - 管理环境配置、确保环境隔离、处理环境差异"
-          }
-        },
-        "exmachina-link-monitoring": {
-          "name": "监控连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-monitoring",
-          "identity": {
-            "name": "监控连结指挥体",
-            "theme": "监控体系、告警策略、可观测性、问题定位 - 设计监控体系、配置告警策略、确保可观测性"
-          }
-        },
-        "exmachina-link-contingency": {
-          "name": "应急连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-contingency",
-          "identity": {
-            "name": "应急连结指挥体",
-            "theme": "应急响应、故障恢复、应急预案、业务连续性 - 处理应急响应、协调故障恢复、管理应急预案"
-          }
-        },
-        "exmachina-link-knowledge": {
-          "name": "知识连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-knowledge",
-          "identity": {
-            "name": "知识连结指挥体",
-            "theme": "术语沉淀、决策记录、索引建立、问题归档 - 把阶段性结果沉淀为可复用的知识资产"
-          }
-        },
-        "exmachina-link-rationality": {
-          "name": "理性连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-rationality",
-          "identity": {
-            "name": "理性连结指挥体",
-            "theme": "证据分级、反证搜索、冲突裁决、置信度校准 - 为任务提供独立理性校验，阻止不可靠结论落地"
-          }
-        },
-        "exmachina-link-validation": {
-          "name": "校验连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-validation",
-          "identity": {
-            "name": "校验连结指挥体",
-            "theme": "现状复现、断言定义、回归执行、证据沉淀 - 复现现状、定义断言、执行回归并沉淀验证证据"
-          }
-        },
-        "exmachina-link-documentation": {
-          "name": "文档连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-documentation",
-          "identity": {
-            "name": "文档连结指挥体",
-            "theme": "资料盘点、结构设计、示例编写、文档校订 - 盘点资料、设计结构、编写示例并校订说明"
-          }
-        },
-        "exmachina-link-security": {
-          "name": "安全连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-security",
-          "identity": {
-            "name": "安全连结指挥体",
-            "theme": "威胁识别、敏感边界审计、加固要求、合规检查 - 识别威胁面、审计敏感边界、提出加固方案"
-          }
-        },
-        "exmachina-link-integration": {
-          "name": "集成连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-integration",
-          "identity": {
-            "name": "集成连结指挥体",
-            "theme": "接入路径、配置入口、发布步骤、外部交付 - 打通外部接入、收束配置入口、定义发布路径"
-          }
-        },
-        "exmachina-link-operations": {
-          "name": "运维连结指挥体",
-          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-operations",
-          "identity": {
-            "name": "运维连结指挥体",
-            "theme": "观测设计、告警配置、回滚策略、演练计划 - 定义观测、告警、回滚和演练策略"
-          }
-        },
         "exmachina-link-research": {
           "name": "研究连结指挥体",
           "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-research",
           "identity": {
             "name": "研究连结指挥体",
-            "theme": "背景补齐、证据溯源、方案比对、待验证假设 - 补齐背景、追踪线索、比较方案、管理假设"
+            "theme": "背景补齐、证据溯源、方案比对、知识沉淀、待验证假设 - 补齐背景、追踪线索、比较方案、管理假设并沉淀知识"
           }
         },
         "exmachina-link-architecture": {
@@ -202,6 +74,62 @@
           "identity": {
             "name": "实作连结指挥体",
             "theme": "入口定位、编码变更、回归验证、实现审核 - 定位实现入口、完成最小必要改动、做回归与审核"
+          }
+        },
+        "exmachina-link-validation": {
+          "name": "校验连结指挥体",
+          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-validation",
+          "identity": {
+            "name": "校验连结指挥体",
+            "theme": "现状复现、断言定义、回归执行、质量标准、证据沉淀 - 复现现状、定义断言、执行回归、定义质量标准并沉淀验证证据"
+          }
+        },
+        "exmachina-link-rationality": {
+          "name": "理性连结指挥体",
+          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-rationality",
+          "identity": {
+            "name": "理性连结指挥体",
+            "theme": "证据分级、反证搜索、冲突裁决、置信度校准 - 为任务提供独立理性校验，阻止不可靠结论落地"
+          }
+        },
+        "exmachina-link-documentation": {
+          "name": "文档连结指挥体",
+          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-documentation",
+          "identity": {
+            "name": "文档连结指挥体",
+            "theme": "资料盘点、结构设计、示例编写、文档校订 - 盘点资料、设计结构、编写示例并校订说明"
+          }
+        },
+        "exmachina-link-integration": {
+          "name": "集成连结指挥体",
+          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-integration",
+          "identity": {
+            "name": "集成连结指挥体",
+            "theme": "接入路径、配置入口、发布步骤、依赖管理、环境配置、外部交付 - 打通外部接入、收束配置入口、管理依赖环境、定义发布路径"
+          }
+        },
+        "exmachina-link-operations": {
+          "name": "运维连结指挥体",
+          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-operations",
+          "identity": {
+            "name": "运维连结指挥体",
+            "theme": "观测设计、告警配置、回滚策略、监控体系、应急响应、演练计划 - 定义观测告警回滚演练、处理应急响应、保障业务连续性"
+          }
+        },
+        "exmachina-link-security": {
+          "name": "安全连结指挥体",
+          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-security",
+          "identity": {
+            "name": "安全连结指挥体",
+            "theme": "威胁识别、敏感边界审计、加固要求、合规检查 - 识别威胁面、审计敏感边界、提出加固方案"
+          }
+        },
+        "exmachina-link-experience": {
+          "name": "体验连结指挥体",
+          "workspace": "{{EXMACHINA_PACK_ROOT}}/dist/openclaw/workspaces/exmachina-link-experience",
+          "identity": {
+            "name": "体验连结指挥体",
+            "theme": "体验设计、可用性评估、用户反馈、性能优化、数据管理、改进建议 - 设计用户体验、优化可用性、管理性能数据、收集反馈"
           }
         }
       }

@@ -175,7 +175,9 @@ function Get-GuidanceWithoutManagedBlock {
   }
 
   $content = Get-Content -LiteralPath $GuidancePath -Raw
-  $pattern = "(?ms)^\Q$GuidanceBegin\E\r?\n.*?^\Q$GuidanceEnd\E\r?\n?"
+  $escapedBegin = [regex]::Escape($GuidanceBegin)
+  $escapedEnd = [regex]::Escape($GuidanceEnd)
+  $pattern = "(?ms)^" + $escapedBegin + "\r?\n.*?^" + $escapedEnd + "\r?\n?"
   return ([regex]::Replace($content, $pattern, "")).Trim()
 }
 
@@ -224,6 +226,7 @@ function Show-InstallSummary {
   if (Test-Path -LiteralPath $AgentManifestPath) {
     $agentCount = @(Get-Content -LiteralPath $AgentManifestPath | Where-Object { $_ })
   }
+  $agentCount = @($agentCount)
 
   Write-Host "[ExMachina] verification ok"
   Write-Host "[ExMachina] skills path: $InstallPath"
@@ -278,12 +281,12 @@ function Remove-GuidanceBlock {
   Write-Host "[ExMachina] removed managed guidance block from: $GuidancePath"
 }
 
-$selectedModes = @(
+$selectedModes = @(@(
   [bool]$Verify,
   [bool]$Uninstall,
   [bool]$InstallGuidance,
   [bool]$RemoveGuidance
-) | Where-Object { $_ }
+) | Where-Object { $_ })
 
 if ($selectedModes.Count -gt 1) {
   throw "[ExMachina] choose only one mode: -Verify, -Uninstall, -InstallGuidance, or -RemoveGuidance"

@@ -120,12 +120,12 @@ const requiredFiles = [
   "AGENTS.md",
   "AGENTS.en.md",
   "plugin.json",
-  ".codex/INSTALL.md",
-  ".codex/INSTALL.en.md",
-  ".codex/README.md",
-  ".codex/README.en.md",
-  ".codex/AGENTS.md",
-  ".codex/AGENTS.en.md",
+  "dist/codex/INSTALL.md",
+  "dist/codex/INSTALL.en.md",
+  "dist/codex/README.md",
+  "dist/codex/README.en.md",
+  "dist/codex/AGENTS.md",
+  "dist/codex/AGENTS.en.md",
   "scripts/setup-exmachina.sh",
   "scripts/setup-exmachina.ps1",
   "skills/using-exmachina/SKILL.md",
@@ -136,37 +136,37 @@ const requiredFiles = [
   "commands/ex.en.md",
   "agents/00_全连结指挥体.md",
   "hooks/hooks.json",
-  ".kiro/skills/exmachina/SKILL.md",
-  ".kiro/skills/exmachina-en/SKILL.md",
-  ".kiro/steering/exmachina.md",
-  ".kiro/steering/exmachina.en.md",
-  ".vscode/prompts/exmachina.prompt.md",
-  ".vscode/prompts/exmachina.en.prompt.md",
-  ".vscode/instructions/exmachina.instructions.md",
-  ".vscode/instructions/exmachina.en.instructions.md",
-  ".trae/INSTALL.md",
-  ".trae/INSTALL.en.md",
-  ".trae/rules/project_rules.en.md",
-  ".trae/agents/00_全连结指挥体.json",
-  ".trae/agents/README.md",
-  ".cursor-plugin/plugin.json",
-  ".cursor-plugin/hooks.json",
-  ".cursor-plugin/INSTALL.md",
-  ".cursor-plugin/INSTALL.en.md",
-  ".cursor/rules/exmachina.mdc",
-  ".cursor/rules/exmachina-en.mdc",
-  ".claude-plugin/plugin.json",
-  ".claude-plugin/marketplace.json",
-  ".claude-plugin/INSTALL.md",
-  ".claude-plugin/INSTALL.en.md",
-  ".opencode/plugins/exmachina.mjs",
-  ".opencode/INSTALL.md",
-  ".opencode/INSTALL.en.md",
+  "dist/kiro/skills/exmachina/SKILL.md",
+  "dist/kiro/skills/exmachina-en/SKILL.md",
+  "dist/kiro/steering/exmachina.md",
+  "dist/kiro/steering/exmachina.en.md",
+  "dist/vscode/prompts/exmachina.prompt.md",
+  "dist/vscode/prompts/exmachina.en.prompt.md",
+  "dist/vscode/instructions/exmachina.instructions.md",
+  "dist/vscode/instructions/exmachina.en.instructions.md",
+  "dist/trae/INSTALL.md",
+  "dist/trae/INSTALL.en.md",
+  "dist/trae/rules/project_rules.en.md",
+  "dist/trae/agents/00_全连结指挥体.json",
+  "dist/trae/agents/README.md",
+  "dist/cursor-plugin/plugin.json",
+  "dist/cursor-plugin/hooks.json",
+  "dist/cursor-plugin/INSTALL.md",
+  "dist/cursor-plugin/INSTALL.en.md",
+  "dist/cursor/rules/exmachina.mdc",
+  "dist/cursor/rules/exmachina-en.mdc",
+  "dist/claude-plugin/plugin.json",
+  "dist/claude-plugin/marketplace.json",
+  "dist/claude-plugin/INSTALL.md",
+  "dist/claude-plugin/INSTALL.en.md",
+  "dist/opencode/plugins/exmachina.mjs",
+  "dist/opencode/INSTALL.md",
+  "dist/opencode/INSTALL.en.md",
   "gemini-extension.json",
-  "GEMINI.md",
-  ".gemini/gemini-tools.md",
-  ".gemini/INSTALL.md",
-  ".gemini/INSTALL.en.md"
+  "dist/GEMINI.md",
+  "dist/gemini/gemini-tools.md",
+  "dist/gemini/INSTALL.md",
+  "dist/gemini/INSTALL.en.md"
 ];
 
 for (const file of requiredFiles) {
@@ -183,14 +183,14 @@ assertMissing("kiro");
 assertMissing("trae");
 assertMissing("vscode");
 assertMissing("skills/exmachina-en/references");
-assertMissing(".codex/exmachina-en/references");
-assertMissing(".kiro/skills/exmachina-en/references");
-assertMissing(".trae/skills/exmachina-en/references");
+assertMissing("dist/codex/exmachina-en/references");
+assertMissing("dist/kiro/skills/exmachina-en/references");
+assertMissing("dist/trae/skills/exmachina-en/references");
 
 const packageJson = readJson("package.json");
 const plugin = readJson("plugin.json");
 assert(
-  packageJson.main === ".opencode/plugins/exmachina.mjs",
+  packageJson.main === "dist/opencode/plugins/exmachina.mjs",
   "[verify-generated] package main does not point at the OpenCode plugin surface"
 );
 assert(
@@ -220,19 +220,19 @@ assert(
   "[verify-generated] plugin english core skill entrypoint mismatch"
 );
 assert(
-  plugin.entrypoints.cursorPlugin === ".cursor-plugin/plugin.json" &&
-    plugin.entrypoints.opencodePlugin === ".opencode/plugins/exmachina.mjs" &&
+  plugin.entrypoints.cursorPlugin === "dist/cursor-plugin/plugin.json" &&
+    plugin.entrypoints.opencodePlugin === "dist/opencode/plugins/exmachina.mjs" &&
     plugin.entrypoints.geminiExtension === "gemini-extension.json",
   "[verify-generated] platform entrypoints are incomplete"
 );
 assert(
-  plugin.entrypoints.codex === ".codex/exmachina/SKILL.md" &&
-    plugin.entrypoints.codexEnglish === ".codex/exmachina-en/SKILL.md" &&
-    plugin.entrypoints.trae === ".trae/rules/project_rules.md",
+  plugin.entrypoints.codex === "dist/codex/exmachina/SKILL.md" &&
+    plugin.entrypoints.codexEnglish === "dist/codex/exmachina-en/SKILL.md" &&
+    plugin.entrypoints.trae === "dist/trae/rules/project_rules.md",
   "[verify-generated] plugin codex or trae entrypoints are incomplete"
 );
 
-const cursorPlugin = readJson(".cursor-plugin/plugin.json");
+const cursorPlugin = readJson("dist/cursor-plugin/plugin.json");
 assert(
   cursorPlugin.skills === "../skills/" &&
     cursorPlugin.agents === "../agents/" &&
@@ -241,14 +241,14 @@ assert(
   "[verify-generated] root Cursor plugin manifest points at the wrong surfaces"
 );
 
-const cursorHooks = readJson(".cursor-plugin/hooks.json");
+const cursorHooks = readJson("dist/cursor-plugin/hooks.json");
 assert(
   cursorHooks.version === 1 &&
     cursorHooks.hooks?.sessionStart?.[0]?.command === "../hooks/session-restore.sh",
   "[verify-generated] root Cursor hook manifest points at the wrong script"
 );
 
-const claudePlugin = readJson(".claude-plugin/plugin.json");
+const claudePlugin = readJson("dist/claude-plugin/plugin.json");
 assert(
   claudePlugin.entrypoints.commands === "../commands" &&
     claudePlugin.entrypoints.skills === "../skills" &&
@@ -263,14 +263,14 @@ assert(
   "[verify-generated] Gemini extension manifest points at the wrong context file"
 );
 
-const geminiContext = readText("GEMINI.md");
+const geminiContext = readText("dist/GEMINI.md");
 assert(
   geminiContext.includes("@./skills/using-exmachina-en/SKILL.md") &&
-    geminiContext.includes("@./.gemini/gemini-tools.md"),
+    geminiContext.includes("@./dist/gemini/gemini-tools.md"),
   "[verify-generated] Gemini root context does not wire the shared bootstrap"
 );
 
-const openCodePlugin = readText(".opencode/plugins/exmachina.mjs");
+const openCodePlugin = readText("dist/opencode/plugins/exmachina.mjs");
 assert(
   openCodePlugin.includes("EXMACHINA_LANG") &&
     openCodePlugin.includes("config.skills.paths") &&
@@ -279,10 +279,10 @@ assert(
   "[verify-generated] OpenCode plugin surface is missing runtime registration or bootstrap injection"
 );
 
-const installDoc = readText(".codex/INSTALL.md");
-const installDocEn = readText(".codex/INSTALL.en.md");
+const installDoc = readText("dist/codex/INSTALL.md");
+const installDocEn = readText("dist/codex/INSTALL.en.md");
 assert(
-  installDoc.includes("https://raw.githubusercontent.com/KurohaneKaoruko/Ex-Machina/main/.codex/INSTALL.md"),
+  installDoc.includes("https://raw.githubusercontent.com/KurohaneKaoruko/Ex-Machina/main/dist/codex/INSTALL.md"),
   "[verify-generated] raw install URL missing from install doc"
 );
 assert(
@@ -326,11 +326,11 @@ assert(
 );
 assert(
   installDoc.includes("~/.codex/AGENTS.md") &&
-    installDoc.includes(".codex/AGENTS.en.md"),
+    installDoc.includes("dist/codex/AGENTS.en.md"),
   "[verify-generated] install doc does not describe the managed guidance surface"
 );
 assert(
-  installDocEn.includes(".codex/INSTALL.en.md"),
+  installDocEn.includes("dist/codex/INSTALL.en.md"),
   "[verify-generated] english install doc raw URL missing"
 );
 assert(!installDocEn.includes("{{"), "[verify-generated] unresolved template token in english install doc");
@@ -369,12 +369,12 @@ assert(
 );
 assert(
   installDocEn.includes("~/.codex/AGENTS.md") &&
-    installDocEn.includes(".codex/AGENTS.en.md"),
+    installDocEn.includes("dist/codex/AGENTS.en.md"),
   "[verify-generated] english install doc does not describe the english managed guidance surface"
 );
 
-const codexGuide = readText(".codex/README.md");
-const codexGuideEn = readText(".codex/README.en.md");
+const codexGuide = readText("dist/codex/README.md");
+const codexGuideEn = readText("dist/codex/README.en.md");
 assert(
   codexGuide.includes("using-exmachina"),
   "[verify-generated] Codex guide does not mention the bootstrap skill"
@@ -404,8 +404,8 @@ assert(
   "[verify-generated] Codex guides do not mention the managed agents manifest"
 );
 assert(
-  codexGuide.includes(".codex/AGENTS.en.md") &&
-    codexGuideEn.includes(".codex/AGENTS.en.md"),
+  codexGuide.includes("dist/codex/AGENTS.en.md") &&
+    codexGuideEn.includes("dist/codex/AGENTS.en.md"),
   "[verify-generated] Codex guides do not mention the english AGENTS surface"
 );
 assert(
@@ -414,33 +414,33 @@ assert(
   "[verify-generated] Codex guides still point to exmachina/scripts"
 );
 
-const cursorInstall = readText(".cursor-plugin/INSTALL.en.md");
+const cursorInstall = readText("dist/cursor-plugin/INSTALL.en.md");
 assert(
-  cursorInstall.includes(".cursor-plugin/plugin.json") &&
-    cursorInstall.includes(".cursor-plugin/hooks.json") &&
-    cursorInstall.includes(".cursor/rules/exmachina.mdc"),
+  cursorInstall.includes("dist/cursor-plugin/plugin.json") &&
+    cursorInstall.includes("dist/cursor-plugin/hooks.json") &&
+    cursorInstall.includes("dist/cursor/rules/exmachina.mdc"),
   "[verify-generated] Cursor install guide does not describe the plugin manifest surface"
 );
 
-const claudeInstall = readText(".claude-plugin/INSTALL.en.md");
+const claudeInstall = readText("dist/claude-plugin/INSTALL.en.md");
 assert(
   claudeInstall.includes(".claude-plugin/plugin.json") &&
     claudeInstall.includes(".claude-plugin/marketplace.json"),
   "[verify-generated] Claude install guide does not describe the root plugin surface"
 );
 
-const opencodeInstall = readText(".opencode/INSTALL.en.md");
+const opencodeInstall = readText("dist/opencode/INSTALL.en.md");
 assert(
   opencodeInstall.includes("\"exmachina@git+") &&
-    opencodeInstall.includes(".opencode/plugins/exmachina.mjs"),
+    opencodeInstall.includes("dist/opencode/plugins/exmachina.mjs"),
   "[verify-generated] OpenCode install guide does not describe the git plugin surface"
 );
 
-const geminiInstall = readText(".gemini/INSTALL.en.md");
+const geminiInstall = readText("dist/gemini/INSTALL.en.md");
 assert(
   geminiInstall.includes("gemini extensions install") &&
     geminiInstall.includes("gemini-extension.json") &&
-    geminiInstall.includes(".gemini/gemini-tools.md"),
+    geminiInstall.includes("dist/gemini/gemini-tools.md"),
   "[verify-generated] Gemini install guide does not describe the extension surface"
 );
 
@@ -570,7 +570,7 @@ function verifyInstallerSmokeTest() {
         assert(
           installedGuidance.includes(guidanceBegin) &&
             installedGuidance.includes(guidanceEnd) &&
-            installedGuidance.includes("task-first"),
+            installedGuidance.includes("lock boundaries first"),
           "[verify-generated] installer smoke test did not install the managed guidance block"
         );
 

@@ -78,7 +78,7 @@ After installation, confirm these paths exist:
 - `~/.codex/skills/exmachina/using-exmachina-en/SKILL.md`
 - `~/.codex/skills/exmachina/exmachina-en/SKILL.md`
 - `~/.codex/agents/00_全连结指挥体.md`
-- `~/.codex/agents/19_实作连结指挥体.md`
+- `~/.codex/agents/04_实作连结体.md`
 - `~/.codex/agents/69_编码体.md`
 - `~/.codex/agents/.exmachina-installed-agents.txt`
 - if always-on guidance is installed: `~/.codex/AGENTS.md`
