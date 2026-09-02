@@ -9,7 +9,7 @@
     "url": "https://github.com/KurohaneKaoruko/Ex-Machina.git"
   },
   "license": "MIT",
-  "main": ".opencode/plugins/exmachina.mjs",
+  "main": "dist/opencode/plugins/exmachina.mjs",
   "keywords": [
     "mechanical-intelligence",
     "multi-agent",

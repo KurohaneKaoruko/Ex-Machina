@@ -157,8 +157,8 @@ function Get-GuidanceSourcePath {
   )
 
   switch ($Language) {
-    "zh" { return (Join-Path $RepoRootPath ".codex\AGENTS.md") }
-    "en" { return (Join-Path $RepoRootPath ".codex\AGENTS.en.md") }
+    "zh" { return (Join-Path $RepoRootPath "dist\codex\AGENTS.md") }
+    "en" { return (Join-Path $RepoRootPath "dist\codex\AGENTS.en.md") }
     default { throw "[ExMachina] unsupported guidance language: $Language" }
   }
 }

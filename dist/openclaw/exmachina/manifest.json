@@ -1,0 +1,172 @@
+{
+  "project_name": "ExMachina",
+  "pack_name": "ExMachina OpenClaw Pack",
+  "mode": "full",
+  "supported_modes": [
+    "lite",
+    "full"
+  ],
+  "mode_notes": {
+    "lite": "不在 OpenClaw 中创建子个体 agent，子个体职责由连结体内联执行。",
+    "full": "在 OpenClaw 中创建全部子个体 agent。"
+  },
+  "compatibility": {
+    "requires_multi_agent_binding": false,
+    "requires_external_routing": false
+  },
+  "ontology": {
+    "conductor": "单一顶层调度体",
+    "link_body": "由一个指挥体和多个子个体组成的任务协作单元；lite 模式不在 OpenClaw 中创建子个体 agent。",
+    "link_conductor": "连结体内部的协调中枢",
+    "subagent": "承担单一职责的实际智能体"
+  },
+  "rationality_protocol": {
+    "name": "绝对理性协议",
+    "paths": {
+      "rationality": "protocol/01_绝对理性协议.md",
+      "evidence": "protocol/02_证据分级协议.md",
+      "conflict": "protocol/03_冲突裁决协议.md",
+      "output_contract": "protocol/06_输出契约.md",
+      "workspace": "protocol/04_工作区与协作协议.md",
+      "multi_agent_handoff": "protocol/05_多智能体回流协议.md"
+    }
+  },
+  "selection_rule": "默认选择一个连结体独立完成任务；若需要并行推进，说明平级分工与交付边界。",
+  "link_bodies": [
+    {
+      "name": "协调连结体",
+      "path": "agents/01_协调连结指挥体.md"
+    },
+    {
+      "name": "质量连结体",
+      "path": "agents/02_质量连结指挥体.md"
+    },
+    {
+      "name": "数据连结体",
+      "path": "agents/03_数据连结指挥体.md"
+    },
+    {
+      "name": "体验连结体",
+      "path": "agents/04_体验连结指挥体.md"
+    },
+    {
+      "name": "性能连结体",
+      "path": "agents/05_性能连结指挥体.md"
+    },
+    {
+      "name": "依赖连结体",
+      "path": "agents/06_依赖连结指挥体.md"
+    },
+    {
+      "name": "环境连结体",
+      "path": "agents/07_环境连结指挥体.md"
+    },
+    {
+      "name": "监控连结体",
+      "path": "agents/08_监控连结指挥体.md"
+    },
+    {
+      "name": "应急连结体",
+      "path": "agents/09_应急连结指挥体.md"
+    },
+    {
+      "name": "知识连结体",
+      "path": "agents/10_知识连结指挥体.md"
+    },
+    {
+      "name": "理性连结体",
+      "path": "agents/11_理性连结指挥体.md"
+    },
+    {
+      "name": "校验连结体",
+      "path": "agents/12_校验连结指挥体.md"
+    },
+    {
+      "name": "文档连结体",
+      "path": "agents/13_文档连结指挥体.md"
+    },
+    {
+      "name": "安全连结体",
+      "path": "agents/14_安全连结指挥体.md"
+    },
+    {
+      "name": "集成连结体",
+      "path": "agents/15_集成连结指挥体.md"
+    },
+    {
+      "name": "运维连结体",
+      "path": "agents/16_运维连结指挥体.md"
+    },
+    {
+      "name": "研究连结体",
+      "path": "agents/17_研究连结指挥体.md"
+    },
+    {
+      "name": "架构连结体",
+      "path": "agents/18_架构连结指挥体.md"
+    },
+    {
+      "name": "实作连结体",
+      "path": "agents/19_实作连结指挥体.md"
+    }
+  ],
+  "conductor": {
+    "name": "全连结指挥体",
+    "path": "agents/00_全连结指挥体.md"
+  },
+  "workflow": [
+    "全连结指挥体先装载绝对理性协议，并明确当前已知、未知、假设与验收标准。",
+    "主控体基于任务特征选择一个连结体作为本轮执行体；如需并行，明确平级分工。",
+    "被选中的连结体指挥体接管内部调度，并装载该连结体的成员子个体。",
+    "成员子个体并行产出事实提取、方案构造、风险分析、验证证据与阶段汇报。",
+    "连结体指挥体汇总成员结果，形成完整交付。",
+    "必要时再并行启用其他连结体，执行证据校验、文档补齐或安全收束等独立交付。",
+    "相邻阶段之间按交接契约传递输入输出，避免上下文丢失或责任悬空。",
+    "若多个连结体或阶段争用资源，按资源优先级仲裁层先处理风险闸门，再保障当前执行连结体的核心交付。",
+    "全连结指挥体输出最终结论、证据摘要、风险清单、置信度和下一轮行动建议。"
+  ],
+  "paths": {
+    "protocols_dir": "protocol",
+    "conductor_dir": "agents",
+    "link_bodies_dir": "agents",
+    "agents_dir": "agents",
+    "runtime_dir": "runtime",
+    "workflow": "workflows/mission-loop.md"
+  },
+  "openclaw_directive": {
+    "entry_agent_id": "exmachina-main",
+    "execution_style": "subagent-dispatch",
+    "link_bodies": [
+      "协调连结体",
+      "质量连结体",
+      "数据连结体",
+      "体验连结体",
+      "性能连结体",
+      "依赖连结体",
+      "环境连结体",
+      "监控连结体",
+      "应急连结体",
+      "知识连结体",
+      "理性连结体",
+      "校验连结体",
+      "文档连结体",
+      "安全连结体",
+      "集成连结体",
+      "运维连结体",
+      "研究连结体",
+      "架构连结体",
+      "实作连结体"
+    ],
+    "selection_rule": "默认选择一个连结体独立完成任务；若需要并行推进，说明平级分工与交付边界。",
+    "quick_start": [
+      "读取 manifest.json 确认模式、连结体清单与选择规则。",
+      "读取 protocol/ 下的协议文件，再读取 agents/00_全连结指挥体.md。",
+      "读取 runtime/topology.json 与 runtime/task-board.json，按多智能体任务板推进。",
+      "主控体选择当前执行连结体并汇总回流结果。"
+    ],
+    "do_not_assume": [
+      "不要在未启用子代理（subagents / sessions_spawn）时启动任务。",
+      "不要跳过任务板与路由回流。"
+    ]
+  }
+}

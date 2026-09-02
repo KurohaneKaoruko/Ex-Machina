@@ -123,10 +123,10 @@ remove_managed_agents() {
 guidance_source_path() {
   case "$guidance_language" in
     zh)
-      printf '%s\n' "$repo_root/.codex/AGENTS.md"
+      printf '%s\n' "$repo_root/dist/codex/AGENTS.md"
       ;;
     en)
-      printf '%s\n' "$repo_root/.codex/AGENTS.en.md"
+      printf '%s\n' "$repo_root/dist/codex/AGENTS.en.md"
       ;;
     *)
       echo "[ExMachina] unsupported guidance language: $guidance_language" >&2

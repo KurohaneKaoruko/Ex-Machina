@@ -4,7 +4,7 @@ ExMachina now ships a Codex-native install surface so you can attach both this r
 
 Raw install guide:
 
-- `{{RAW_BASE_URL}}/.codex/INSTALL.en.md`
+- `{{RAW_BASE_URL}}/dist/codex/INSTALL.en.md`
 
 ## What You Get
 
@@ -16,7 +16,7 @@ After installation, Codex gets three entry layers:
 - `exmachina-en`: full English operating surface
 - a native numbered agent set mirrored from `agents/` into `~/.codex/agents/`
 
-If you want Codex to hold the ExMachina stance consistently, do not stop at skills alone. Install the managed guidance block into `~/.codex/AGENTS.md`. That is the path that most strongly reinforces absolute rationality, task priority, and affectless language. The repository-side Codex surface now lives under `.codex/`.
+If you want Codex to hold the ExMachina stance consistently, do not stop at skills alone. Install the managed guidance block into `~/.codex/AGENTS.md`. That is the path that most strongly reinforces absolute rationality, task priority, and affectless language. The repository-side Codex surface now lives under `dist/codex/`.
 
 ## Quick Install
 
@@ -60,7 +60,7 @@ The install script manages three surfaces:
 - Windows PowerShell: syncs a managed directory into `~/.codex/skills/exmachina` and writes `.exmachina-managed.txt`
 - syncs numbered agent files from `agents/` into `~/.codex/agents/`
 - maintains a manifest at `~/.codex/agents/.exmachina-installed-agents.txt`
-- optionally writes `.codex/AGENTS.md` or `.codex/AGENTS.en.md` into a managed block inside `~/.codex/AGENTS.md`
+- optionally writes `dist/codex/AGENTS.md` or `dist/codex/AGENTS.en.md` into a managed block inside `~/.codex/AGENTS.md`
 
 The managed guidance block is wrapped by explicit markers:
 
@@ -181,11 +181,11 @@ Remove-Item "$HOME/exmachina" -Recurse -Force
 - If you only want to inspect the current installation state without changing files, use `--verify` / `-Verify`.
 - If you install under a custom Codex home, set `CODEX_HOME` or pass `--codex-home` / `-CodexHome`.
 - If you want stronger always-on guidance, use `--install-guidance` / `-InstallGuidance` instead of copying text manually.
-- English users should normally install `.codex/AGENTS.en.md` by passing `--guidance-language en` / `-GuidanceLanguage en`.
+- English users should normally install `dist/codex/AGENTS.en.md` by passing `--guidance-language en` / `-GuidanceLanguage en`.
 
 ## Related Entry Points
 
 - Repository: `{{REPOSITORY_URL}}`
-- Codex guide: `.codex/README.en.md`
-- English always-on guidance: `.codex/AGENTS.en.md`
+- Codex guide: `dist/codex/README.en.md`
+- English always-on guidance: `dist/codex/AGENTS.en.md`
 - Bundle manifest: `plugin.json`

@@ -1,0 +1,31 @@
+{
+  "mode": "lite",
+  "format_name": "exmachina-openclaw-settings-v2",
+  "target_config_paths": [
+    "~/.openclaw/openclaw.json"
+  ],
+  "supports_direct_import": false,
+  "template_variables": {},
+  "settings_patch": {
+    "agents": {
+      "defaults": {
+        "subagents": {
+          "maxSpawnDepth": 2,
+          "maxChildrenPerAgent": 8,
+          "maxConcurrent": 8
+        }
+      }
+    }
+  },
+  "merge_instructions": [
+    "读取目标配置前先做 JSON 解析校验，失败则中止，不得覆盖损坏文件。",
+    "写入前把原文件备份为 <target>.exmachina.bak。",
+    "agents.defaults.subagents 逐字段深合并，仅在字段缺失或等于本模板默认值时写入。",
+    "不新增 agents.entries，不修改 channels、bindings 与任何模型或 provider 配置。"
+  ],
+  "usage_notes": [
+    "lite 模式由主 agent 兼任全连结指挥体；workspace 内容安装由 scripts/apply-openclaw-settings.mjs 完成。",
+    "连结指挥体与子个体角色提示词按需读取仓库 agents/ 目录与 skills/exmachina-zh/references/agents/，由任务文本内嵌。",
+    "升级到 full 模式前先运行 --uninstall 清理受管理内容，再以 --mode full 重新应用。"
+  ]
+}

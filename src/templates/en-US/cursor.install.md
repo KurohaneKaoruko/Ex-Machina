@@ -2,18 +2,18 @@
 
 ExMachina now ships two Cursor entry surfaces:
 
-- a repository-level plugin manifest at `.cursor-plugin/plugin.json`
-- a rules fallback at `.cursor/rules/exmachina.mdc`
+- a repository-level plugin manifest at `dist/cursor-plugin/plugin.json`
+- a rules fallback at `dist/cursor/rules/exmachina.mdc`
 
 ## Recommended path
 
-Prefer installing the repository itself as a plugin source so Cursor can read `.cursor-plugin/plugin.json`. This is closer to a repository-native plugin flow than copying a rules file by hand because it exposes skills, agents, commands, and hooks in one surface.
+Prefer installing the repository itself as a plugin source so Cursor can read `dist/cursor-plugin/plugin.json`. This is closer to a repository-native plugin flow than copying a rules file by hand because it exposes skills, agents, commands, and hooks in one surface.
 
-If your current Cursor build does not yet expose a usable repository plugin flow, fall back to the generated `.mdc` rules files under `.cursor/rules/`.
+If your current Cursor build does not yet expose a usable repository plugin flow, fall back to the generated `.mdc` rules files under `dist/cursor/rules/`.
 
 ## What the plugin manifest exposes
 
-`.cursor-plugin/plugin.json` registers these paths:
+`dist/cursor-plugin/plugin.json` registers these paths:
 
 - `../skills/`
 - `../agents/`
@@ -32,26 +32,26 @@ cd ~/exmachina
 Then point Cursor at the repository root so it can read:
 
 ```text
-~/exmachina/.cursor-plugin/plugin.json
+~/exmachina/dist/cursor-plugin/plugin.json
 ```
 
-If your environment prefers Git-backed plugin sources, use the repository root as the plugin source. The important part is that Cursor resolves the root `.cursor-plugin/plugin.json`.
+If your environment prefers Git-backed plugin sources, use the repository root as the plugin source. The important part is that Cursor resolves the root `dist/cursor-plugin/plugin.json`.
 
 ## Rules fallback
 
 If plugin installation is not available yet, use the rules surface instead:
 
 1. Open Cursor Rules
-2. Paste `.cursor/rules/exmachina.mdc`
-3. Use `.cursor/rules/exmachina-en.mdc` for an English-first workflow
+2. Paste `dist/cursor/rules/exmachina.mdc`
+3. Use `dist/cursor/rules/exmachina-en.mdc` for an English-first workflow
 
 ## Verification
 
 Confirm that these files exist:
 
-- `.cursor-plugin/plugin.json`
-- `.cursor-plugin/hooks.json`
-- `.cursor/rules/exmachina.mdc`
+- `dist/cursor-plugin/plugin.json`
+- `dist/cursor-plugin/hooks.json`
+- `dist/cursor/rules/exmachina.mdc`
 
 Then run a task that needs analysis plus implementation. If the surface is loaded, the model should more consistently:
 
@@ -61,7 +61,7 @@ Then run a task that needs analysis plus implementation. If the surface is loade
 
 ## Related entrypoints
 
-- Root plugin manifest: `.cursor-plugin/plugin.json`
-- Root plugin hooks: `.cursor-plugin/hooks.json`
-- Chinese rules: `.cursor/rules/exmachina.mdc`
-- English rules: `.cursor/rules/exmachina-en.mdc`
+- Root plugin manifest: `dist/cursor-plugin/plugin.json`
+- Root plugin hooks: `dist/cursor-plugin/hooks.json`
+- Chinese rules: `dist/cursor/rules/exmachina.mdc`
+- English rules: `dist/cursor/rules/exmachina-en.mdc`

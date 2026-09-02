@@ -3,7 +3,7 @@
 ExMachina splits the Codex surface into three layers:
 
 1. Install layer
-`.codex/INSTALL*.md` and the root `scripts/setup-exmachina.*` files register the repository `skills/` directory into the local Codex skill library and sync `agents/` into `~/.codex/agents/`.
+`dist/codex/INSTALL*.md` and the root `scripts/setup-exmachina.*` files register the repository `skills/` directory into the local Codex skill library and sync `agents/` into `~/.codex/agents/`.
 
 2. Bootstrap layer
 `using-exmachina-zh` and `using-exmachina-en` help Codex recognize when a task should move into the stricter ExMachina workflow.
@@ -13,8 +13,8 @@ ExMachina splits the Codex surface into three layers:
 
 ## Recommended Usage
 
-- Normal installers: follow `.codex/INSTALL.md` or `.codex/INSTALL.en.md` and install both skills and native agents.
-- Power users: install a managed guidance block with `--install-guidance` / `-InstallGuidance` so `.codex/AGENTS.en.md` or `.codex/AGENTS.md` is written into `~/.codex/AGENTS.md`.
+- Normal installers: follow `dist/codex/INSTALL.md` or `dist/codex/INSTALL.en.md` and install both skills and native agents.
+- Power users: install a managed guidance block with `--install-guidance` / `-InstallGuidance` so `dist/codex/AGENTS.en.md` or `dist/codex/AGENTS.md` is written into `~/.codex/AGENTS.md`.
 - Contributors: edit `src/`, then run `npm run generate && npm run verify`.
 
 ## Skill Responsibilities
@@ -76,10 +76,10 @@ Lifecycle commands:
 
 ## Key Paths
 
-- `.codex/INSTALL.md`
-- `.codex/INSTALL.en.md`
-- `.codex/README.md`
-- `.codex/README.en.md`
+- `dist/codex/INSTALL.md`
+- `dist/codex/INSTALL.en.md`
+- `dist/codex/README.md`
+- `dist/codex/README.en.md`
 - `scripts/setup-exmachina.sh`
 - `scripts/setup-exmachina.ps1`
 - `agents/`
@@ -87,11 +87,11 @@ Lifecycle commands:
 - `skills/using-exmachina-en/SKILL.md`
 - `skills/exmachina-zh/SKILL.md`
 - `skills/exmachina-en/SKILL.md`
-- `.codex/AGENTS.md`
-- `.codex/AGENTS.en.md`
+- `dist/codex/AGENTS.md`
+- `dist/codex/AGENTS.en.md`
 
 ## Version And Source
 
 - Repository: `{{REPOSITORY_URL}}`
-- Raw install guide: `{{RAW_BASE_URL}}/.codex/INSTALL.en.md`
+- Raw install guide: `{{RAW_BASE_URL}}/dist/codex/INSTALL.en.md`
 - Bundle version: `{{VERSION}}`

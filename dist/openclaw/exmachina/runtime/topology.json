@@ -1,0 +1,59 @@
+{
+  "mode": "full",
+  "supported_modes": [
+    "lite",
+    "full"
+  ],
+  "mode_notes": {
+    "lite": "不在 OpenClaw 中创建子个体 agent，子个体职责由连结体内联执行。",
+    "full": "在 OpenClaw 中创建全部子个体 agent；运行时拓扑仍以连结体为粒度。"
+  },
+  "controller_agent_id": "exmachina-main",
+  "coordination_mode": "subagent-dispatch",
+  "requires_external_routing": false,
+  "shared_artifacts": [
+    {
+      "name": "mission-context",
+      "path": "runtime/shared/mission-context.json",
+      "description": "全局任务上下文、连结体清单与选择规则。"
+    },
+    {
+      "name": "task-board",
+      "path": "runtime/task-board.json",
+      "description": "多智能体任务板与连结体交付安排。"
+    },
+    {
+      "name": "knowledge-handoff",
+      "path": "runtime/shared/knowledge-handoff.json",
+      "description": "知识交接与后续维护输入。"
+    },
+    {
+      "name": "resource-arbitration",
+      "path": "runtime/shared/resource-arbitration.json",
+      "description": "资源仲裁与升级规则。"
+    }
+  ],
+  "agent_specs": [
+    {
+      "agent_id": "exmachina-main",
+      "display_name": "ExMachina 主控体",
+      "runtime_role": "controller",
+      "source": "全连结指挥体",
+      "responsibilities": [
+        "选择当前执行连结体，必要时明确平级分工。",
+        "汇总多智能体产出，生成最终结构化交付。",
+        "负责跨 agent 冲突裁决与风险升级。"
+      ]
+    }
+  ],
+  "coordination_rules": [
+    "必须启用子代理（subagents / sessions_spawn）。",
+    "默认选择一个连结体独立完成任务；并行启用多连结体时必须说明平级分工。",
+    "多智能体汇报需使用 [xx体]:xxx 格式。"
+  ],
+  "activation_steps": [
+    "主控体读取 runtime/shared/mission-context.json、runtime/task-board.json 与 runtime/topology.json。",
+    "主控体选择当前执行连结体并派发交付目标；如并行启用多连结体，说明平级分工。",
+    "主控体汇总连结体产出，完成最终结构化交付。"
+  ]
+}

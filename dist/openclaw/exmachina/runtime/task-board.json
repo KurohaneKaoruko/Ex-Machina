@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "status": "ready",
+  "current_phase": "idle",
+  "active_link_body": null,
+  "parallel_link_bodies": [],
+  "completed_tasks": [],
+  "pending_tasks": [],
+  "blocked_tasks": [],
+  "handoff_queue": []
+}

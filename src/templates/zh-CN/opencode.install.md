@@ -4,8 +4,8 @@ ExMachina 现在提供了仓库原生的 OpenCode 插件入口。
 
 ## 入口结构
 
-- `package.json` 的 `main` 指向 `.opencode/plugins/exmachina.mjs`
-- 仓库根目录提供 `.opencode/INSTALL.md`
+- `package.json` 的 `main` 指向 `dist/opencode/plugins/exmachina.mjs`
+- 仓库根目录提供 `dist/opencode/INSTALL.md`
 
 OpenCode 安装时不需要再手工建 symlink；插件会在运行时把 `skills/` 注册到 OpenCode 的技能路径里，并把 ExMachina 的引导内容注入系统提示。
 
@@ -41,7 +41,7 @@ EXMACHINA_LANG=en
 
 确认这些入口存在：
 
-- `.opencode/plugins/exmachina.mjs`
+- `dist/opencode/plugins/exmachina.mjs`
 - `skills/using-exmachina-zh/SKILL.md`
 - `skills/using-exmachina-en/SKILL.md`
 
@@ -49,5 +49,5 @@ EXMACHINA_LANG=en
 
 ## 相关入口
 
-- 根 OpenCode 插件入口：`.opencode/plugins/exmachina.mjs`
-- 根安装文档：`.opencode/INSTALL.md`
+- 根 OpenCode 插件入口：`dist/opencode/plugins/exmachina.mjs`
+- 根安装文档：`dist/opencode/INSTALL.md`

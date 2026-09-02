@@ -185,19 +185,22 @@ ExMachina 不依赖“角色自己发挥协作意识”，而是把协作规范�
 .
 ├─ agents/                # 共享角色提示词
 ├─ benchmark/             # 基准场景
-├─ .codex/                # Codex 文档与技能使用面
 ├─ commands/              # 命令入口文档
-├─ .claude-plugin/        # 仓库级 Claude 插件入口
-├─ .cursor/               # 仓库级 Cursor 规则回退面
-├─ .cursor-plugin/        # 仓库级 Cursor 插件入口
-├─ .gemini/               # Gemini 辅助文件
-├─ .opencode/             # 仓库级 OpenCode 插件入口
+├─ dist/                  # 各平台产物集中目录
+│  ├─ codex/              # Codex 文档与技能使用面
+│  ├─ claude-plugin/      # 仓库级 Claude 插件入口
+│  ├─ cursor/             # 仓库级 Cursor 规则回退面
+│  ├─ cursor-plugin/      # 仓库级 Cursor 插件入口
+│  ├─ gemini/             # Gemini 辅助文件
+│  ├─ opencode/           # 仓库级 OpenCode 插件入口
+│  ├─ kiro/               # Kiro 技能与 steering 面
+│  ├─ openclaw/           # OpenClaw 包
+│  ├─ trae/               # Trae 规则、技能与自定义 agents
+│  ├─ vscode/             # VS Code 风格 prompt / instructions 面
+│  └─ old/                # 历史归档
 ├─ evals/                 # 评测辅助与触发样本
 ├─ examples/              # 示例任务包
-├─ gemini-extension.json  # 仓库级 Gemini extension manifest
-├─ GEMINI.md              # 仓库级 Gemini context
 ├─ hooks/                 # 共享 hooks
-├─ .kiro/                 # Kiro 技能与 steering 面
 ├─ paper/                 # 长文档说明
 ├─ skills/                # 共享技能面
 ├─ src/
@@ -212,8 +215,8 @@ ExMachina 不依赖“角色自己发挥协作意识”，而是把协作规范�
 │  ├─ setup-exmachina.ps1
 │  └─ dev/
 │     └─ verify-generated.mjs
-├─ .trae/                 # Trae 规则、技能与自定义 agents
-├─ .vscode/               # VS Code 风格 prompt / instructions 面
+├─ gemini-extension.json  # 仓库级 Gemini extension manifest
+├─ GEMINI.md              # 仓库级 Gemini context
 └─ README.md
 ```
 
@@ -225,8 +228,8 @@ ExMachina 不依赖“角色自己发挥协作意识”，而是把协作规范�
 
 安装文档：
 
-- 仓库内：[`.codex/INSTALL.md`](.codex/INSTALL.md)
-- Raw URL：`https://raw.githubusercontent.com/KurohaneKaoruko/Ex-Machina/main/.codex/INSTALL.md`
+- 仓库内：[`dist/codex/INSTALL.md`](dist/codex/INSTALL.md)
+- Raw URL：`https://raw.githubusercontent.com/KurohaneKaoruko/Ex-Machina/main/dist/codex/INSTALL.md`
 
 快速安装：
 
@@ -242,14 +245,15 @@ bash ./scripts/setup-exmachina.sh
 
 | 平台 | 安装文件位置 | 参考文档 |
 |------|-------------|---------|
-| OpenAI Codex | `scripts/` + `skills/` + `agents/` + `.codex/` | [`.codex/INSTALL.md`](.codex/INSTALL.md), [`.codex/INSTALL.en.md`](.codex/INSTALL.en.md), [`.codex/README.md`](.codex/README.md), [`.codex/README.en.md`](.codex/README.en.md) |
-| Trae | `.trae/` | [`.trae/INSTALL.md`](.trae/INSTALL.md), [`.trae/INSTALL.en.md`](.trae/INSTALL.en.md) |
-| Cursor | `.cursor-plugin/` + `.cursor/` | [`.cursor-plugin/INSTALL.md`](.cursor-plugin/INSTALL.md), [`.cursor-plugin/INSTALL.en.md`](.cursor-plugin/INSTALL.en.md) |
-| Claude Code | `.claude-plugin/` | [`.claude-plugin/INSTALL.md`](.claude-plugin/INSTALL.md), [`.claude-plugin/INSTALL.en.md`](.claude-plugin/INSTALL.en.md) |
-| OpenCode | `.opencode/` | [`.opencode/INSTALL.md`](.opencode/INSTALL.md), [`.opencode/INSTALL.en.md`](.opencode/INSTALL.en.md) |
-| Gemini CLI | `gemini-extension.json` + `GEMINI.md` + `.gemini/` | [`.gemini/INSTALL.md`](.gemini/INSTALL.md), [`.gemini/INSTALL.en.md`](.gemini/INSTALL.en.md) |
-| VS Code | `.vscode/` | Prompt 与 instructions 产物已生成 |
-| Kiro | `.kiro/` | Skill 与 steering 产物已生成 |
+| OpenAI Codex | `scripts/` + `skills/` + `agents/` + `dist/codex/` | [`dist/codex/INSTALL.md`](dist/codex/INSTALL.md), [`dist/codex/INSTALL.en.md`](dist/codex/INSTALL.en.md), [`dist/codex/README.md`](dist/codex/README.md), [`dist/codex/README.en.md`](dist/codex/README.en.md) |
+| Trae | `dist/trae/` | [`dist/trae/INSTALL.md`](dist/trae/INSTALL.md), [`dist/trae/INSTALL.en.md`](dist/trae/INSTALL.en.md) |
+| Cursor | `dist/cursor-plugin/` + `dist/cursor/` | [`dist/cursor-plugin/INSTALL.md`](dist/cursor-plugin/INSTALL.md), [`dist/cursor-plugin/INSTALL.en.md`](dist/cursor-plugin/INSTALL.en.md) |
+| Claude Code | `dist/claude-plugin/` | [`dist/claude-plugin/INSTALL.md`](dist/claude-plugin/INSTALL.md), [`dist/claude-plugin/INSTALL.en.md`](dist/claude-plugin/INSTALL.en.md) |
+| OpenCode | `dist/opencode/` | [`dist/opencode/INSTALL.md`](dist/opencode/INSTALL.md), [`dist/opencode/INSTALL.en.md`](dist/opencode/INSTALL.en.md) |
+| Gemini CLI | `gemini-extension.json` + `GEMINI.md` + `dist/gemini/` | [`dist/gemini/INSTALL.md`](dist/gemini/INSTALL.md), [`dist/gemini/INSTALL.en.md`](dist/gemini/INSTALL.en.md) |
+| VS Code | `dist/vscode/` | Prompt 与 instructions 产物已生成 |
+| Kiro | `dist/kiro/` | Skill 与 steering 产物已生成 |
+| OpenClaw | `dist/openclaw/` | [`dist/openclaw/INSTALL.md`](dist/openclaw/INSTALL.md) |
 
 ### 贡献者构建产物
 
@@ -283,7 +287,7 @@ ls ~/.codex/skills/exmachina
 npm run verify
 ```
 
-生成成功后，共享内容直接位于仓库根目录的 `skills/`、`agents/`、`commands/`、`hooks/`、`.codex/`、`.trae/`、`.kiro/`、`.vscode/` 等目录；平台安装脚本仍位于根目录 `scripts/`。
+生成成功后，共享内容直接位于仓库根目录的 `skills/`、`agents/`、`commands/`、`hooks/` 等目录；各平台产物集中位于 `dist/` 目录；平台安装脚本仍位于根目录 `scripts/`。
 
 ## 源码层与产物层
 
@@ -346,16 +350,16 @@ Skill 安装面。当前包含：
 
 这些命令用于把 ExMachina 作为可调用工作流接入不同环境。
 
-### `.codex/`
+### `dist/codex/`
 
 Codex 使用面，包含：
 
-- `.codex/exmachina/SKILL.md`
-- `.codex/exmachina-en/SKILL.md`
+- `dist/codex/exmachina/SKILL.md`
+- `dist/codex/exmachina-en/SKILL.md`
 - `INSTALL.md`
 - `README.md`
 
-### `.trae/`
+### `dist/trae/`
 
 Trae 使用面，包含规则、技能与自定义 agents。
 
@@ -392,12 +396,13 @@ Trae 使用面，包含规则、技能与自定义 agents。
 
 各平台安装入口现在都尽量保持“薄壳”设计，只负责让平台发现共享内容：
 
-- `.cursor-plugin/` 与 `.cursor/`：Cursor 插件 manifest、hooks 与规则回退面
-- `.claude-plugin/`：Claude 插件 manifest 与 marketplace 描述
-- `.opencode/`：OpenCode 仓库插件入口
-- `gemini-extension.json`、`GEMINI.md` 与 `.gemini/`：Gemini CLI 原生 extension 面
-- `.kiro/`：Kiro Skill 与 steering 入口
-- `.vscode/`：VS Code 风格 prompt / instructions 面
+- `dist/cursor-plugin/` 与 `dist/cursor/`：Cursor 插件 manifest、hooks 与规则回退面
+- `dist/claude-plugin/`：Claude 插件 manifest 与 marketplace 描述
+- `dist/opencode/`：OpenCode 仓库插件入口
+- `gemini-extension.json`、`GEMINI.md` 与 `dist/gemini/`：Gemini CLI 原生 extension 面
+- `dist/kiro/`：Kiro Skill 与 steering 入口
+- `dist/vscode/`：VS Code 风格 prompt / instructions 面
+- `dist/openclaw/`：OpenClaw 包
 - `plugin.json`：仓库级入口元数据
 
 ### `scripts/`
@@ -410,7 +415,7 @@ Trae 使用面，包含规则、技能与自定义 agents。
 
 ## 迁移说明
 
-旧的嵌套产物目录 `./exmachina` 已从当前架构中移除。现在唯一有效的共享内容路径就是根目录下的 `skills/`、`agents/`、`commands/`、`hooks/`、`.codex/`、`.trae/`、`.kiro/`、`.vscode/` 等目录。
+旧的嵌套产物目录 `./exmachina` 已从当前架构中移除。现在唯一有效的共享内容路径就是根目录下的 `skills/`、`agents/`、`commands/`、`hooks/` 等目录；各平台产物集中位于 `dist/` 目录。
 
 这次收束后的原则是：
 

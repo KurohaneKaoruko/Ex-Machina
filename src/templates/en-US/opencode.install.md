@@ -4,8 +4,8 @@ ExMachina now ships a repository-native OpenCode plugin surface.
 
 ## Entry structure
 
-- `package.json` points `main` to `.opencode/plugins/exmachina.mjs`
-- the repository root exposes `.opencode/INSTALL.en.md`
+- `package.json` points `main` to `dist/opencode/plugins/exmachina.mjs`
+- the repository root exposes `dist/opencode/INSTALL.en.md`
 
 OpenCode no longer needs a manual symlink for ExMachina. The plugin registers `skills/` at runtime and injects the ExMachina bootstrap into the system prompt.
 
@@ -41,7 +41,7 @@ EXMACHINA_LANG=en
 
 Confirm that these entry files exist:
 
-- `.opencode/plugins/exmachina.mjs`
+- `dist/opencode/plugins/exmachina.mjs`
 - `skills/using-exmachina-zh/SKILL.md`
 - `skills/using-exmachina-en/SKILL.md`
 
@@ -49,5 +49,5 @@ Then run a task that needs analysis plus execution. If the plugin is active, ExM
 
 ## Related entrypoints
 
-- Root OpenCode plugin entry: `.opencode/plugins/exmachina.mjs`
-- Root install guide: `.opencode/INSTALL.en.md`
+- Root OpenCode plugin entry: `dist/opencode/plugins/exmachina.mjs`
+- Root install guide: `dist/opencode/INSTALL.en.md`

@@ -4,7 +4,7 @@ ExMachina 现在提供面向 Codex 的原生安装面，可以同时把仓库里
 
 原始安装文档地址：
 
-- `{{RAW_BASE_URL}}/.codex/INSTALL.md`
+- `{{RAW_BASE_URL}}/dist/codex/INSTALL.md`
 
 ## 你会得到什么
 
@@ -16,7 +16,7 @@ ExMachina 现在提供面向 Codex 的原生安装面，可以同时把仓库里
 - `exmachina-en`：英文主技能
 - 一组原生智能体文件：`00_全连结指挥体`、`10-19` 连结指挥体、`30-70` 子个体，会被同步到 `~/.codex/agents/`
 
-如果你希望 Codex 更稳定地进入 ExMachina 模式，不要只装技能；继续把 ExMachina 的常驻指导块安装到 `~/.codex/AGENTS.md`。这一步会显著增强“绝对理性、任务优先、语言不带情感”的持续约束。仓库内对应的安装面位于 `.codex/`。
+如果你希望 Codex 更稳定地进入 ExMachina 模式，不要只装技能；继续把 ExMachina 的常驻指导块安装到 `~/.codex/AGENTS.md`。这一步会显著增强“绝对理性、任务优先、语言不带情感”的持续约束。仓库内对应的安装面位于 `dist/codex/`。
 
 ## 快速安装
 
@@ -70,7 +70,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\setup-exmachina.ps1 -InstallG
 - Windows PowerShell：同步一个受 ExMachina 管理的目录到 `~/.codex/skills/exmachina`，并写入 `.exmachina-managed.txt`
 - 把 `agents/` 里的编号智能体文件同步到 `~/.codex/agents/`
 - 维护清单文件：`~/.codex/agents/.exmachina-installed-agents.txt`
-- 可选地把 `.codex/AGENTS.md` 或 `.codex/AGENTS.en.md` 作为受管理块写入 `~/.codex/AGENTS.md`
+- 可选地把 `dist/codex/AGENTS.md` 或 `dist/codex/AGENTS.en.md` 作为受管理块写入 `~/.codex/AGENTS.md`
 
 常驻指导块带有显式边界标记：
 
@@ -193,11 +193,11 @@ Remove-Item "$HOME/exmachina" -Recurse -Force
 - 如果你只想检查当前安装状态，不改任何文件，可用 `--verify` / `-Verify`。
 - 如果你在自定义 Codex 主目录下安装，可把 `CODEX_HOME` 设为目标目录，或给脚本传 `--codex-home` / `-CodexHome`。
 - 如果你希望更强的常驻约束，用 `--install-guidance` / `-InstallGuidance` 安装受管理指导块，而不是手工复制。
-- 如果你希望英文版常驻指导，用 `--guidance-language en` / `-GuidanceLanguage en`，脚本会写入 `.codex/AGENTS.en.md` 的内容。
+- 如果你希望英文版常驻指导，用 `--guidance-language en` / `-GuidanceLanguage en`，脚本会写入 `dist/codex/AGENTS.en.md` 的内容。
 
 ## 相关入口
 
 - 仓库主页：`{{REPOSITORY_URL}}`
-- Codex 使用说明：`.codex/README.md`
-- 英文常驻指导：`.codex/AGENTS.en.md`
+- Codex 使用说明：`dist/codex/README.md`
+- 英文常驻指导：`dist/codex/AGENTS.en.md`
 - 打包产物入口：`plugin.json`
