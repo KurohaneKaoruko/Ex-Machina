@@ -39,9 +39,7 @@
     "geminiExtension": "gemini-extension.json",
     "geminiContext": "dist/GEMINI.md",
     "geminiInstall": "dist/gemini/INSTALL.md",
-    "geminiInstallEnglish": "dist/gemini/INSTALL.en.md",
-    "trae": "dist/trae/rules/project_rules.md",
-    "traeEnglish": "dist/trae/rules/project_rules.en.md"
+    "geminiInstallEnglish": "dist/gemini/INSTALL.en.md"
   },
   "aliases": [
     "/ex",

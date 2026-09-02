@@ -144,11 +144,6 @@ const requiredFiles = [
   "dist/vscode/prompts/exmachina.en.prompt.md",
   "dist/vscode/instructions/exmachina.instructions.md",
   "dist/vscode/instructions/exmachina.en.instructions.md",
-  "dist/trae/INSTALL.md",
-  "dist/trae/INSTALL.en.md",
-  "dist/trae/rules/project_rules.en.md",
-  "dist/trae/agents/00_全连结指挥体.json",
-  "dist/trae/agents/README.md",
   "dist/cursor-plugin/plugin.json",
   "dist/cursor-plugin/hooks.json",
   "dist/cursor-plugin/INSTALL.md",
@@ -180,12 +175,10 @@ for (const file of ["docs/README.codex.md", "docs/README.codex.en.md"]) {
 assertMissing("exmachina");
 assertMissing("codex");
 assertMissing("kiro");
-assertMissing("trae");
 assertMissing("vscode");
 assertMissing("skills/exmachina-en/references");
 assertMissing("dist/codex/exmachina-en/references");
 assertMissing("dist/kiro/skills/exmachina-en/references");
-assertMissing("dist/trae/skills/exmachina-en/references");
 
 const packageJson = readJson("package.json");
 const plugin = readJson("plugin.json");
@@ -227,9 +220,8 @@ assert(
 );
 assert(
   plugin.entrypoints.codex === "dist/codex/exmachina/SKILL.md" &&
-    plugin.entrypoints.codexEnglish === "dist/codex/exmachina-en/SKILL.md" &&
-    plugin.entrypoints.trae === "dist/trae/rules/project_rules.md",
-  "[verify-generated] plugin codex or trae entrypoints are incomplete"
+    plugin.entrypoints.codexEnglish === "dist/codex/exmachina-en/SKILL.md",
+  "[verify-generated] plugin codex entrypoints are incomplete"
 );
 
 const cursorPlugin = readJson("dist/cursor-plugin/plugin.json");

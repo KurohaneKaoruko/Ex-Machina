@@ -131,19 +131,6 @@ Before final output, verify:
 
 ## Platform Setup Guide
 
-### Trae
-
-**Global install**
-
-1. Open Trae Settings -> Global Rules
-2. Paste the rule content above into the global rule set
-
-**Project install**
-
-1. Create `.trae/rules/` at the project root if it does not exist
-2. Create `.trae/rules/exmachina.md`
-3. Paste the rule content above into that file
-
 ### Cursor
 
 **Global install**
